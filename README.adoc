@@ -1,0 +1,23 @@
+= SOARCA Python capability library
+
+== Documentation
+For documentation we use link:https://docs.asciidoctor.org/asciidoc/latest/[asciidoc] and link:https://plantuml.com/[plantUML]. 
+
+Documentation will be stored in the link:doc[doc] folder.
+
+To get started with plantUML in Asciidoc please install the following components in VS-Code:
+
+AsciiDoc  
+VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=asciidoctor.asciidoctor-vscode
+
+
+Once you installed them please enable Kroki in the settings, and add the following to use a non public Kroki server:
+
+```
+    "asciidoc.extensions.enableKroki": true,
+    "asciidoc.preview.asciidoctorAttributes": {
+        "kroki-server-url": "<your-server-here>"
+    },
+```
+
+image:img/kroki.png[]
