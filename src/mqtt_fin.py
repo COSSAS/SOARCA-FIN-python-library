@@ -22,32 +22,31 @@ class SoarcaFin:
         self.acks = {}
         self.capabilities: list[CapabilityStructureMessage] = []
 
-
     def connect(self, host, port, username, password):
-            self.mqttc = mqtt.Client(client_id="testFin", callback_api_version = mqtt.CallbackAPIVersion.VERSION2, clean_session=True)
-            self.mqttc.on_connect = self.on_connect
-            self.mqttc.on_message = self.on_message
+        self.mqttc = mqtt.Client(
+            client_id="testFin", callback_api_version=mqtt.CallbackAPIVersion.VERSION2, clean_session=True)
+        self.mqttc.on_connect = self.on_connect
+        self.mqttc.on_message = self.on_message
 
-            self.mqttc.username_pw_set(username, password)
+        self.mqttc.username_pw_set(username, password)
 
-            self.mqttc.connect(host, port, 60)
+        self.mqttc.connect(host, port, 60)
 
-            # Start mqtt loop in background thread
-            self.mqttc.loop_start()
+        # Start mqtt loop in background thread
+        self.mqttc.loop_start()
 
+        FinRegisterFuture = self.thread_pool.submit(registerFin, self)
 
-            FinRegisterFuture = self.thread_pool.submit(registerFin, self)
-            
-            match FinRegisterFuture.exception(timeout=60):
-                case None:
-                    print("Successfully registered fin")
-                case Exception() as e:
-                    print(e)
-                    exit(-1)
+        match FinRegisterFuture.exception(timeout=60):
+            case None:
+                print("Successfully registered fin")
+            case Exception() as e:
+                print(e)
+                exit(-1)
 
-            # Allow input to execute commands?
-            while True:
-                time.sleep(1)
+        # Allow input to execute commands?
+        while True:
+            time.sleep(1)
 
         # The callback for when the client receives a CONNACK response from the server.
     def on_connect(self, client: mqtt.Client, userdata, flags, reason_code, properties):
@@ -86,17 +85,16 @@ class SoarcaFin:
             case _:
                 print("error, no such command")
 
-        
-
-
         # decoded = RegisterMessage(**json.loads(content))
         # print(content)
         # print(decoded)
-                
+
+
 def registerFin(fin: SoarcaFin):
     # noLocal:            True or False. If set to True, the subscriber will not receive its own publications.
     # Does not seem to work
-    fin.mqttc.subscribe("soarca", options=SubscribeOptions(qos=1, noLocal=True))
+    fin.mqttc.subscribe(
+        "soarca", options=SubscribeOptions(qos=1, noLocal=True))
 
     x = generateCapabilityStructureMessage(str(uuid1()), "cap1", "", "")
     msg = generateRegisterMessage(fin.fin_id)
@@ -104,7 +102,8 @@ def registerFin(fin: SoarcaFin):
     fin.capabilities.append(x)
     json_msg = msg.toJson()
 
-    fin.mqttc.subscribe(fin.fin_id, options=SubscribeOptions(qos=1, noLocal=True))
+    fin.mqttc.subscribe(
+        fin.fin_id, options=SubscribeOptions(qos=1, noLocal=True))
     fin.mqttc.publish("soarca", json_msg, qos=1)
 
     fin.acks[msg.message_id] = "1"
@@ -118,8 +117,9 @@ def registerFin(fin: SoarcaFin):
             return
         time.sleep(0.1)
 
-    raise TimeoutError(f"Message with message id: {msg.message_id} was not acknowleged")
-        
+    raise TimeoutError(
+        f"Message with message id: {msg.message_id} was not acknowleged")
+
 
 def on_ack_handler(fin: SoarcaFin, content: str):
     try:
@@ -127,39 +127,45 @@ def on_ack_handler(fin: SoarcaFin, content: str):
         if ack.message_id in fin.acks:
             del fin.acks[ack.message_id]
         else:
-            raise Exception(f"Ack with the message id: {ack.message_id} does not exist")
+            raise Exception(
+                f"Ack with the message id: {ack.message_id} does not exist")
     except Exception as e:
         print(e)
+
 
 def on_unregister_handler(fin: SoarcaFin, content: str):
     try:
         unregister = UnRegisterMessage(**content)
         if unregister.fin_id != fin.fin_id:
-            print("Not the target fin, ignoring...") 
+            print("Not the target fin, ignoring...")
             return
         if unregister.all:
             for capability in fin.capabilities:
-                unregister_capability(fin, capability.capability_id, unregister.message_id)
+                unregister_capability(
+                    fin, capability.capability_id, unregister.message_id)
         else:
-            unregister_capability(fin, unregister.capability_id, unregister.message_id)
+            unregister_capability(
+                fin, unregister.capability_id, unregister.message_id)
     except Exception as e:
         print(e)
+
 
 def unregister_capability(fin: SoarcaFin, id: str, message_id: str):
     if not id in fin.capabilities:
         raise Exception(f"Capability with id: {id} not recoginized")
-    
-    fin.capabilities = [cap for cap in fin.capabilities if cap.capability_id == id]
+
+    fin.capabilities = [
+        cap for cap in fin.capabilities if cap.capability_id == id]
 
     ack = generateAckMessage(message_id)
 
     fin.mqttc.publish("soarca", payload=ack.toJson(), qos=1)
 
-    
 
 def main(username: str, password: str):
     fin = SoarcaFin("TestFin")
     fin.connect("localhost", 1883, username, password)
+
 
 if __name__ == "__main__":
     try:

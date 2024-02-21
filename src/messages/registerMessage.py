@@ -2,6 +2,7 @@ from dataclasses import dataclass
 import json
 from messages.capabilityStructureMessage import CapabilityStructureMessage
 
+
 @dataclass
 class RegisterMessage:
     message_id: str
@@ -13,8 +14,5 @@ class RegisterMessage:
     type: str = "register"
 
     def toJson(self) -> str:
-        jsondata = json.dumps(self, default=lambda o:o.__dict__, indent=4)
+        jsondata = json.dumps(self, default=lambda o: o.__dict__, indent=4)
         return jsondata
-
-
-

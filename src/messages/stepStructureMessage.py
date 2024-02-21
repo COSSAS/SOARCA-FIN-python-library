@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import json
 
+
 @dataclass
 class StepStructureMessage:
     type: str
