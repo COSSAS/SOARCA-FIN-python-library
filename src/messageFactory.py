@@ -3,6 +3,7 @@ from messages.capabilityStructureMessage import CapabilityStructureMessage
 from uuid import uuid1
 
 from messages.ackMessage import AckMessage
+from messages.nackMessage import NackMessage
 
 
 def generateRegisterMessage(fin_id) -> RegisterMessage:
@@ -15,3 +16,7 @@ def generateCapabilityStructureMessage(capability_id, name, step: any, agent: an
 
 def generateAckMessage(message_id: str) -> AckMessage:
     return AckMessage(message_id)
+
+
+def generateNackMessage(message_id: str) -> NackMessage:
+    return NackMessage(message_id)

@@ -7,7 +7,7 @@ from paho.mqtt.subscribeoptions import SubscribeOptions
 # Use uuid1 for non-safe uuids (uses address) and uuid4 for complete random
 from uuid import uuid1
 from concurrent.futures import ThreadPoolExecutor
-from messageFactory import generateAckMessage, generateCapabilityStructureMessage, generateRegisterMessage
+from messageFactory import generateAckMessage, generateCapabilityStructureMessage, generateNackMessage, generateRegisterMessage
 from messages.ackMessage import AckMessage
 from messages.unRegisterMessage import UnRegisterMessage
 from messages.capabilityStructureMessage import CapabilityStructureMessage
@@ -136,30 +136,63 @@ def on_ack_handler(fin: SoarcaFin, content: str):
 def on_unregister_handler(fin: SoarcaFin, content: str):
     try:
         unregister = UnRegisterMessage(**content)
-        if unregister.fin_id != fin.fin_id:
-            print("Not the target fin, ignoring...")
-            return
-        if unregister.all:
-            for capability in fin.capabilities:
-                unregister_capability(
-                    fin, capability.capability_id, unregister.message_id)
+        if unregister.all or unregister.fin_id == fin.fin_id:
+            unregister_fin(fin, unregister.message_id)
+        elif any(cap.capability_id == unregister.capability_id for cap in fin.capabilities):
+            unregister_capability(fin, unregister.message_id)
         else:
-            unregister_capability(
-                fin, unregister.capability_id, unregister.message_id)
+            print("Not targeted for this fin")
     except Exception as e:
         print(e)
 
 
-def unregister_capability(fin: SoarcaFin, id: str, message_id: str):
-    if not id in fin.capabilities:
-        raise Exception(f"Capability with id: {id} not recoginized")
+def unregister_fin(fin: SoarcaFin, message_id: str):
+    try:
+        fin.mqttc.unsubscribe(fin.fin_id)
+        fin.mqttc.unsubscribe("soarca")
+        # Should we shut down the thread pool?
+        fin.thread_pool.shutdown()
 
-    fin.capabilities = [
-        cap for cap in fin.capabilities if cap.capability_id == id]
+        send_ack(fin, message_id)
 
+    except Exception as e:
+        print(f"Something went wrong while unregistering fin: {e}")
+        send_nack(fin, message_id)
+
+
+def unregister_capability(fin: SoarcaFin, capability_id: str, message_id: str):
+    try:
+        fin.capabilities = [
+            cap for cap in fin.capabilities if cap.capability_id == capability_id]
+
+        send_ack(fin, message_id)
+
+    except Exception as e:
+        print(f"Something went wrong while unregistering fin: {e}")
+        send_nack(fin, message_id)
+
+
+def send_ack(fin: SoarcaFin, message_id: str):
     ack = generateAckMessage(message_id)
 
     fin.mqttc.publish("soarca", payload=ack.toJson(), qos=1)
+
+
+def send_nack(fin: SoarcaFin, message_id: str):
+    nack = generateNackMessage(message_id)
+
+    fin.mqttc.publish("soarca", payload=nack.toJson(), qos=1)
+
+# def unregister_capability(fin: SoarcaFin, id: str, message_id: str):
+#     if not id in fin.capabilities:
+#         raise Exception(f"Capability with id: {id} not recoginized")
+
+#     fin.capabilities = [
+#         cap for cap in fin.capabilities if cap.capability_id == id]
+
+#     ack = generateAckMessage(message_id)
+
+#     fin.mqttc.publish("soarca", payload=ack.toJson(), qos=1)
 
 
 def main(username: str, password: str):
