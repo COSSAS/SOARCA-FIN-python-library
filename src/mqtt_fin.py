@@ -7,8 +7,7 @@ from paho.mqtt.subscribeoptions import SubscribeOptions
 # Use uuid1 for non-safe uuids (uses address) and uuid4 for complete random
 from uuid import uuid1
 from concurrent.futures import ThreadPoolExecutor
-from messageFactory import generateCapabilityStructureMessage, generateRegisterMessage
-from messages.registerMessage import RegisterMessage
+from messageFactory import generateAckMessage, generateCapabilityStructureMessage, generateRegisterMessage
 from messages.ackMessage import AckMessage
 from messages.unRegisterMessage import UnRegisterMessage
 from messages.capabilityStructureMessage import CapabilityStructureMessage
@@ -46,6 +45,7 @@ class SoarcaFin:
                     print(e)
                     exit(-1)
 
+            # Allow input to execute commands?
             while True:
                 time.sleep(1)
 
@@ -82,7 +82,7 @@ class SoarcaFin:
             case "register":
                 print("skipping....")
             case "unregister":
-                on_unregister_handler(self, content)
+                self.thread_pool.submit(on_unregister_handler, self, content)
             case _:
                 print("error, no such command")
 
@@ -139,12 +139,23 @@ def on_unregister_handler(fin: SoarcaFin, content: str):
             return
         if unregister.all:
             for capability in fin.capabilities:
-                unregister_capability(fin, capability.capability_id)
+                unregister_capability(fin, capability.capability_id, unregister.message_id)
+        else:
+            unregister_capability(fin, unregister.capability_id, unregister.message_id)
     except Exception as e:
         print(e)
 
-def unregister_capability(fin: SoarcaFin, id: str):
-    fin.mqttc.unsubscribe()
+def unregister_capability(fin: SoarcaFin, id: str, message_id: str):
+    if not id in fin.capabilities:
+        raise Exception(f"Capability with id: {id} not recoginized")
+    
+    fin.capabilities = [cap for cap in fin.capabilities if cap.capability_id == id]
+
+    ack = generateAckMessage(message_id)
+
+    fin.mqttc.publish("soarca", payload=ack.toJson(), qos=1)
+
+    
 
 def main(username: str, password: str):
     fin = SoarcaFin("TestFin")
