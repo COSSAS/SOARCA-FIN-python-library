@@ -14,6 +14,7 @@ from messageFactory import generateAckMessage, generateCapabilityStructureMessag
 from messages.ackMessage import AckMessage
 from messages.unRegisterMessage import UnRegisterMessage
 from messages.capabilityStructureMessage import CapabilityStructureMessage
+from messages.nackMessage import NackMessage
 
 
 class AckStatus(Enum):
@@ -113,9 +114,10 @@ class SoarcaFin:
             case "ack":
                 on_ack_handler(self, content)
             case "nack":
-                print("nack")
+                on_nack_handler(self, content)
             case "register":
-                print("skipping....")
+                log.debug(
+                    "Ignoring register request, since only the fin can start this")
             case "unregister":
                 self.thread_pool.submit(on_unregister_handler, self, content)
             case _:
@@ -255,6 +257,24 @@ def on_ack_handler(fin: SoarcaFin, content: str):
         else:
             raise Exception(
                 f"Ack with the message id: {ack.message_id} does not exist")
+    except Exception as e:
+        log.error(f"{e}")
+
+
+def on_nack_handler(fin: SoarcaFin, content: str):
+    try:
+        ack = NackMessage(**content)
+        if ack.message_id in fin.acks:
+            match fin.acks[ack.message_id]:
+                case AckStatus.WAITING:
+                    fin.acks[ack.message_id] = AckStatus.FAIL
+                case AckStatus.FAIL | TimeoutStatus.TIMEOUT:
+                    fin.acks[ack.message_id] = AckStatus.FAIL2
+                case AckStatus.FAIL2 | TimeoutStatus.TIMEOUTU3:
+                    fin.acks[ack.message_id] = AckStatus.FAIL3
+        else:
+            raise Exception(
+                f"Nack with the message id: {ack.message_id} does not exist")
     except Exception as e:
         log.error(f"{e}")
 
