@@ -6,21 +6,38 @@ from dotenv import load_dotenv
 from paho.mqtt.subscribeoptions import SubscribeOptions
 # Use uuid1 for non-safe uuids (uses address) and uuid4 for complete random
 from uuid import uuid1
+from enum import Enum
 from concurrent.futures import ThreadPoolExecutor
+from functools import partial
 from messageFactory import generateAckMessage, generateCapabilityStructureMessage, generateNackMessage, generateRegisterMessage
 from messages.ackMessage import AckMessage
 from messages.unRegisterMessage import UnRegisterMessage
 from messages.capabilityStructureMessage import CapabilityStructureMessage
 
 
+class AckStatus(Enum):
+    WAITING = 0
+    SUCCESS = 1
+    FAIL = 2
+    FAIL2 = 3
+    FAIL3 = 4
+
+
+class TimeoutStatus(Enum):
+    TIMEOUT = 2
+    TIMEOUT2 = 3
+    TIMEOUTU3 = 4
+
+
 class SoarcaFin:
 
     def __init__(self, name: str):
         self.name = name
-        self.fin_id = str(uuid1())
+        self.fin_id = "1"  # str(uuid1())
         self.thread_pool = ThreadPoolExecutor(max_workers=1)
-        self.acks = {}
+        self.acks: dict[str, AckStatus | TimeoutStatus] = {}
         self.capabilities: list[CapabilityStructureMessage] = []
+        self.TIMEOUT = 20
 
     def connect(self, host, port, username, password):
         self.mqttc = mqtt.Client(
@@ -37,7 +54,7 @@ class SoarcaFin:
 
         FinRegisterFuture = self.thread_pool.submit(registerFin, self)
 
-        match FinRegisterFuture.exception(timeout=60):
+        match FinRegisterFuture.exception():
             case None:
                 print("Successfully registered fin")
             case Exception() as e:
@@ -46,9 +63,20 @@ class SoarcaFin:
 
         # Allow input to execute commands?
         while True:
-            time.sleep(1)
+            command = input("Waiting for commands:\n1). Unregister\n\n")
+            try:
+                match int(command):
+                    case 1:
+                        unregister_command(self)
+                    case _:
+                        print(
+                            "Command unkown, please choose a valid option from the options screen\n\n")
+
+            except Exception as e:
+                print("Not a valid input\n\n")
 
         # The callback for when the client receives a CONNACK response from the server.
+
     def on_connect(self, client: mqtt.Client, userdata, flags, reason_code, properties):
 
         print(f"Connected to the broker with result code {reason_code}")
@@ -73,6 +101,13 @@ class SoarcaFin:
             print("Error, not message type found in payload")
             return
 
+        if not "message_id" in content:
+            print("No message_id found in the payload")
+
+        if content["message_id"] in self.acks and not (content["type"] == "ack" or content["type"] == "nack"):
+            print("Received own message, skipping....")
+            return
+
         match content["type"]:
             case "ack":
                 on_ack_handler(self, content)
@@ -90,6 +125,46 @@ class SoarcaFin:
         # print(decoded)
 
 
+def ack_awaiter(fin: SoarcaFin, message_id: str, callback):
+    fin.acks[message_id] = AckStatus.WAITING
+    callback()
+
+    while True:
+        startTime = time.time()
+
+        while time.time() < startTime + fin.TIMEOUT:
+            if fin.acks[message_id] == AckStatus.SUCCESS:
+                print("received ack")
+                del fin.acks[message_id]
+                return
+            if fin.acks[message_id] == AckStatus.FAIL:
+                print("Received NACK, attempting again...")
+                callback()
+            if fin.acks[message_id] == AckStatus.FAIL2:
+                print("Received NACK 2 times, attempting again...")
+                callback()
+            if fin.acks[message_id] == AckStatus.FAIL3:
+                print("Received NACK 3 times, exiting program")
+                exit(-1)
+            time.sleep(0.1)
+
+        match fin.acks[message_id]:
+            case AckStatus.WAITING:
+                fin.acks[message_id] = TimeoutStatus.TIMEOUT
+                print(
+                    f"Message with message id: {message_id} was not acknowleged, attempting again...")
+                callback()
+            case AckStatus.FAIL | TimeoutStatus.TIMEOUT:
+                fin.acks[message_id] = TimeoutStatus.TIMEOUT2
+                print(
+                    f"Message with message id: {message_id} was not acknowleged twice, attempting again...")
+                callback()
+            case AckStatus.FAIL2 | TimeoutStatus.TIMEOUT2:
+                print(
+                    f"Message with message id: {message_id} was not acknowleged, exiting now")
+                exit(-1)
+
+
 def registerFin(fin: SoarcaFin):
     # noLocal:            True or False. If set to True, the subscriber will not receive its own publications.
     # Does not seem to work
@@ -104,28 +179,83 @@ def registerFin(fin: SoarcaFin):
 
     fin.mqttc.subscribe(
         fin.fin_id, options=SubscribeOptions(qos=1, noLocal=True))
-    fin.mqttc.publish("soarca", json_msg, qos=1)
 
-    fin.acks[msg.message_id] = "1"
+    ack_awaiter(fin, msg.message_id, lambda:
+                fin.mqttc.publish("soarca", json_msg, qos=1))
 
-    startTime = time.time()
-    timeout = 60
 
-    while time.time() < startTime + timeout:
-        if not msg.message_id in fin.acks:
-            print("received ack")
-            return
-        time.sleep(0.1)
+def unregister_command(fin: SoarcaFin):
+    print("Which fin or capability should be unregistered:")
+    print("0). Cancel")
+    print(f"1). Fin ({fin.fin_id})")
+    for i, cap in enumerate(fin.capabilities):
+        print("{}). Capabiltity {} ({})".format(
+            i+2, cap.name, cap.capability_id))
+    command = input("\n")
+    try:
+        match int(command):
+            case 0:
+                return
+            case 1:
+                on_unregister_fin_command(fin)
+            case _ if int(command) < len(fin.capabilities) + 2:
+                capability = fin.capabilities[int(command) - 2]
 
-    raise TimeoutError(
-        f"Message with message id: {msg.message_id} was not acknowleged")
+                on_unregister_capability_command(fin, capability)
+            case _:
+                print("")
+    except Exception as e:
+        print("Not a valid input\n\n")
+        unregister_command(fin)
+
+
+def on_unregister_fin_command(fin: SoarcaFin):
+    try:
+        msg_id = str(uuid1())
+        msg = UnRegisterMessage(message_id=msg_id, fin_id=fin.fin_id)
+
+        json_msg = msg.toJson()
+
+        ack_awaiter(fin, msg.message_id, lambda:
+                    fin.mqttc.publish("soarca", json_msg, qos=1))
+
+        fin.mqttc.unsubscribe(fin.fin_id)
+        fin.mqttc.unsubscribe("soarca")
+        for cap in fin.capabilities:
+            fin.mqttc.unsubscribe(cap.capability_id)
+        # Should we shut down the thread pool?
+        fin.thread_pool.shutdown()
+
+        print("Successfully unregistered")
+
+    except Exception as e:
+        print("")
+
+
+def on_unregister_capability_command(fin: SoarcaFin, capability: CapabilityStructureMessage):
+    try:
+        msg_id = str(uuid1())
+        msg = UnRegisterMessage(
+            message_id=msg_id, capability_id=capability.capability_id)
+
+        json_msg = msg.toJson()
+
+        ack_awaiter(fin, msg.message_id, lambda: fin.mqttc.publish(
+            "soarca", json_msg, qos=1))
+
+        fin.capabilities.remove(capability)
+
+        print("Successfully unregistered")
+
+    except Exception as e:
+        print("")
 
 
 def on_ack_handler(fin: SoarcaFin, content: str):
     try:
         ack = AckMessage(**content)
         if ack.message_id in fin.acks:
-            del fin.acks[ack.message_id]
+            fin.acks[ack.message_id] = AckStatus.SUCCESS
         else:
             raise Exception(
                 f"Ack with the message id: {ack.message_id} does not exist")
@@ -137,7 +267,7 @@ def on_unregister_handler(fin: SoarcaFin, content: str):
     try:
         unregister = UnRegisterMessage(**content)
         if unregister.all or unregister.fin_id == fin.fin_id:
-            unregister_fin(fin, unregister.message_id)
+            unregister_fin_handler(fin, unregister.message_id)
         elif any(cap.capability_id == unregister.capability_id for cap in fin.capabilities):
             unregister_capability(fin, unregister.message_id)
         else:
@@ -146,14 +276,18 @@ def on_unregister_handler(fin: SoarcaFin, content: str):
         print(e)
 
 
-def unregister_fin(fin: SoarcaFin, message_id: str):
+def unregister_fin_handler(fin: SoarcaFin, message_id: str):
     try:
         fin.mqttc.unsubscribe(fin.fin_id)
         fin.mqttc.unsubscribe("soarca")
+        for cap in fin.capabilities:
+            fin.mqttc.unsubscribe(cap.capability_id)
         # Should we shut down the thread pool?
         fin.thread_pool.shutdown()
 
         send_ack(fin, message_id)
+
+        print("Succssfully unregistered")
 
     except Exception as e:
         print(f"Something went wrong while unregistering fin: {e}")
@@ -163,9 +297,11 @@ def unregister_fin(fin: SoarcaFin, message_id: str):
 def unregister_capability(fin: SoarcaFin, capability_id: str, message_id: str):
     try:
         fin.capabilities = [
-            cap for cap in fin.capabilities if cap.capability_id == capability_id]
+            cap for cap in fin.capabilities if cap.capability_id != capability_id]
 
         send_ack(fin, message_id)
+
+        print("Succssfully unregistered")
 
     except Exception as e:
         print(f"Something went wrong while unregistering fin: {e}")
@@ -182,17 +318,6 @@ def send_nack(fin: SoarcaFin, message_id: str):
     nack = generateNackMessage(message_id)
 
     fin.mqttc.publish("soarca", payload=nack.toJson(), qos=1)
-
-# def unregister_capability(fin: SoarcaFin, id: str, message_id: str):
-#     if not id in fin.capabilities:
-#         raise Exception(f"Capability with id: {id} not recoginized")
-
-#     fin.capabilities = [
-#         cap for cap in fin.capabilities if cap.capability_id == id]
-
-#     ack = generateAckMessage(message_id)
-
-#     fin.mqttc.publish("soarca", payload=ack.toJson(), qos=1)
 
 
 def main(username: str, password: str):
