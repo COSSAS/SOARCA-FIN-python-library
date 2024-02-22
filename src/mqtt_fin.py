@@ -7,6 +7,7 @@ from paho.mqtt.subscribeoptions import SubscribeOptions
 # Use uuid1 for non-safe uuids (uses address) and uuid4 for complete random
 from uuid import uuid1
 from enum import Enum
+import logging as log
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
 from messageFactory import generateAckMessage, generateCapabilityStructureMessage, generateNackMessage, generateRegisterMessage
@@ -56,9 +57,9 @@ class SoarcaFin:
 
         match FinRegisterFuture.exception():
             case None:
-                print("Successfully registered fin")
+                log.info("Successfully registered fin")
             case Exception() as e:
-                print(e)
+                log.critical(e)
                 exit(-1)
 
         # Allow input to execute commands?
@@ -79,7 +80,7 @@ class SoarcaFin:
 
     def on_connect(self, client: mqtt.Client, userdata, flags, reason_code, properties):
 
-        print(f"Connected to the broker with result code {reason_code}")
+        log.debug(f"Connected to the broker with result code {reason_code}")
 
         # Subscribing in on_connect() means that if we lose the connection and
         # reconnect then subscriptions will be renewed.
@@ -88,24 +89,24 @@ class SoarcaFin:
     # The callback for when a PUBLISH message is received from the server.
     def on_message(self, client: mqtt.Client, userdata, msg: mqtt.MQTTMessage):
         if not msg.payload:
-            print("Empty payload")
+            log.error(f"Received a message with an empty payload")
             return
         content = ""
         try:
             content = json.loads(msg.payload.decode('utf8'))
         except Exception as e:
-            print("Could not parse the payload as json format")
-            print(e)
+            log.error(f"Could not parse the payload as json format: {e}")
 
         if not "type" in content:
-            print("Error, not message type found in payload")
+            log.error("Error, not message type found in payload")
             return
 
         if not "message_id" in content:
-            print("No message_id found in the payload")
+            log.error("No message_id found in the payload")
+            return
 
         if content["message_id"] in self.acks and not (content["type"] == "ack" or content["type"] == "nack"):
-            print("Received own message, skipping....")
+            log.debug("Received own message, skipping....")
             return
 
         match content["type"]:
@@ -118,11 +119,7 @@ class SoarcaFin:
             case "unregister":
                 self.thread_pool.submit(on_unregister_handler, self, content)
             case _:
-                print("error, no such command")
-
-        # decoded = RegisterMessage(**json.loads(content))
-        # print(content)
-        # print(decoded)
+                log.error("error, no such command")
 
 
 def ack_awaiter(fin: SoarcaFin, message_id: str, callback):
@@ -134,33 +131,33 @@ def ack_awaiter(fin: SoarcaFin, message_id: str, callback):
 
         while time.time() < startTime + fin.TIMEOUT:
             if fin.acks[message_id] == AckStatus.SUCCESS:
-                print("received ack")
+                log.debug("received ack")
                 del fin.acks[message_id]
                 return
             if fin.acks[message_id] == AckStatus.FAIL:
-                print("Received NACK, attempting again...")
+                log.debug("Received NACK, attempting again...")
                 callback()
             if fin.acks[message_id] == AckStatus.FAIL2:
-                print("Received NACK 2 times, attempting again...")
+                log.debug("Received NACK 2 times, attempting again...")
                 callback()
             if fin.acks[message_id] == AckStatus.FAIL3:
-                print("Received NACK 3 times, exiting program")
+                log.critical("Received NACK 3 times, exiting program")
                 exit(-1)
             time.sleep(0.1)
 
         match fin.acks[message_id]:
             case AckStatus.WAITING:
                 fin.acks[message_id] = TimeoutStatus.TIMEOUT
-                print(
+                log.debug(
                     f"Message with message id: {message_id} was not acknowleged, attempting again...")
                 callback()
             case AckStatus.FAIL | TimeoutStatus.TIMEOUT:
                 fin.acks[message_id] = TimeoutStatus.TIMEOUT2
-                print(
+                log.debug(
                     f"Message with message id: {message_id} was not acknowleged twice, attempting again...")
                 callback()
             case AckStatus.FAIL2 | TimeoutStatus.TIMEOUT2:
-                print(
+                log.debug(
                     f"Message with message id: {message_id} was not acknowleged, exiting now")
                 exit(-1)
 
@@ -206,7 +203,6 @@ def unregister_command(fin: SoarcaFin):
                 print("")
     except Exception as e:
         print("Not a valid input\n\n")
-        unregister_command(fin)
 
 
 def on_unregister_fin_command(fin: SoarcaFin):
@@ -226,10 +222,10 @@ def on_unregister_fin_command(fin: SoarcaFin):
         # Should we shut down the thread pool?
         fin.thread_pool.shutdown()
 
-        print("Successfully unregistered")
+        log.info("Successfully unregistered")
 
     except Exception as e:
-        print("")
+        log.error(f"Could not unregister: {e}")
 
 
 def on_unregister_capability_command(fin: SoarcaFin, capability: CapabilityStructureMessage):
@@ -245,10 +241,10 @@ def on_unregister_capability_command(fin: SoarcaFin, capability: CapabilityStruc
 
         fin.capabilities.remove(capability)
 
-        print("Successfully unregistered")
+        log.info("Successfully unregistered")
 
     except Exception as e:
-        print("")
+        log.error(f"Could not unregister: {e}")
 
 
 def on_ack_handler(fin: SoarcaFin, content: str):
@@ -260,7 +256,7 @@ def on_ack_handler(fin: SoarcaFin, content: str):
             raise Exception(
                 f"Ack with the message id: {ack.message_id} does not exist")
     except Exception as e:
-        print(e)
+        log.error(f"{e}")
 
 
 def on_unregister_handler(fin: SoarcaFin, content: str):
@@ -271,9 +267,9 @@ def on_unregister_handler(fin: SoarcaFin, content: str):
         elif any(cap.capability_id == unregister.capability_id for cap in fin.capabilities):
             unregister_capability(fin, unregister.message_id)
         else:
-            print("Not targeted for this fin")
+            log.debug("Not targeted for this fin")
     except Exception as e:
-        print(e)
+        log.error(e)
 
 
 def unregister_fin_handler(fin: SoarcaFin, message_id: str):
@@ -287,10 +283,10 @@ def unregister_fin_handler(fin: SoarcaFin, message_id: str):
 
         send_ack(fin, message_id)
 
-        print("Succssfully unregistered")
+        log.info("Succssfully unregistered")
 
     except Exception as e:
-        print(f"Something went wrong while unregistering fin: {e}")
+        log.error(f"Something went wrong while unregistering fin: {e}")
         send_nack(fin, message_id)
 
 
@@ -301,10 +297,10 @@ def unregister_capability(fin: SoarcaFin, capability_id: str, message_id: str):
 
         send_ack(fin, message_id)
 
-        print("Succssfully unregistered")
+        log.info("Succssfully unregistered")
 
     except Exception as e:
-        print(f"Something went wrong while unregistering fin: {e}")
+        log.error(f"Something went wrong while unregistering fin: {e}")
         send_nack(fin, message_id)
 
 
@@ -331,8 +327,9 @@ if __name__ == "__main__":
         USERNAME = os.getenv("USERNAME")
         PASSWD = os.getenv("PASSWD")
     except Exception as e:
-        print("Could not read environment variables. Make sure the .env file exists in the src directory")
-        print(e)
+        log.CRITICAL(
+            "Could not read environment variables. Make sure the .env file exists in the src directory")
+        log.CRITICAL(e)
         exit(-1)
 
     main(USERNAME, PASSWD)
