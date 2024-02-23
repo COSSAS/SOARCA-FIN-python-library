@@ -24,7 +24,7 @@ class TestAckMessage(unittest.TestCase):
             "message_id": id
         }
 
-        nack = NackMessage(**json_obj)
+        nack = NackMessage.fromJson(json_obj)
 
         self.assertEqual(nack.type, "nack", "Type should be a nack")
         self.assertEqual(nack.message_id, id, "Message_id's should match")

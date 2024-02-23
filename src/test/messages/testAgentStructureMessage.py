@@ -26,7 +26,7 @@ class TestAgentStructureMessage(unittest.TestCase):
             "name": f"soarca-fin--{name}-{id}"
         }
 
-        agent = AgentStructureMessage(**json_obj)
+        agent = AgentStructureMessage.fromJson(json_obj)
 
         self.assertEqual(agent.type, "soarca-fin",
                          "Type should be an soarca-fin")
