@@ -4,6 +4,9 @@ from uuid import uuid1
 
 from messages.ackMessage import AckMessage
 from messages.nackMessage import NackMessage
+from messages.resultMessage import ResultMessage
+from messages.resultStructure import ResultStructureMessage
+from messages.variableMessage import VariableMessage
 
 
 def generateRegisterMessage(fin_id) -> RegisterMessage:
@@ -20,3 +23,7 @@ def generateAckMessage(message_id: str) -> AckMessage:
 
 def generateNackMessage(message_id: str) -> NackMessage:
     return NackMessage(message_id)
+
+
+def generateResultMessage(message_id: str, result: ResultStructureMessage, variables: dict[str, VariableMessage]) -> ResultMessage:
+    return ResultMessage(message_id, result, variables, result)

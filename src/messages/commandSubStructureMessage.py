@@ -8,4 +8,4 @@ class CommandSubStructureMessage:
     command: str
     context: ContextMessage
     variables: dict[str, VariableMessage]
-    authentication: any | None = None
+    authentication: any = None

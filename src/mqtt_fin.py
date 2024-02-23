@@ -10,25 +10,15 @@ from enum import Enum
 import logging as log
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
-from messageFactory import generateAckMessage, generateCapabilityStructureMessage, generateNackMessage, generateRegisterMessage
+from messageFactory import generateAckMessage, generateCapabilityStructureMessage, generateNackMessage, generateRegisterMessage, generateResultMessage
 from messages.ackMessage import AckMessage
 from messages.unRegisterMessage import UnRegisterMessage
 from messages.capabilityStructureMessage import CapabilityStructureMessage
 from messages.nackMessage import NackMessage
-
-
-class AckStatus(Enum):
-    WAITING = 0
-    SUCCESS = 1
-    FAIL = 2
-    FAIL2 = 3
-    FAIL3 = 4
-
-
-class TimeoutStatus(Enum):
-    TIMEOUT = 2
-    TIMEOUT2 = 3
-    TIMEOUTU3 = 4
+from messages.commandMessage import CommandMessage
+from messages.resultMessage import ResultMessage
+from enums.ackStatusEnum import AckStatus
+from enums.timeoutStatusEnum import TimeoutStatus
 
 
 class SoarcaFin:
@@ -115,6 +105,8 @@ class SoarcaFin:
                 on_ack_handler(self, content)
             case "nack":
                 on_nack_handler(self, content)
+            case "command":
+                log.info("executing command")
             case "register":
                 log.debug(
                     "Ignoring register request, since only the fin can start this")
@@ -162,6 +154,31 @@ def ack_awaiter(fin: SoarcaFin, message_id: str, callback):
                 log.debug(
                     f"Message with message id: {message_id} was not acknowleged, exiting now")
                 exit(-1)
+
+
+def on_command_handler(fin: SoarcaFin, content: str):
+    try:
+        command = CommandMessage(**content)
+        send_ack(fin, command.message_id)
+
+        log.info("Executing command...")
+
+        result = execute_command(fin, command)
+
+        ack_awaiter(fin, command.message_id,
+                    lambda: fin.mqttc.publish(fin.fin_id, result.toJson(), qos=1))
+
+    except Exception as e:
+        log.error(f"Could not parse or execute the command error: {e}")
+
+
+def execute_command(fin: SoarcaFin, command: CommandMessage) -> ResultMessage:
+
+    # TODO: Check authentication
+
+    subCommand = command.command
+
+    result = generateResultMessage(command)
 
 
 def registerFin(fin: SoarcaFin):

@@ -9,5 +9,5 @@ class CommandMessage:
     message_id: str
     meta: MetaMessage
     command: CommandSubStructureMessage
-    authentication_info: any | None = None
+    authentication_info: any = None
     type: str = "command"
