@@ -7,6 +7,7 @@ from messages.nackMessage import NackMessage
 from messages.resultMessage import ResultMessage
 from messages.resultStructure import ResultStructureMessage
 from messages.variableMessage import VariableMessage
+from messages.agentStructureMessage import AgentStructureMessage
 
 
 def generateRegisterMessage(fin_id) -> RegisterMessage:
@@ -27,3 +28,7 @@ def generateNackMessage(message_id: str) -> NackMessage:
 
 def generateResultMessage(message_id: str, result: ResultStructureMessage, variables: dict[str, VariableMessage]) -> ResultMessage:
     return ResultMessage(message_id, result, variables, result)
+
+
+def generateAgentStructureMessage(name: str, uuid: str) -> AgentStructureMessage:
+    return AgentStructureMessage(name=f"soarca-fin--{name}-{uuid}")
