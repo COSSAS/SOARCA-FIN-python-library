@@ -1,4 +1,2 @@
 .vscode/settings.json
-src/__pycache__
-src/messages/__pycache__
-src
+**/__pycache__/
