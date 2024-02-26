@@ -4,6 +4,7 @@ from uuid import uuid1
 
 from messages.ackMessage import AckMessage
 from messageFactory import generateAckMessage
+from models.ack import Ack
 
 
 class TestAckMessage(unittest.TestCase):
@@ -24,7 +25,7 @@ class TestAckMessage(unittest.TestCase):
             "message_id": id
         }
 
-        ack = AckMessage.fromJson(json_obj)
+        ack = Ack(**json_obj)
 
         self.assertEqual(ack.type, "ack", "Type should be an ack")
         self.assertEqual(ack.message_id, id, "Message_id's should match")
@@ -33,7 +34,7 @@ class TestAckMessage(unittest.TestCase):
         id = str(uuid1())
         ack = generateAckMessage(id)
 
-        json_str = ack.toJson()
+        json_str = ack.model_dump_json()
 
         json_obj = {
             "message_id": id,

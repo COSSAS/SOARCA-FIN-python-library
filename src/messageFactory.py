@@ -10,6 +10,8 @@ from messages.variableMessage import VariableMessage
 from messages.agentStructureMessage import AgentStructureMessage
 from messages.stepStructureMessage import StepStructureMessage
 from messages.extrernalReferenceMessage import ExternalReferenceMessage
+from models.ack import Ack
+from models.nack import Nack
 
 
 def generateRegisterMessage(fin_id) -> RegisterMessage:
@@ -28,14 +30,12 @@ def generateExternalReferenceMessage(name, description=None, url=None, external_
     return ExternalReferenceMessage(name, description, url, external_id, reference_id)
 
 
+def generateAckMessage(message_id: str) -> Ack:
+    return Ack(message_id=message_id)
 
 
-def generateAckMessage(message_id: str) -> AckMessage:
-    return AckMessage(message_id)
-
-
-def generateNackMessage(message_id: str) -> NackMessage:
-    return NackMessage(message_id)
+def generateNackMessage(message_id: str) -> Nack:
+    return Nack(message_id=message_id)
 
 
 def generateResultMessage(message_id: str, result: ResultStructureMessage, variables: dict[str, VariableMessage]) -> ResultMessage:

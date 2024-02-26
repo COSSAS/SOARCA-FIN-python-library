@@ -4,6 +4,7 @@ from uuid import uuid1
 
 from messages.nackMessage import NackMessage
 from messageFactory import generateNackMessage
+from models.nack import Nack
 
 
 class TestAckMessage(unittest.TestCase):
@@ -24,7 +25,7 @@ class TestAckMessage(unittest.TestCase):
             "message_id": id
         }
 
-        nack = NackMessage.fromJson(json_obj)
+        nack = Nack(**json_obj)
 
         self.assertEqual(nack.type, "nack", "Type should be a nack")
         self.assertEqual(nack.message_id, id, "Message_id's should match")
@@ -33,7 +34,7 @@ class TestAckMessage(unittest.TestCase):
         id = str(uuid1())
         nack = generateNackMessage(id)
 
-        json_str = nack.toJson()
+        json_str = nack.model_dump_json()
 
         json_obj = {
             "message_id": id,
