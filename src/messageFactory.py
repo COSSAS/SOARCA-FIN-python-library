@@ -14,6 +14,12 @@ from models.security import Security
 from models.meta import Meta
 from models.register import Register
 from models.unregister import Unregister
+from models.variable import Variable
+from enums.variableTypeEnum import VariableTypeEnum
+from models.context import Context
+from enums.openVocabEnum import OpenVocabEnum
+from models.authenticationInformation import AuthenticationInformation
+from models.commandSubStructure import CommandSubStructure
 
 
 def generateRegisterMessage(fin_id: str, protocol_version: str, security: Security, capabilitites: list[CapabilityStructure], meta: Meta = None, message_id=None) -> Register:
@@ -83,3 +89,19 @@ def generateMetaMessage(sender_id: str, timestamp: str = None) -> Meta:
     if not timestamp:
         timestamp = datetime.datetime.now().isoformat()
     return Meta(timestamp=timestamp, sender_id=sender_id)
+
+
+def generateVariableMessage(type: VariableTypeEnum, description: str, value: str, constant: bool, external: bool) -> Variable:
+    return Variable(type=type, description=description, value=value, constant=constant, external=external)
+
+
+def generateContextMessage(step_id: str, playbook_id: str, execution_id: str, completed_on: str = None, generated_on: str = None, timeout: str = None) -> Context:
+    return Context(step_id=step_id, playbook_id=playbook_id, execution_id=execution_id, completed_on=completed_on, generated_on=generated_on, timeout=timeout)
+
+
+def generateAuthenticationInformationMessage(type: OpenVocabEnum, name: str = None, description: str = None, authentication_info_extenstion: dict[str, str] = None) -> AuthenticationInformation:
+    return AuthenticationInformation(type=type, name=name, description=description, authentication_info_extensions=authentication_info_extenstion)
+
+
+def generateCommandSubStructureMessage(command: str, context: Context, variables: dict[str, Variable], authentication: dict[str, AuthenticationInformation] = None) -> CommandSubStructure:
+    return CommandSubStructure(command=command, authentication=authentication, context=context, variables=variables)
