@@ -8,5 +8,4 @@ class Command(Message):
     type: str = "command"
     # message_id: str implemented from parent
     command: CommandSubStructure
-    context: Context
     meta: Meta

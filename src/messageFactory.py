@@ -20,6 +20,7 @@ from models.context import Context
 from enums.openVocabEnum import OpenVocabEnum
 from models.authenticationInformation import AuthenticationInformation
 from models.commandSubStructure import CommandSubStructure
+from models.command import Command
 
 
 def generateRegisterMessage(fin_id: str, protocol_version: str, security: Security, capabilitites: list[CapabilityStructure], meta: Meta = None, message_id=None) -> Register:
@@ -105,3 +106,11 @@ def generateAuthenticationInformationMessage(type: OpenVocabEnum, name: str = No
 
 def generateCommandSubStructureMessage(command: str, context: Context, variables: dict[str, Variable], authentication: dict[str, AuthenticationInformation] = None) -> CommandSubStructure:
     return CommandSubStructure(command=command, authentication=authentication, context=context, variables=variables)
+
+
+def generateCommandMessage(command: CommandSubStructure, meta: Meta, message_id: str = None) -> Command:
+    message_id = message_id
+    if not message_id:
+        message_id = str(uuid1())
+
+    return Command(message_id=message_id, command=command, meta=meta)
