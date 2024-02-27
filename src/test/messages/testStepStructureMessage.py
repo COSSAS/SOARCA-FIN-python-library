@@ -1,11 +1,10 @@
-import dataclasses
 import unittest
 import json
 from uuid import uuid1
 
 from messageFactory import generateExternalReferenceMessage, generateStepStructureMessage
-from messages.extrernalReferenceMessage import ExternalReferenceMessage
-from messages.stepStructureMessage import StepStructureMessage
+from models.externalReference import ExternalReference
+from models.stepStructure import StepStructure
 
 
 class testStepStructureMessage(unittest.TestCase):
@@ -20,7 +19,7 @@ class testStepStructureMessage(unittest.TestCase):
         target = str(uuid1())
 
         stepStructureMessage = generateStepStructureMessage(
-            type, step_name, description, externalReference, command, target)
+            type, step_name, description, [externalReference], command, target)
 
         self.assertEqual(stepStructureMessage.type, type,
                          "Types should be the same")
@@ -32,10 +31,9 @@ class testStepStructureMessage(unittest.TestCase):
                          command, "Commands should be the same")
         self.assertEqual(stepStructureMessage.target, target,
                          "Targets should be the same")
-
-        self.assertIsInstance(stepStructureMessage.external_references, ExternalReferenceMessage,
+        self.assertIsInstance(stepStructureMessage.external_references[0], ExternalReference,
                               "External references should be of external references type")
-        self.assertEqual(stepStructureMessage.external_references.name,
+        self.assertEqual(stepStructureMessage.external_references[0].name,
                          ext_name, "External references names should match")
 
     def test_json_to_step_structure_message(self):
@@ -54,10 +52,10 @@ class testStepStructureMessage(unittest.TestCase):
             "description": description,
             "command": command,
             "target": target,
-            "external_references": dataclasses.asdict(externalReference)
+            "external_references": [externalReference.model_dump()]
         }
 
-        stepStructureMessage = StepStructureMessage.fromJson(json_object)
+        stepStructureMessage = StepStructure(**json_object)
 
         self.assertEqual(stepStructureMessage.type, type,
                          "Types should be the same")
@@ -70,9 +68,9 @@ class testStepStructureMessage(unittest.TestCase):
         self.assertEqual(stepStructureMessage.target, target,
                          "Targets should be the same")
 
-        self.assertIsInstance(stepStructureMessage.external_references, ExternalReferenceMessage,
+        self.assertIsInstance(stepStructureMessage.external_references[0], ExternalReference,
                               "External references should be of external references type")
-        self.assertEqual(stepStructureMessage.external_references.name,
+        self.assertEqual(stepStructureMessage.external_references[0].name,
                          ext_name, "External references names should match")
 
     def test_step_structure_to_json(self):
@@ -86,9 +84,9 @@ class testStepStructureMessage(unittest.TestCase):
         target = str(uuid1())
 
         stepStructureMessage = generateStepStructureMessage(
-            type, step_name, description, externalReference, command, target)
+            type, step_name, description, [externalReference], command, target)
 
-        json_str = stepStructureMessage.toJson()
+        json_str = stepStructureMessage.model_dump_json()
 
         json_object = {
             "type": type,
@@ -96,7 +94,7 @@ class testStepStructureMessage(unittest.TestCase):
             "description": description,
             "command": command,
             "target": target,
-            "external_references": dataclasses.asdict(externalReference)
+            "external_references": [externalReference.model_dump()]
         }
 
         self.assertEqual(json.loads(json_str), json_object,

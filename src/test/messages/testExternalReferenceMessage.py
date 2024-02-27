@@ -3,7 +3,7 @@ import json
 from uuid import uuid1
 
 from messageFactory import generateExternalReferenceMessage
-from messages.extrernalReferenceMessage import ExternalReferenceMessage
+from models.externalReference import ExternalReference
 
 
 class TestExternalReferenceMessage(unittest.TestCase):
@@ -12,11 +12,12 @@ class TestExternalReferenceMessage(unittest.TestCase):
         name = "test"
         description = "test description"
         url = "https://www.testurl.com"
+        source = "testsource"
         external_id = str(uuid1())
         reference_id = str(uuid1())
 
         externalReference = generateExternalReferenceMessage(
-            name, description, url, external_id, reference_id)
+            name, description, source, url, external_id, reference_id)
 
         self.assertEqual(externalReference.name, name,
                          "Names should match")
@@ -52,17 +53,19 @@ class TestExternalReferenceMessage(unittest.TestCase):
         name = "test"
         description = "test description"
         url = "https://www.testurl.com"
+        source = "testsource"
         external_id = str(uuid1())
         reference_id = str(uuid1())
         json_obj = {
             "name": name,
             "description": description,
+            "source": source,
             "url": url,
             "external_id": external_id,
             "reference_id": reference_id,
         }
 
-        externalReference = ExternalReferenceMessage.fromJson(json_obj)
+        externalReference = ExternalReference(**json_obj)
         self.assertEqual(externalReference.name, name,
                          "Names should match")
         self.assertEqual(externalReference.description, description,
@@ -82,11 +85,12 @@ class TestExternalReferenceMessage(unittest.TestCase):
             "name": name,
             "description": None,
             "url": None,
+            "source": None,
             "external_id": None,
             "reference_id": None,
         }
 
-        externalReference = ExternalReferenceMessage.fromJson(json_obj)
+        externalReference = ExternalReference(**json_obj)
 
         self.assertEqual(externalReference.name, name,
                          "Names should match")
@@ -104,18 +108,20 @@ class TestExternalReferenceMessage(unittest.TestCase):
         name = "test"
         description = "test description"
         url = "https://www.testurl.com"
+        source = "testsource"
         external_id = str(uuid1())
         reference_id = str(uuid1())
 
         externalReference = generateExternalReferenceMessage(
-            name, description, url, external_id, reference_id)
+            name, description, source, url, external_id, reference_id)
 
-        json_str = externalReference.toJson()
+        json_str = externalReference.model_dump_json()
 
         json_obj = {
             "name": name,
             "description": description,
             "url": url,
+            "source": source,
             "external_id": external_id,
             "reference_id": reference_id,
         }
@@ -128,12 +134,13 @@ class TestExternalReferenceMessage(unittest.TestCase):
 
         externalReference = generateExternalReferenceMessage(name)
 
-        json_str = externalReference.toJson()
+        json_str = externalReference.model_dump_json()
 
         json_obj = {
             "name": name,
             "description": None,
             "url": None,
+            "source": None,
             "external_id": None,
             "reference_id": None,
         }

@@ -2,7 +2,7 @@ import unittest
 import json
 from uuid import uuid1
 from messageFactory import generateAgentStructureMessage
-from messages.agentStructureMessage import AgentStructureMessage
+from models.agentStructure import AgentStructure
 
 
 class TestAgentStructureMessage(unittest.TestCase):
@@ -26,7 +26,7 @@ class TestAgentStructureMessage(unittest.TestCase):
             "name": f"soarca-fin--{name}-{id}"
         }
 
-        agent = AgentStructureMessage.fromJson(json_obj)
+        agent = AgentStructure(**json_obj)
 
         self.assertEqual(agent.type, "soarca-fin",
                          "Type should be an soarca-fin")
@@ -38,7 +38,7 @@ class TestAgentStructureMessage(unittest.TestCase):
         id = str(uuid1())
         agent = generateAgentStructureMessage(name, id)
 
-        json_str = agent.toJson()
+        json_str = agent.model_dump_json()
 
         json_obj = {
             "type": "soarca-fin",

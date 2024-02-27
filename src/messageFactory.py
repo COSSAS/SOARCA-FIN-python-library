@@ -1,17 +1,15 @@
 from messages.registerMessage import RegisterMessage
 from messages.capabilityStructureMessage import CapabilityStructureMessage
 from uuid import uuid1
-
-from messages.ackMessage import AckMessage
-from messages.nackMessage import NackMessage
 from messages.resultMessage import ResultMessage
 from messages.resultStructure import ResultStructureMessage
 from messages.variableMessage import VariableMessage
-from messages.agentStructureMessage import AgentStructureMessage
-from messages.stepStructureMessage import StepStructureMessage
 from messages.extrernalReferenceMessage import ExternalReferenceMessage
 from models.ack import Ack
 from models.nack import Nack
+from models.agentStructure import AgentStructure
+from models.externalReference import ExternalReference
+from models.stepStructure import StepStructure
 
 
 def generateRegisterMessage(fin_id) -> RegisterMessage:
@@ -22,12 +20,12 @@ def generateCapabilityStructureMessage(capability_id, name, step: any, agent: an
     return CapabilityStructureMessage(capability_id=capability_id, type="empty", name=name, step=step, agent=agent, version="TODO")
 
 
-def generateStepStructureMessage(type: str, name: str, description: str, external_references: ExternalReferenceMessage, command: str, target: str) -> StepStructureMessage:
-    return StepStructureMessage(type, name, description, external_references, command, target)
+def generateStepStructureMessage(type: str, name: str, description: str, external_references: list[ExternalReference], command: str, target: str) -> StepStructure:
+    return StepStructure(type=type, name=name, description=description, external_references=external_references, command=command, target=target)
 
 
-def generateExternalReferenceMessage(name, description=None, url=None, external_id=None, reference_id=None) -> ExternalReferenceMessage:
-    return ExternalReferenceMessage(name, description, url, external_id, reference_id)
+def generateExternalReferenceMessage(name, description=None, source=None, url=None, external_id=None, reference_id=None) -> ExternalReference:
+    return ExternalReference(name=name, description=description, source=source, url=url, external_id=external_id, reference_id=reference_id)
 
 
 def generateAckMessage(message_id: str) -> Ack:
@@ -42,5 +40,5 @@ def generateResultMessage(message_id: str, result: ResultStructureMessage, varia
     return ResultMessage(message_id, result, variables, result)
 
 
-def generateAgentStructureMessage(name: str, uuid: str) -> AgentStructureMessage:
-    return AgentStructureMessage(name=f"soarca-fin--{name}-{uuid}")
+def generateAgentStructureMessage(name: str, uuid: str) -> AgentStructure:
+    return AgentStructure(name=f"soarca-fin--{name}-{uuid}")
