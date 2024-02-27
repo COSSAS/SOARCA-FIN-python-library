@@ -21,6 +21,8 @@ from enums.openVocabEnum import OpenVocabEnum
 from models.authenticationInformation import AuthenticationInformation
 from models.commandSubStructure import CommandSubStructure
 from models.command import Command
+from models.resultStructure import ResultStructure
+from models.result import Result
 
 
 def generateRegisterMessage(fin_id: str, protocol_version: str, security: Security, capabilitites: list[CapabilityStructure], meta: Meta = None, message_id=None) -> Register:
@@ -73,8 +75,15 @@ def generateNackMessage(message_id: str) -> Nack:
     return Nack(message_id=message_id)
 
 
-def generateResultMessage(message_id: str, result: ResultStructureMessage, variables: dict[str, VariableMessage]) -> ResultMessage:
-    return ResultMessage(message_id, result, variables, result)
+def generateResultStructureMessage(state: str, context: Context, variables: dict[str, Variable]) -> ResultStructure:
+    return ResultStructure(state=state, context=context, variables=variables)
+
+
+def generateResultMessage(result: ResultStructure, meta: Meta, message_id: str = None) -> Result:
+    message_id = message_id
+    if not message_id:
+        message_id = str(uuid1())
+    return Result(message_id=message_id, result=result, meta=meta)
 
 
 def generateAgentStructureMessage(name: str, uuid: str) -> AgentStructure:
