@@ -1,10 +1,8 @@
-from messages.registerMessage import RegisterMessage
-from messages.capabilityStructureMessage import CapabilityStructureMessage
+import datetime
 from uuid import uuid1
 from messages.resultMessage import ResultMessage
 from messages.resultStructure import ResultStructureMessage
 from messages.variableMessage import VariableMessage
-from messages.extrernalReferenceMessage import ExternalReferenceMessage
 from models.ack import Ack
 from models.nack import Nack
 from models.agentStructure import AgentStructure
@@ -12,10 +10,22 @@ from models.externalReference import ExternalReference
 from models.stepStructure import StepStructure
 from models.capabilityStructure import CapabilityStructure
 from enums.workFlowStepEnum import WorkFlowStepEnum
+from models.security import Security
+from models.meta import Meta
+from models.register import Register
 
 
-def generateRegisterMessage(fin_id) -> RegisterMessage:
-    return RegisterMessage(fin_id=fin_id, message_id=str(uuid1()), protocol_version="1.0.0", security="", capabiltities=[], meta="")
+def generateRegisterMessage(fin_id: str, protocol_version: str, security: Security, capabilitites: list[CapabilityStructure], meta: Meta = None, message_id=None) -> Register:
+    message_id = message_id
+    if not message_id:
+        message_id = str(uuid1())
+
+    meta = meta
+    if not meta:
+        meta = generateMetaMessage(fin_id)
+
+    return Register(message_id=message_id, fin_id=fin_id,
+                    protocol_version=protocol_version, security=security, capabilities=capabilitites, meta=meta)
 
 
 def generateCapabilityStructureMessage(capability_id: str, type: WorkFlowStepEnum, name: str, version: str, step: StepStructure, agent: AgentStructure) -> CapabilityStructure:
@@ -44,3 +54,14 @@ def generateResultMessage(message_id: str, result: ResultStructureMessage, varia
 
 def generateAgentStructureMessage(name: str, uuid: str) -> AgentStructure:
     return AgentStructure(name=f"soarca-fin--{name}-{uuid}")
+
+
+def generateSecurityMessage(version: str, channel_security: str) -> Security:
+    return Security(version=version, channel_security=channel_security)
+
+
+def generateMetaMessage(sender_id: str, timestamp: str = None) -> Meta:
+    timestamp = timestamp
+    if not timestamp:
+        timestamp = datetime.datetime.now().isoformat()
+    return Meta(timestamp=timestamp, sender_id=sender_id)
