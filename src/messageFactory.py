@@ -13,6 +13,7 @@ from enums.workFlowStepEnum import WorkFlowStepEnum
 from models.security import Security
 from models.meta import Meta
 from models.register import Register
+from models.unregister import Unregister
 
 
 def generateRegisterMessage(fin_id: str, protocol_version: str, security: Security, capabilitites: list[CapabilityStructure], meta: Meta = None, message_id=None) -> Register:
@@ -26,6 +27,23 @@ def generateRegisterMessage(fin_id: str, protocol_version: str, security: Securi
 
     return Register(message_id=message_id, fin_id=fin_id,
                     protocol_version=protocol_version, security=security, capabilities=capabilitites, meta=meta)
+
+
+def generateUnregisterMessage(all: bool = False, capability_id: str = None, fin_id: str = None, message_id: str = None) -> Unregister:
+
+    message_id = message_id
+    if not message_id:
+        message_id = str(uuid1())
+
+    if all:
+        return Unregister(message_id=message_id, capability_id=None, fin_id=None, all=True)
+    if capability_id:
+        return Unregister(message_id=message_id, capability_id=capability_id, fin_id=None, all=False)
+    if fin_id:
+        return Unregister(message_id=message_id, capability_id=None, fin_id=fin_id, all=False)
+
+    raise ValueError(
+        "Either capability_id != null, fin_id != null or all == true need to be set")
 
 
 def generateCapabilityStructureMessage(capability_id: str, type: WorkFlowStepEnum, name: str, version: str, step: StepStructure, agent: AgentStructure) -> CapabilityStructure:
