@@ -1,36 +1,23 @@
 import os
-import json
-import time
-import paho.mqtt.client as mqtt
-from dotenv import load_dotenv
-from paho.mqtt.subscribeoptions import SubscribeOptions
-# Use uuid1 for non-safe uuids (uses address) and uuid4 for complete random
 from uuid import uuid1
-from enum import Enum
+from dotenv import load_dotenv
+# Use uuid1 for non-safe uuids (uses address) and uuid4 for complete random
 import logging as log
-from concurrent.futures import ThreadPoolExecutor
-from functools import partial
-from messageFactory import generateAckMessage, generateCapabilityStructureMessage, generateNackMessage, generateRegisterMessage, generateResultMessage
-from messages.ackMessage import AckMessage
-from messages.unRegisterMessage import UnRegisterMessage
-from messages.capabilityStructureMessage import CapabilityStructureMessage
-from messages.nackMessage import NackMessage
-from messages.commandMessage import CommandMessage
-from messages.resultMessage import ResultMessage
-from enums.ackStatusEnum import AckStatus
-from enums.timeoutStatusEnum import TimeoutStatus
 from mqqtClient import MqqtClient
+from messageFactory import generateAgentStructureMessage, generateCapabilityStructureMessage, generateExternalReferenceMessage, generateRegisterMessage, generateSecurityMessage, generateStepStructureMessage
+from models.capabilityStructure import CapabilityStructure
+from models.security import Security
+from enums.workFlowStepEnum import WorkFlowStepEnum
 
 
 class SoarcaFin:
 
-    def __init__(self, name: str):
-        self.name = name
-        self.fin_id = "1"  # str(uuid1())
-        self.thread_pool = ThreadPoolExecutor(max_workers=1)
-        self.acks: dict[str, AckStatus | TimeoutStatus] = {}
-        self.capabilities: list[CapabilityStructureMessage] = []
-        self.TIMEOUT = 20
+    def __init__(self, name: str, fin_id: str, protocol_version: str, security: Security, capabilities: list[CapabilityStructure] = []):
+        self.name: str = name
+        self.fin_id: str = fin_id
+        self.protocol_version: str = protocol_version
+        self.security: Security = security
+        self.capabilities: list[CapabilityStructure] = capabilities
         self.mqttc: MqqtClient | None = None
 
     def start_mqtt_client(self, host: str, port: str, username: str, password: str):
@@ -44,7 +31,9 @@ class SoarcaFin:
 
     def register_fin(self):
 
-        self.mqttc.register_fin()
+        registerMessage = generateRegisterMessage(
+            self.fin_id, self.protocol_version, self.security, self.capabilities)
+        self.mqttc.register_fin(registerMessage)
 
         # Allow input to execute commands?
         while True:
@@ -61,6 +50,10 @@ class SoarcaFin:
                 print("Not a valid input\n\n")
 
         # The callback for when the client receives a CONNACK response from the server.
+
+    def register_capability(self, capability: CapabilityStructure) -> None:
+
+        pass
 
 
 # def on_command_handler(fin: SoarcaFin, content: str):
@@ -112,12 +105,47 @@ class SoarcaFin:
 
 
 def main(username: str, password: str):
-    fin = SoarcaFin("TestFin")
+    security_version = "0.0.1"
+    channel_security = "plaintext"
+    securityMessage = generateSecurityMessage(
+        security_version, channel_security)
+
+    agent_name = "test"
+    uuid_agent = str(uuid1())
+    agentStructure = generateAgentStructureMessage(agent_name, uuid_agent)
+
+    ext_name = "test"
+    externalReference = generateExternalReferenceMessage(ext_name)
+
+    type = "action"
+    step_name = "test step"
+    description = "test description"
+    command = "test command"
+    target = str(uuid1())
+
+    stepStructure = generateStepStructureMessage(
+        type, step_name, description, [externalReference], command, target)
+
+    capability_id = str(uuid1())
+    type = WorkFlowStepEnum.action
+    capability_name = "test name"
+    version = "0.0.1"
+
+    capabilityStructure = generateCapabilityStructureMessage(
+        capability_id, type, capability_name, version, stepStructure, agentStructure)
+
+    fin_id = "1"
+
+    fin = SoarcaFin("TestFin", fin_id, protocol_version=version,
+                    security=securityMessage, capabilities=[capabilityStructure])
     fin.start_mqtt_client("localhost", 1883, username, password)
+
     fin.register_fin()
 
 
 if __name__ == "__main__":
+    log.basicConfig()
+    log.getLogger().setLevel(log.DEBUG)
     try:
         load_dotenv()
         USERNAME = os.getenv("USERNAME")

@@ -11,6 +11,10 @@ from messages.unRegisterMessage import UnRegisterMessage
 from handlers.unregister_handlers import unregister_capability, unregister_fin_handler
 from handlers.unregister_fin_command import unregister_fin_command
 from handlers.unregister_capability_command import unregister_capability_command
+from models.unregister import Unregister
+from models.message import Message
+from models.register import Register
+from models.capabilityStructure import CapabilityStructure
 
 
 class Handler:
@@ -19,7 +23,7 @@ class Handler:
         self.fin_id = fin_id
         self.fin_name = fin_name
         self.mqttc = mqttc
-        self.capabilities = []
+        self.capabilities: list[CapabilityStructure] = []
         self.acks: dict[str, AckStatus | TimeoutStatus] = {}
         self.TIMEOUT = 20
 
@@ -62,7 +66,7 @@ class Handler:
                     "Ignoring register request, since only the fin can start this")
             case "unregister":
                 # self.thread_pool.submit(on_unregister_handler, self, content)
-                self._handle_unregister_case(content)
+                return self._handle_unregister_case(content)
             case _:
                 log.error("error, no such command")
 
@@ -113,24 +117,34 @@ class Handler:
     def _handle_nack_case(self, content) -> None:
         on_nack_handler(content, self.acks)
 
-    def _handle_unregister_case(self, content):
+    def _handle_unregister_case(self, content) -> Unregister:
         try:
-            unregister = UnRegisterMessage(**content)
-            if unregister.all or unregister.fin_id == self.fin_id:
-                # Shutdown on the thread?
-                unregister_fin_handler(self.mqttc, unregister.message_id)
-            elif any(cap.capability_id == unregister.capability_id for cap in self.capabilities):
-                return lambda: unregister_capability(self.mqttc, unregister.capability_id, unregister.message_id, self.capabilities)
-            else:
-                log.debug("Not targeted for this fin")
+            unregister = Unregister(**content)
+            return unregister
+            # if unregister.all or unregister.fin_id == self.fin_id:
+            #     # Shutdown on the thread?
+            #     unregister_fin_handler(self.mqttc, unregister.message_id)
+            # elif any(cap.capability_id == unregister.capability_id for cap in self.capabilities):
+            #     return lambda: unregister_capability(self.mqttc, unregister.capability_id, unregister.message_id, self.capabilities)
+            # else:
+            #     log.debug("Not targeted for this fin")
         except Exception as e:
             log.error(e)
 
-    def register_fin(self, fin_id):
-        return lambda: registerFin(self.mqttc, fin_id, self.await_ack_with_func)
+    def register_fin(self, message: Register):
+        registerFin(self.mqttc, message, self.await_ack_with_func)
 
-    def unregister_fin(self):
-        return lambda: unregister_fin_command(self.mqttc, self.fin_id, self.capabilities, self.await_ack_with_func)
+    def unregister_fin(self, message: Unregister):
+        if message.all or message.fin_id == self.fin_id:
+            message.fin_id = self.fin_id
+            unregister_fin_handler(self.mqttc, message, self.capabilities)
+        elif any(cap.capability_id == message.capability_id for cap in self.capabilities):
+            return lambda: unregister_capability(self.mqttc, message, self.capabilities)
+        else:
+            log.debug("Not targeted for this fin")
 
-    def unregister_capability_command(self, capability):
-        return lambda: unregister_capability_command(self.mqttc, capability, self.capabilities, self.await_ack_with_func)
+    # def unregister_fin(self):
+    #     return lambda: unregister_fin_command(self.mqttc, self.fin_id, self.capabilities, self.await_ack_with_func)
+
+    # def unregister_capability_command(self, capability):
+    #     return lambda: unregister_capability_command(self.mqttc, capability, self.capabilities, self.await_ack_with_func)
