@@ -7,12 +7,8 @@ import logging as log
 from handlers.ack_handler import on_ack_handler
 from handlers.register_fin import registerFin
 from handlers.nack_handler import on_nack_handler
-from messages.unRegisterMessage import UnRegisterMessage
 from handlers.unregister_handlers import unregister_capability, unregister_fin_handler
-from handlers.unregister_fin_command import unregister_fin_command
-from handlers.unregister_capability_command import unregister_capability_command
 from models.unregister import Unregister
-from models.message import Message
 from models.register import Register
 from models.capabilityStructure import CapabilityStructure
 

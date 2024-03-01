@@ -1,8 +1,5 @@
 import datetime
 from uuid import uuid1
-from messages.resultMessage import ResultMessage
-from messages.resultStructure import ResultStructureMessage
-from messages.variableMessage import VariableMessage
 from models.ack import Ack
 from models.nack import Nack
 from models.agentStructure import AgentStructure
