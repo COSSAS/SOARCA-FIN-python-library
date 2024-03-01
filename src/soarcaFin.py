@@ -12,12 +12,12 @@ from enums.workFlowStepEnum import WorkFlowStepEnum
 
 class SoarcaFin:
 
-    def __init__(self, name: str, fin_id: str, protocol_version: str, security: Security, capabilities: list[CapabilityStructure] = []):
+    def __init__(self, name: str, fin_id: str, protocol_version: str, security: Security):
         self.name: str = name
         self.fin_id: str = fin_id
         self.protocol_version: str = protocol_version
         self.security: Security = security
-        self.capabilities: list[CapabilityStructure] = capabilities
+        self.capabilities: dict[str, (CapabilityStructure, function)] = {}
         self.mqttc: MqqtClient | None = None
 
     def start_mqtt_client(self, host: str, port: str, username: str, password: str):
@@ -29,10 +29,17 @@ class SoarcaFin:
             log.error(f"Could not initialize mqtt client: {e}")
             exit(-1)
 
-    def register_fin(self):
+    def register_capability(self, capability: CapabilityStructure, callback) -> None:
+        capability_id = capability.capability_id
+        if capability_id in self.capabilities:
+            raise Exception(f"Key with id {capability_id} already exists")
 
+        self.capabilities[capability_id] = (capability, callback)
+
+    def register_fin(self):
+        capabilities = [cap for cap, _ in self.capabilities.values()]
         registerMessage = generateRegisterMessage(
-            self.fin_id, self.protocol_version, self.security, self.capabilities)
+            self.fin_id, self.protocol_version, self.security, capabilities)
         self.mqttc.register_fin(registerMessage)
 
         # Allow input to execute commands?
@@ -50,10 +57,6 @@ class SoarcaFin:
                 print("Not a valid input\n\n")
 
         # The callback for when the client receives a CONNACK response from the server.
-
-    def register_capability(self, capability: CapabilityStructure) -> None:
-
-        pass
 
 
 # def on_command_handler(fin: SoarcaFin, content: str):
@@ -79,6 +82,7 @@ class SoarcaFin:
 #     subCommand = command.command
 
 #     result = generateResultMessage(command)
+
 
     def unregister_command(self):
         print("Which fin or capability should be unregistered:")
@@ -137,10 +141,16 @@ def main(username: str, password: str):
     fin_id = "1"
 
     fin = SoarcaFin("TestFin", fin_id, protocol_version=version,
-                    security=securityMessage, capabilities=[capabilityStructure])
+                    security=securityMessage)
     fin.start_mqtt_client("localhost", 1883, username, password)
 
+    fin.register_capability(capabilityStructure, capability_callback_test)
+
     fin.register_fin()
+
+
+def capability_callback_test():
+    print("Test capability")
 
 
 if __name__ == "__main__":

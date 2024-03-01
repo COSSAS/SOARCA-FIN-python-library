@@ -24,37 +24,24 @@ class MqqtClient:
         log.debug(
             f"Connected to the broker with result code {reason_code}")
 
-        # Subscribing in on_connect() means that if we lose the connection and
-        # reconnect then subscriptions will be renewed.
-        # client.subscribe("$SYS/#")
-
-    # The callback for when a PUBLISH message is received from the server.
     def on_message(self, client: mqtt.Client, userdata, msg: mqtt.MQTTMessage):
         message = self.handler.handle_on_message(msg)
         if message:
             self.dispatcher.add_message(message)
 
     def register_fin(self, registerMessage: Register):
-        self.dispatcher.add_message(registerMessage)
         self.dispatcher.start_dispatcher()
-        # fn = self.handler.register_fin(self.fin_id)
-        # future = self.executor.submit(fn)
-        # match future.exception():
-        #     case None:
-        #         log.info("Successfully registered fin")
-        #     case Exception() as e:
-        #         log.critical(e)
-        #         exit(-1)
+        self.dispatcher.add_message(registerMessage)
+
+        # Wait for dispatcher to proccess register message
+        self.dispatcher.block_until_task_done(registerMessage.message_id)
+        log.info("Successfully registered fin")
 
     def unregister_fin(self):
         pass
-        # fn = self.handler.unregister_fin()
-        # self.executor.submit(fn)
 
     def unregister_capability(self, capability):
         pass
-        # fn = self.handler.unregister_capability_command(capability)
-        # self.executor.submit(fn)
 
     @classmethod
     def init_client_with_pw(cls, host: str, port: str, username: str, password: str) -> MqqtClient:
