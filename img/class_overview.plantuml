@@ -1,22 +1,26 @@
 @startuml Soarca Fin
 
-abstract IHandler {
+interface IHandler {
+ Message parse_on_message()
+}
+
+interface IDispatcher {
+ void start_dispatcher()
+ void queue_message(msg: Message)
+}
+
+interface IMQTTClient {
  void on_connect()
  void on_message()
 }
 
-abstract IDispatcher {
- void start_dispatcher()
- void queue_message()
-}
-
-abstract IMQTTClient {
+interface ISoarcaFin {
  void set_config_MQTTServer()
  void set_fin_capabilities()
  void start_fin()
 }
 
-class soarcaFin
+class SoarcaFin
 class MQTTClient
 class Handler
 class Dispatcher
@@ -27,9 +31,10 @@ class Queue
 IHandler <|.. Handler
 IDispatcher <|.. Dispatcher
 IMQTTClient <|.. MQTTClient
+ISoarcaFin <|.. SoarcaFin
 
-IMQTTClient <- soarcaFin
-IDispatcher <- Handler
+IMQTTClient <- SoarcaFin
+IDispatcher <- MQTTClient
 IHandler <- MQTTClient
 DispatcherTask <- Dispatcher
 ThreadPoolExecutor <- Dispatcher
