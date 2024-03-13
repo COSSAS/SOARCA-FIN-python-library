@@ -1,12 +1,7 @@
 @startuml Soarca Fin
 
-interface IHandler {
+interface IParser {
  Message parse_on_message()
-}
-
-interface IDispatcher {
- void start_dispatcher()
- void queue_message(msg: Message)
 }
 
 interface IMQTTClient {
@@ -20,24 +15,23 @@ interface ISoarcaFin {
  void start_fin()
 }
 
+interface IExecutor {
+ void queue_message()
+}
+
+
 class SoarcaFin
 class MQTTClient
-class Handler
-class Dispatcher
-class DispatcherTask
-class ThreadPoolExecutor
-class Queue
+class Parser
+class Executor
 
-IHandler <|.. Handler
-IDispatcher <|.. Dispatcher
-IMQTTClient <|.. MQTTClient
 ISoarcaFin <|.. SoarcaFin
+IMQTTClient <|.. MQTTClient
+IParser <|.. Parser
+IExecutor <|.. Executor
 
 IMQTTClient <- SoarcaFin
-IDispatcher <- MQTTClient
-IHandler <- MQTTClient
-DispatcherTask <- Dispatcher
-ThreadPoolExecutor <- Dispatcher
-Queue <- Dispatcher
+IExecutor <- MQTTClient
+IParser <-MQTTClient
 
 @enduml

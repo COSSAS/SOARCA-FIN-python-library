@@ -1,0 +1,38 @@
+@startuml Sequence Diagram Register
+
+Soarca -> Soarca : Create Soarca Topic
+
+Library -> SoarcaFin : Set MQTT Server config
+
+Library -> SoarcaFin : Set Capability1
+SoarcaFin -> "MQTTClient (Capability 1)" : Create capability
+
+Library -> SoarcaFin : Set Capability2
+SoarcaFin -> "MQTTClient (Capability 2)" : Create capability
+
+
+Library -> SoarcaFin : Start Fin
+
+
+SoarcaFin -> "MQTTClient (Capability 1)" : Start capability
+"MQTTClient (Capability 1)" -> "MQTTClient (Capability 1)" : Register Capability Topic
+SoarcaFin -> "MQTTClient (Capability 2)" : Start capability
+"MQTTClient (Capability 2)" -> "MQTTClient (Capability 2)" : Register Capability Topic
+
+SoarcaFin -> "MQTTClient (Fin)" : Register Fin
+"MQTTClient (Fin)" -> "MQTTClient (Fin)" : Register SoarcaFin Topic
+
+"MQTTClient (Fin)" -> "Executor (Fin)" : Send Register Message
+
+Soarca <- "Executor (Fin)" : Message.Register [Soarca Topic]
+
+Soarca --> "MQTTClient (Fin)" :  Message.Ack [Fin ID Topic]
+
+"MQTTClient (Fin)" -> "Parser (Fin)" : parse_on_message(ack)
+"MQTTClient (Fin)" <-- "Parser (Fin)" : Message.Ack
+
+"MQTTClient (Fin)" -> "Executor (Fin)" : Message.Ack
+
+
+
+@enduml
