@@ -46,3 +46,7 @@ class MQTTClient(IMQTTClient):
         self._executor_thread.daemon = True
 
         self._executor_thread.start()
+
+    def stop(self):
+        self.mqttc.loop_stop()
+        self.executor.stop_executor()

@@ -1,5 +1,6 @@
 
 from queue import Queue
+import time
 from uuid import uuid1
 import paho.mqtt.client as mqtt
 import paho.mqtt.enums as PahoEnums
@@ -13,6 +14,12 @@ from Executor import Executor
 from models.register import Register
 from models.security import Security
 from models.meta import Meta
+from models.message import Message
+from models.unregister import Unregister
+import logging as log
+
+from models.unregisterSelf import UnregisterSelf
+from models import unregisterSelf
 
 
 class SoarcaFin(ISoarcaFin):
@@ -50,11 +57,34 @@ class SoarcaFin(ISoarcaFin):
         mqttc.subscribe(
             "soarca", options=SubscribeOptions(qos=1, noLocal=True))
         parser = Parser(self.fin_id)
-        executor = Executor(self.fin_id, None, Queue(), mqttc)
+        executor = Executor(
+            self.fin_id, self.fin_control_callback, Queue(), mqttc)
         self.fin = MQTTClient(self.fin_id, mqttc, None, executor, parser)
         self.fin.start()
         register_msg = self._create_register_message()
         self.fin.executor.queue_message(register_msg)
+        self.fin._executor_thread.join()
+
+    def fin_control_callback(self, message: Message):
+        match message:
+            case Unregister() | UnregisterSelf():
+                if message.all or message.fin_id == self.fin:
+                    for capability in self.capabilities.values():
+                        capability.stop()
+                    self.fin.stop()
+                    log.warn("Stopping in 10 seconds...")
+                    time.sleep(10)
+                elif message.capability_id in self.capabilities:
+                    self.capabilities[message.capability_id].stop()
+                    del self.capabilities[message.capability_id]
+                    del self.capability_structure[message.capability_id]
+                    log.warn(
+                        f"Stopping capability with id {message.capability_id} in 10 seconds...")
+                    time.sleep(10)
+                else:
+                    log.debug("Unregister not for this fin")
+            case _:
+                log.error("Unknown message")
 
     def _create_register_message(self) -> Register:
         msg_uuid = str(uuid1())

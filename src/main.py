@@ -45,7 +45,6 @@ def main(username: str, password: str) -> None:
     fin.set_config_MQTT_server("localhost", 1883, username, password)
     fin.create_fin_capability(capability_structure, capability_test_callback)
     fin.start_fin()
-    time.sleep(1000)
 
 
 if __name__ == "__main__":

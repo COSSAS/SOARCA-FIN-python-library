@@ -12,6 +12,8 @@ from queue import Empty
 from models.result import Result
 from models.nack import Nack
 from models.register import Register
+from models.unregister import Unregister
+from models.unregisterSelf import UnregisterSelf
 
 
 class Executor(IExecutor):
@@ -22,28 +24,44 @@ class Executor(IExecutor):
         self.id = id
         self.callback = callback
         self.TIMEOUT = 30
+        self.running = True
 
     def queue_message(self, message: Message) -> None:
         self.queue.put(message)
 
-    def start_executor(self):
-        while True:
-            # This method is blocking
-            message = self._get_message_from_queue()
+    def stop_executor(self):
+        self.running = False
 
-            match message:
-                case Ack():
-                    self._put_message_in_queue(message)
-                case Nack():
-                    self._put_message_in_queue(message)
-                case Register():
-                    self._handle_register_message(message)
-                case Command():
-                    self._handle_command_message(message)
-                case _:
-                    # Send Nack?
-                    log.warn(
-                        f"Unimplemented command: {message.model_dump_json()}")
+    def start_executor(self):
+
+        log.info(f"Thread started for {self.id}")
+        self.running = True
+
+        while self.running:
+            try:
+                # This method is blocking
+                message = self._get_message_from_queue(timeout=10)
+                match message:
+                    case Ack():
+                        self._put_message_in_queue(message)
+                    case Nack():
+                        self._put_message_in_queue(message)
+                    case Register():
+                        self._handle_register_message(message)
+                    case Unregister():
+                        self._handle_unregister_message(message)
+                    case UnregisterSelf():
+                        self._handle_unregister_self_message(message)
+                    case Command():
+                        self._handle_command_message(message)
+                    case _:
+                        # Send Nack?
+                        log.warn(
+                            f"Unimplemented command: {message.model_dump_json()}")
+            except Empty as e:
+                pass
+
+        log.info(f"Thread ended for {self.id}")
 
     # Is blocking
     def _get_message_from_queue(self, timeout: float = None) -> Message:
@@ -51,6 +69,38 @@ class Executor(IExecutor):
 
     def _put_message_in_queue(self, message: Message, timeout: float = None):
         self.queue.put(message, timeout=timeout)
+
+    def _handle_unregister_message(self, message: Unregister):
+        ack = Ack(message_id=message.message_id)
+        self._send_message_as_json(ack, topic="soarca")
+
+        self.callback(message)
+
+    def _handle_unregister_self_message(self, message: UnregisterSelf):
+        # Send command message to soarca
+        self._send_message_as_json(message, topic="soarca")
+
+        # Wait for ack
+        retries = 3
+        while retries > 0:
+            try:
+                self._wait_for_ack(message.message_id)
+                self.callback(message)
+                return
+            except (Empty, TimeoutError) as e:
+                retries -= 1
+                if retries == 0:
+                    log.error(
+                        f"Did not receive an ack for message {message.message_id}. Aborting...")
+                    exit(-1)
+                self._send_message_as_json(message, topic="soarca")
+            except RuntimeError as e:
+                retries -= 1
+                if retries == 0:
+                    log.error(
+                        f"Did not receive an ack for message {message.message_id}. Aborting...")
+                    exit(-1)
+                self._send_message_as_json(message, topic="soarca")
 
     def _handle_register_message(self, message: Register):
         # Send command message to soarca
