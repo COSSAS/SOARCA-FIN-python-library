@@ -2,9 +2,11 @@
 from queue import Queue
 from uuid import uuid1
 import paho.mqtt.client as mqtt
+import paho.mqtt.enums as PahoEnums
 from abstract_classes.ISoarcaFin import ISoarcaFin
 from abstract_classes.IMQTTClient import IMQTTClient
 from models.capabilityStructure import CapabilityStructure
+from paho.mqtt.subscribeoptions import SubscribeOptions
 from MQTTClient import MQTTClient
 from Parser import Parser
 from Executor import Executor
@@ -45,6 +47,8 @@ class SoarcaFin(ISoarcaFin):
             capability.start()
 
         mqttc = self._create_mqtt_client(self.fin_id)
+        mqttc.subscribe(
+            "soarca", options=SubscribeOptions(qos=1, noLocal=True))
         parser = Parser(self.fin_id)
         executor = Executor(self.fin_id, None, Queue(), mqttc)
         self.fin = MQTTClient(self.fin_id, mqttc, None, executor, parser)
@@ -61,7 +65,7 @@ class SoarcaFin(ISoarcaFin):
 
     def _create_mqtt_client(self, client_id: str) -> mqtt.Client:
         mqttc = mqtt.Client(
-            client_id=client_id, callback_api_version=mqtt.CallbackAPIVersion.VERSION2, clean_session=True)
+            client_id=client_id, callback_api_version=mqtt.CallbackAPIVersion.VERSION2, protocol=PahoEnums.MQTTProtocolVersion.MQTTv5)
 
         mqttc.username_pw_set(self.username, self.password)
 

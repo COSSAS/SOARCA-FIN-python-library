@@ -42,7 +42,9 @@ class Parser(IParser):
                 return Command(**content)
             case "register":
                 log.debug(
-                    "Ignoring register request, since only the fin can start this")
+                    "Ignoring register request, since only the fin can start this")           
+            case "unregister":
+                return Unregister(**content)
             case "result":
                 log.debug(
                     "Ignoring result request, since only the fin can send this")
