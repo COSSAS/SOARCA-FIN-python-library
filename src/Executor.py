@@ -52,8 +52,8 @@ class Executor(IExecutor):
     def _put_message_in_queue(self, message: Message, timeout: float = None):
         self.queue.put(message, timeout=timeout)
 
-    def _handle_register_message(self, message: Register): \
-            # Send command message to soarca
+    def _handle_register_message(self, message: Register):
+        # Send command message to soarca
         self._send_message_as_json(message, topic="soarca")
 
         # Wait for ack
@@ -61,16 +61,20 @@ class Executor(IExecutor):
         while retries > 0:
             try:
                 self._wait_for_ack(message.message_id)
-                break
+                return
             except (Empty, TimeoutError) as e:
                 retries -= 1
                 if retries == 0:
-                    break
+                    log.error(
+                        f"Did not receive an ack for message {message.message_id}. Aborting...")
+                    exit(-1)
                 self._send_message_as_json(message, topic="soarca")
             except RuntimeError as e:
                 retries -= 1
                 if retries == 0:
-                    break
+                    log.error(
+                        f"Did not receive an ack for message {message.message_id}. Aborting...")
+                    exit(-1)
                 self._send_message_as_json(message, topic="soarca")
 
     def _handle_command_message(self, message: Command):
