@@ -153,17 +153,17 @@ def capability_callback_test():
     print("Test capability")
 
 
-if __name__ == "__main__":
-    log.basicConfig()
-    log.getLogger().setLevel(log.DEBUG)
-    try:
-        load_dotenv()
-        USERNAME = os.getenv("USERNAME")
-        PASSWD = os.getenv("PASSWD")
-    except Exception as e:
-        log.CRITICAL(
-            "Could not read environment variables. Make sure the .env file exists in the src directory")
-        log.CRITICAL(e)
-        exit(-1)
+# if __name__ == "__main__":
+#     log.basicConfig()
+#     log.getLogger().setLevel(log.DEBUG)
+#     try:
+#         load_dotenv()
+#         USERNAME = os.getenv("USERNAME")
+#         PASSWD = os.getenv("PASSWD")
+#     except Exception as e:
+#         log.CRITICAL(
+#             "Could not read environment variables. Make sure the .env file exists in the src directory")
+#         log.CRITICAL(e)
+#         exit(-1)
 
-    main(USERNAME, PASSWD)
+#     main(USERNAME, PASSWD)

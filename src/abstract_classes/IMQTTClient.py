@@ -1,18 +1,19 @@
 from abc import ABC, abstractmethod
-
-from src.models.capabilityStructure import CapabilityStructure
+from paho.mqtt.client import Client, MQTTMessage, ConnectFlags
+from paho.mqtt.reasoncodes import ReasonCode
+from paho.mqtt.properties import Properties
 
 
 class IMQTTClient(ABC):
 
     @abstractmethod
-    def set_config_MQTT_server(host: str, port: str, username: str, password: str) -> None:
+    def on_connect(self, client: Client, userdata, connect_flags: ConnectFlags, reason_code: ReasonCode, properties: Properties):
         pass
 
     @abstractmethod
-    def set_fin_capabilitites(capabilities: list[CapabilityStructure]) -> None:
+    def on_message(self, client: Client, userdata, message: MQTTMessage):
         pass
 
     @abstractmethod
-    def start_fin() -> None:
+    def start(self):
         pass

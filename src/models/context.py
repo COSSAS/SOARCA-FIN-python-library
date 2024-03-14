@@ -6,6 +6,6 @@ class Context(BaseModel):
     step_id: str
     playbook_id: str
     execution_id: str
-    completed_on: Optional[str]
-    generated_on: Optional[str]
-    timeout: Optional[str]
+    completed_on: Optional[str] = None
+    generated_on: Optional[str] = None
+    timeout: Optional[str] = None
