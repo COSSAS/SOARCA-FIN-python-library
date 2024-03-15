@@ -10,6 +10,8 @@ from models.nack import Nack
 from models.unregister import Unregister
 from models.command import Command
 
+# Parser class to convert MQTT messages to Fin protocol messages.
+
 
 class Parser(IParser):
 
@@ -17,22 +19,27 @@ class Parser(IParser):
         self.id = id
 
     def parse_on_message(self, message: mqtt.MQTTMessage) -> Message:
+        # Check if we did not receive an empty MQTT message.
         if not message.payload:
             log.error(f"Received a message with an empty payload")
             raise LookupError("Could not receive payload from message")
         content = ""
+        # Try to convert MQTT payload to utf8 and load is as a JSON object.
         try:
             content = json.loads(message.payload.decode('utf8'))
         except Exception as e:
             log.error(f"Could not parse the payload as json format: {e}")
             raise e
+        # Check for attribute 'type'. Is required to parse the message further.
         if not "type" in content:
             log.error("Error, no message type found in payload")
             raise LookupError("No type attribute in payload")
 
+        # Check for attribute 'message_id'. Is required for a valid message.
         if not "message_id" in content:
             log.error("No message_id found in the payload")
 
+        # Match on type and convert to Message types
         match content["type"]:
             case "ack":
                 return Ack(**content)
@@ -42,7 +49,7 @@ class Parser(IParser):
                 return Command(**content)
             case "register":
                 log.debug(
-                    "Ignoring register request, since only the fin can start this")           
+                    "Ignoring register request, since only the fin can start this")
             case "unregister":
                 return Unregister(**content)
             case "result":

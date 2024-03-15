@@ -41,9 +41,13 @@ def main(username: str, password: str) -> None:
     capability_structure = CapabilityStructure(
         capability_id="1234", type=WorkFlowStepEnum.action, name="capability_name", version="0.0.1", step=step_structure, agent=agent)
 
+    # Create Soarca fin
     fin = SoarcaFin("123456789")
+    # Set config for MQTT Server
     fin.set_config_MQTT_server("localhost", 1883, username, password)
+    # Register Capabilities
     fin.create_fin_capability(capability_structure, capability_test_callback)
+    # Start the fin
     fin.start_fin()
 
 
