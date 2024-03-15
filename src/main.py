@@ -16,12 +16,14 @@ from models.command import Command
 from models.meta import Meta
 from models.resultStructure import ResultStructure
 from models.context import Context
+from datetime import datetime
 
 
 def capability_test_callback(command: Command) -> Result:
     print("Capability callback")
     message_id = str(uuid1())
-    meta = Meta(timestamp="123:32", sender_id="1234")
+    timestamp = datetime.now().isoformat()
+    meta = Meta(timestamp=timestamp, sender_id="1234")
     context = Context(step_id="1", playbook_id="2", execution_id="3")
     resultstructure = ResultStructure(
         state="success", context=context, variables={})
