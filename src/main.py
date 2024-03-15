@@ -16,13 +16,13 @@ from models.command import Command
 from models.meta import Meta
 from models.resultStructure import ResultStructure
 from models.context import Context
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def capability_test_callback(command: Command) -> Result:
     print("Capability callback")
     message_id = str(uuid1())
-    timestamp = datetime.now().isoformat()
+    timestamp = datetime.now(timezone.utc).isoformat()
     meta = Meta(timestamp=timestamp, sender_id="1234")
     context = Context(step_id="1", playbook_id="2", execution_id="3")
     resultstructure = ResultStructure(
@@ -41,7 +41,7 @@ def main(username: str, password: str) -> None:
                                    external_refernce], command="test-command", target="123456")
 
     capability_structure = CapabilityStructure(
-        capability_id="1234", type=WorkFlowStepEnum.action, name="capability_name", version="0.0.1", step=step_structure, agent=agent)
+        capability_id="mod-virustotal--e896aa3b-bb37-429e-8ece-2d4286cf326d", type=WorkFlowStepEnum.action, name="capability_name", version="0.0.1", step=step_structure, agent=agent)
 
     # Create Soarca fin
     fin = SoarcaFin("123456789")

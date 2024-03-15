@@ -17,7 +17,7 @@ from models.meta import Meta
 from models.message import Message
 from models.unregister import Unregister
 import logging as log
-from datetime import datetime
+from datetime import datetime, timezone
 from models.unregisterSelf import UnregisterSelf
 from models import unregisterSelf
 
@@ -102,7 +102,7 @@ class SoarcaFin(ISoarcaFin):
     def _create_register_message(self) -> Register:
         msg_uuid = str(uuid1())
         security = Security(version="0.0.1", channel_security="plaintext")
-        timestamp = datetime.now().isoformat()
+        timestamp = datetime.now(timezone.utc).isoformat()
         meta = Meta(timestamp=timestamp, sender_id=self.fin_id)
         return Register(message_id=msg_uuid, fin_id=self.fin_id, protocol_version="0.0.1",
                         security=security, capabilities=list(self.capability_structure.values()), meta=meta)
