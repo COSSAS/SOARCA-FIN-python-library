@@ -8,4 +8,4 @@ class Context(BaseModel):
     execution_id: str
     completed_on: Optional[str] = None
     generated_on: Optional[str] = None
-    timeout: Optional[str] = None
+    timeout: Optional[int] = None

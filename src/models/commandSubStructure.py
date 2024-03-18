@@ -8,6 +8,6 @@ from models.variable import Variable
 
 class CommandSubStructure(BaseModel):
     command: str
-    authentication: Optional[dict[str, AuthenticationInformation]]
+    authentication: Optional[AuthenticationInformation] = None
     context: Context
-    variables: dict[str, Variable]
+    variables: Optional[dict[str, Variable]] = None
