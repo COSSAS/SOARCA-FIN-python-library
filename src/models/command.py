@@ -1,4 +1,3 @@
-from click import Context
 from models.message import Message
 from models.commandSubStructure import CommandSubStructure
 from models.meta import Meta
