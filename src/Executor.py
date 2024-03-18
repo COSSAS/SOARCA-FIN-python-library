@@ -1,4 +1,6 @@
+from datetime import datetime, timezone
 import time
+from uuid import uuid1
 from abstract_classes.IExecutor import IExecutor
 from models.message import Message
 from queue import Queue
@@ -14,6 +16,8 @@ from models.nack import Nack
 from models.register import Register
 from models.unregister import Unregister
 from models.unregisterSelf import UnregisterSelf
+from models.resultStructure import ResultStructure
+from models.meta import Meta
 
 
 class Executor(IExecutor):
@@ -154,7 +158,12 @@ class Executor(IExecutor):
         self._send_message_as_json(ack)
 
         # Do Callback method
-        result: Result = self.callback(message)
+        resultStruct: ResultStructure = self.callback(message)
+        message_id = str(uuid1())
+        timestamp = datetime.now(timezone.utc).isoformat()
+        meta = Meta(timestamp=timestamp, sender_id=self.id)
+        result = Result(message_id=message_id, meta=meta,
+                        result=resultStruct)
 
         # Send result back
         self._send_message_as_json(result)

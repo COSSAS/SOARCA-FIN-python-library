@@ -1,7 +1,5 @@
 import os
 import logging as log
-import time
-from uuid import uuid1
 from dotenv import load_dotenv
 
 from SoarcaFin import SoarcaFin
@@ -11,25 +9,20 @@ from models.externalReference import ExternalReference
 from models.stepStructure import StepStructure
 from models.capabilityStructure import CapabilityStructure
 from enums.workFlowStepEnum import WorkFlowStepEnum
-from models.result import Result
 from models.command import Command
-from models.meta import Meta
 from models.resultStructure import ResultStructure
-from models.context import Context
-from datetime import datetime, timezone
+
+from models.variable import Variable
+from enums.variableTypeEnum import VariableTypeEnum
 
 
-def capability_test_callback(command: Command) -> Result:
-    # See Ping:
-    #   Send Pong back
-    print("Capability callback")
-    message_id = str(uuid1())
-    timestamp = datetime.now(timezone.utc).isoformat()
-    meta = Meta(timestamp=timestamp, sender_id="1234")
-    context = Context(step_id="1", playbook_id="2", execution_id="3")
-    resultstructure = ResultStructure(
-        state="success", context=context, variables={})
-    return Result(message_id=message_id, meta=meta, result=resultstructure)
+def capability_pong_callback(command: Command) -> ResultStructure:
+    log.info("Received ping, returning pong!")
+    out = Variable(type=VariableTypeEnum.string, name="pong_output",
+                   description="If ping, return pong", value="pong", constant=True, external=False)
+    context = command.command.context
+    return ResultStructure(
+        state="success", context=context, variables={"result": out})
 
 
 def main(username: str, password: str) -> None:
@@ -50,7 +43,7 @@ def main(username: str, password: str) -> None:
     # Set config for MQTT Server
     fin.set_config_MQTT_server("localhost", 1883, username, password)
     # Register Capabilities
-    fin.create_fin_capability(capability_structure, capability_test_callback)
+    fin.create_fin_capability(capability_structure, capability_pong_callback)
     # Start the fin
     fin.start_fin()
 
