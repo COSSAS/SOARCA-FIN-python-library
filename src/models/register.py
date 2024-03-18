@@ -1,7 +1,7 @@
-from models.security import Security
-from models.capabilityStructure import CapabilityStructure
-from models.meta import Meta
-from models.message import Message
+from src.models.security import Security
+from src.models.capabilityStructure import CapabilityStructure
+from src.models.meta import Meta
+from src.models.message import Message
 
 
 class Register(Message):

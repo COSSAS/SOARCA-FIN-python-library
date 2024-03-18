@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel
 
-from enums.openVocabEnum import OpenVocabEnum
+from src.enums.openVocabEnum import OpenVocabEnum
 
 
 class AuthenticationInformation(BaseModel):

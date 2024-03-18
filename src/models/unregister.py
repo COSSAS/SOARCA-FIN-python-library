@@ -1,5 +1,5 @@
 from typing import Optional
-from models.message import Message
+from src.models.message import Message
 
 
 class Unregister(Message):

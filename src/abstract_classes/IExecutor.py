@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from models.message import Message
+from src.models.message import Message
 
 
 class IExecutor(ABC):

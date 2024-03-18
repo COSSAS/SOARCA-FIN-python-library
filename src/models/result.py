@@ -1,6 +1,6 @@
-from models.message import Message
-from models.resultStructure import ResultStructure
-from models.meta import Meta
+from src.models.message import Message
+from src.models.resultStructure import ResultStructure
+from src.models.meta import Meta
 
 
 class Result(Message):

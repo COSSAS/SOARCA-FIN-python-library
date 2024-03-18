@@ -1,5 +1,5 @@
 
-from models.message import Message
+from src.models.message import Message
 
 
 class Ack(Message):

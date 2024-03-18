@@ -1,6 +1,6 @@
-from models.message import Message
-from models.commandSubStructure import CommandSubStructure
-from models.meta import Meta
+from src.models.message import Message
+from src.models.commandSubStructure import CommandSubStructure
+from src.models.meta import Meta
 
 
 class Command(Message):

@@ -1,9 +1,9 @@
 from typing import Optional
 from pydantic import BaseModel
 
-from models.authenticationInformation import AuthenticationInformation
-from models.context import Context
-from models.variable import Variable
+from src.models.authenticationInformation import AuthenticationInformation
+from src.models.context import Context
+from src.models.variable import Variable
 
 
 class CommandSubStructure(BaseModel):

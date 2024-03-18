@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import paho.mqtt.client as mqtt
-from models.message import Message
+from src.models.message import Message
 
 
 class IParser(ABC):

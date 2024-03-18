@@ -1,14 +1,14 @@
 import json
 
-from abstract_classes.IParser import IParser
-from models.ack import Ack
-from models.message import Message
+from src.abstract_classes.IParser import IParser
+from src.models.ack import Ack
+from src.models.message import Message
 import paho.mqtt.client as mqtt
 import logging as log
 
-from models.nack import Nack
-from models.unregister import Unregister
-from models.command import Command
+from src.models.nack import Nack
+from src.models.unregister import Unregister
+from src.models.command import Command
 
 # Parser class to convert MQTT messages to Fin protocol messages.
 

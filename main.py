@@ -2,18 +2,18 @@ import os
 import logging as log
 from dotenv import load_dotenv
 
-from SoarcaFin import SoarcaFin
-from models.security import Security
-from models.agentStructure import AgentStructure
-from models.externalReference import ExternalReference
-from models.stepStructure import StepStructure
-from models.capabilityStructure import CapabilityStructure
-from enums.workFlowStepEnum import WorkFlowStepEnum
-from models.command import Command
-from models.resultStructure import ResultStructure
+from src.SoarcaFin import SoarcaFin
+from src.models.security import Security
+from src.models.agentStructure import AgentStructure
+from src.models.externalReference import ExternalReference
+from src.models.stepStructure import StepStructure
+from src.models.capabilityStructure import CapabilityStructure
+from src.enums.workFlowStepEnum import WorkFlowStepEnum
+from src.models.command import Command
+from src.models.resultStructure import ResultStructure
 
-from models.variable import Variable
-from enums.variableTypeEnum import VariableTypeEnum
+from src.models.variable import Variable
+from src.enums.variableTypeEnum import VariableTypeEnum
 
 
 def capability_pong_callback(command: Command) -> ResultStructure:
@@ -53,8 +53,8 @@ if __name__ == "__main__":
     log.getLogger().setLevel(log.DEBUG)
     try:
         load_dotenv()
-        USERNAME = os.getenv("USERNAME")
-        PASSWD = os.getenv("PASSWD")
+        USERNAME = os.getenv("MQTT_USERNAME")
+        PASSWD = os.getenv("MQTT_PASSWD")
     except Exception as e:
         log.CRITICAL(
             "Could not read environment variables. Make sure the .env file exists in the src directory")
