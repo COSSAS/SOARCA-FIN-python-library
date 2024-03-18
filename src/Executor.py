@@ -25,6 +25,7 @@ class Executor(IExecutor):
     def __init__(self, id: str, callback, queue: Queue, mqttc: Client):
         self.queue: Queue[Message] = queue
         self.mqttc: Client = mqttc
+        self.acks: list[str] = []
         self.id = id
         self.callback = callback
         self.TIMEOUT = 30
@@ -49,10 +50,13 @@ class Executor(IExecutor):
                 # This method is blocking
                 message = self._get_message_from_queue(timeout=10)
                 match message:
-                    case Ack():
-                        self._put_message_in_queue(message)
-                    case Nack():
-                        self._put_message_in_queue(message)
+                    case Ack() | Nack():
+                        # Check if we are expecting this (n)ack
+                        if message.message_id in self.acks:
+                            self._put_message_in_queue(message)
+                        else:
+                            log.debug(
+                                f"Received unknown (n)ack with message_id: {message.message_id}")
                     case Register():
                         self._handle_register_message(message)
                     case Unregister():
@@ -197,6 +201,8 @@ class Executor(IExecutor):
     # Polls message queue for acks and nacks. If message is not for the correct one, retrieve new message from queue and put the old message back in.
     # If timeout expires or a nack is received, raise an exception.
     def _wait_for_ack(self, message_id: str):
+        # Notify executor that we are waiting for an ack
+        self.acks.append(message_id)
         startTime = time.time()
         while time.time() < startTime + self.TIMEOUT:
             try:
@@ -207,6 +213,8 @@ class Executor(IExecutor):
 
                     message = self._get_message_from_queue(timeout=timeout)
 
+                # Notify executor that we received ack
+                self.acks.remove(message_id)
                 match message:
                     case Ack():
                         log.info(f"Receive ack for message {message_id}")

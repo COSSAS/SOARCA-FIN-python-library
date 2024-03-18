@@ -29,12 +29,14 @@ class MQTTClient(IMQTTClient):
 
     # On message callback function for Paho MQTT client
     def on_message(self, client: Client, userdata, message: MQTTMessage):
-        # Parse message to check message type
-        msg = self.parser.parse_on_message(message)
-
-        # If we should process the message, send it to the executor
-        if msg:
-            self.executor.queue_message(msg)
+        try:
+            # Parse message to check message type
+            msg = self.parser.parse_on_message(message)
+            # If we should process the message, send it to the executor
+            if msg:
+                self.executor.queue_message(msg)
+        except Exception as e:
+            log.error(f"Something went wrong when parsing messag:\n{e}")
 
     # Start the MQTT client by registering mqtt callbacks, subscribing to topic and launching executor
     def start(self):
