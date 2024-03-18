@@ -36,7 +36,7 @@ def main(username: str, password: str) -> None:
                                    external_references=external_refernce, command="test-command", target="123456")
 
     capability_structure = CapabilityStructure(
-        capability_id="mod-virustotal--e896aa3b-bb37-429e-8ece-2d4286cf326d", type=WorkFlowStepEnum.action, name="capability_name", version="0.0.1", step={"test": step_structure})
+        capability_id="mod-virustotal--e896aa3b-bb37-429e-8ece-2d4286cf326d", type=WorkFlowStepEnum.action, name="capability_name", version="0.0.1", step={"test": step_structure}, agent={"testagent": agent})
 
     # Create Soarca fin
     fin = SoarcaFin("123456789")
