@@ -1,0 +1,25 @@
+@startuml Sequence Diagram Command
+
+Soarca -> "MQTTClient (Capability 1)" : Command Message [Capability ID Topic]
+
+"MQTTClient (Capability 1)" -> Parser : parse_on_message(message)
+"MQTTClient (Capability 1)" <-- Parser : Message.Command
+
+"MQTTClient (Capability 1)" -> "Executor (Capability 1)" : Command message
+Soarca <-- "Executor (Capability 1)" : Ack
+
+"Executor (Capability 1)" -> "Capability Callback" : Command
+"Executor (Capability 1)" <-- "Capability Callback" : Result
+
+
+Soarca <- "Executor (Capability 1)" : Result
+Soarca --> "MQTTClient (Capability 1)" : Ack
+
+"MQTTClient (Capability 1)" -> Parser : parse_on_message(message)
+"MQTTClient (Capability 1)" <-- Parser : Message.Ack
+
+"MQTTClient (Capability 1)" -> "Executor (Capability 1)" : Ack message
+
+
+
+@enduml
