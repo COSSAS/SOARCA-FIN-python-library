@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+
+  mosquitto:
+    container_name: mqtt-mosquitto
+    image: eclipse-mosquitto
+    ports:
+      - 1883:1883
+      - 8883:8883
+    volumes:
+      - ./mosquitto/logs:/mosquitto/logs
+      - ./mosquitto/config:/mosquitto/config
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Amsterdam
+
+    restart: unless-stopped
+
+volumes:
+  store:
+  config:
+  mosquitto-data:
+  mosquitto-logs:
