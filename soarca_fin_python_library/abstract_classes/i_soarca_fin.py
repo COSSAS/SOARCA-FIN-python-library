@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.models.capability_structure import CapabilityStructure
+from soarca_fin_python_library.models.capability_structure import CapabilityStructure
 
 
 class ISoarcaFin(ABC):

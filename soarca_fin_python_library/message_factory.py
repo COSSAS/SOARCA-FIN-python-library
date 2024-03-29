@@ -1,25 +1,25 @@
 import datetime
 from uuid import uuid1
-from src.models.ack import Ack
-from src.models.nack import Nack
-from src.models.agent_structure import AgentStructure
-from src.models.external_reference import ExternalReference
-from src.models.step_structure import StepStructure
-from src.models.capability_structure import CapabilityStructure
-from src.enums.workflow_step_enum import WorkFlowStepEnum
-from src.models.security import Security
-from src.models.meta import Meta
-from src.models.register import Register
-from src.models.unregister import Unregister
-from src.models.variable import Variable
-from src.enums.variable_type_enum import VariableTypeEnum
-from src.models.context import Context
-from src.enums.auth_type_enum import AuthTypeEnum
-from src.models.authentication_information import AuthenticationInformation
-from src.models.command_sub_structure import CommandSubStructure
-from src.models.command import Command
-from src.models.result_structure import ResultStructure
-from src.models.result import Result
+from soarca_fin_python_library.models.ack import Ack
+from soarca_fin_python_library.models.nack import Nack
+from soarca_fin_python_library.models.agent_structure import AgentStructure
+from soarca_fin_python_library.models.external_reference import ExternalReference
+from soarca_fin_python_library.models.step_structure import StepStructure
+from soarca_fin_python_library.models.capability_structure import CapabilityStructure
+from soarca_fin_python_library.enums.workflow_step_enum import WorkFlowStepEnum
+from soarca_fin_python_library.models.security import Security
+from soarca_fin_python_library.models.meta import Meta
+from soarca_fin_python_library.models.register import Register
+from soarca_fin_python_library.models.unregister import Unregister
+from soarca_fin_python_library.models.variable import Variable
+from soarca_fin_python_library.enums.variable_type_enum import VariableTypeEnum
+from soarca_fin_python_library.models.context import Context
+from soarca_fin_python_library.enums.auth_type_enum import AuthTypeEnum
+from soarca_fin_python_library.models.authentication_information import AuthenticationInformation
+from soarca_fin_python_library.models.command_sub_structure import CommandSubStructure
+from soarca_fin_python_library.models.command import Command
+from soarca_fin_python_library.models.result_structure import ResultStructure
+from soarca_fin_python_library.models.result import Result
 
 
 def generateRegisterMessage(

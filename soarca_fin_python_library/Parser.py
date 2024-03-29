@@ -1,14 +1,14 @@
 import json
 
-from src.abstract_classes.i_parser import IParser
-from src.models.ack import Ack
-from src.models.message import Message
+from soarca_fin_python_library.abstract_classes.i_parser import IParser
+from soarca_fin_python_library.models.ack import Ack
+from soarca_fin_python_library.models.message import Message
 import paho.mqtt.client as mqtt
 import logging as log
 
-from src.models.nack import Nack
-from src.models.unregister import Unregister
-from src.models.command import Command
+from soarca_fin_python_library.models.nack import Nack
+from soarca_fin_python_library.models.unregister import Unregister
+from soarca_fin_python_library.models.command import Command
 
 # Parser class to convert MQTT messages to Fin protocol messages.
 

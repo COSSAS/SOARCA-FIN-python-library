@@ -1,7 +1,7 @@
 from pydantic import BaseModel
-from src.enums.workflow_step_enum import WorkFlowStepEnum
-from src.models.agent_structure import AgentStructure
-from src.models.step_structure import StepStructure
+from soarca_fin_python_library.enums.workflow_step_enum import WorkFlowStepEnum
+from soarca_fin_python_library.models.agent_structure import AgentStructure
+from soarca_fin_python_library.models.step_structure import StepStructure
 
 
 class CapabilityStructure(BaseModel):

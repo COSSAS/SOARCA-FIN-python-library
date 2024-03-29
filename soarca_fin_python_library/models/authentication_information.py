@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel
 
-from src.enums.auth_type_enum import AuthTypeEnum
+from soarca_fin_python_library.enums.auth_type_enum import AuthTypeEnum
 
 
 class AuthenticationInformation(BaseModel):

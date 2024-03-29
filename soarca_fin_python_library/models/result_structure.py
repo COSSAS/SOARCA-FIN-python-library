@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
-from src.models.context import Context
-from src.models.variable import Variable
+from soarca_fin_python_library.models.context import Context
+from soarca_fin_python_library.models.variable import Variable
 
 
 class ResultStructure(BaseModel):
