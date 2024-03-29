@@ -9,7 +9,7 @@ from paho.mqtt.subscribeoptions import SubscribeOptions
 from soarca_fin_python_library.abstract_classes.i_executor import IExecutor
 from soarca_fin_python_library.abstract_classes.i_parser import IParser
 from soarca_fin_python_library.abstract_classes.i_mqtt_client import IMQTTClient
-from soarca_fin_python_library.executor import Executor
+from soarca_fin_python_library import Executor
 
 
 class MQTTClient(IMQTTClient):
