@@ -1,9 +1,9 @@
 import json
 import unittest
 
-from src.enums.variable_type_enum import VariableTypeEnum
-from src.message_factory import generateVariableMessage
-from src.models.variable import Variable
+from soarca_fin_python_library.enums.variable_type_enum import VariableTypeEnum
+from soarca_fin_python_library.message_factory import generateVariableMessage
+from soarca_fin_python_library.models.variable import Variable
 
 
 class TestVariable(unittest.TestCase):

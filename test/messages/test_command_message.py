@@ -2,10 +2,10 @@ import json
 import unittest
 from uuid import uuid1
 
-from src.message_factory import generateCommandMessage, generateCommandSubStructureMessage, generateContextMessage, generateMetaMessage
-from src.models.command_sub_structure import CommandSubStructure
-from src.models.meta import Meta
-from src.models.command import Command
+from soarca_fin_python_library.message_factory import generateCommandMessage, generateCommandSubStructureMessage, generateContextMessage, generateMetaMessage
+from soarca_fin_python_library.models.command_sub_structure import CommandSubStructure
+from soarca_fin_python_library.models.meta import Meta
+from soarca_fin_python_library.models.command import Command
 
 
 class TestCommandMessage(unittest.TestCase):

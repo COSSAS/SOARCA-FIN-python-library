@@ -2,10 +2,10 @@ import json
 import unittest
 from uuid import uuid1
 
-from src.message_factory import generateContextMessage, generateMetaMessage, generateResultMessage, generateResultStructureMessage
-from src.models.result_structure import ResultStructure
-from src.models.meta import Meta
-from src.models.result import Result
+from soarca_fin_python_library.message_factory import generateContextMessage, generateMetaMessage, generateResultMessage, generateResultStructureMessage
+from soarca_fin_python_library.models.result_structure import ResultStructure
+from soarca_fin_python_library.models.meta import Meta
+from soarca_fin_python_library.models.result import Result
 
 
 class TestResultMessage(unittest.TestCase):

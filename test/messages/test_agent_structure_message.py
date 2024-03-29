@@ -1,8 +1,8 @@
 import unittest
 import json
 from uuid import uuid1
-from src.message_factory import generateAgentStructureMessage
-from src.models.agent_structure import AgentStructure
+from soarca_fin_python_library.message_factory import generateAgentStructureMessage
+from soarca_fin_python_library.models.agent_structure import AgentStructure
 
 
 class TestAgentStructureMessage(unittest.TestCase):

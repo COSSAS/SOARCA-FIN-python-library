@@ -2,9 +2,9 @@ import json
 import unittest
 from uuid import uuid1
 
-from src.message_factory import generateContextMessage, generateResultStructureMessage
-from src.models.context import Context
-from src.models.result_structure import ResultStructure
+from soarca_fin_python_library.message_factory import generateContextMessage, generateResultStructureMessage
+from soarca_fin_python_library.models.context import Context
+from soarca_fin_python_library.models.result_structure import ResultStructure
 
 
 class TestResultStructure(unittest.TestCase):

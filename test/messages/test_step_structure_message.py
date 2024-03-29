@@ -2,9 +2,9 @@ import unittest
 import json
 from uuid import uuid1
 
-from src.message_factory import generateExternalReferenceMessage, generateStepStructureMessage
-from src.models.external_reference import ExternalReference
-from src.models.step_structure import StepStructure
+from soarca_fin_python_library.message_factory import generateExternalReferenceMessage, generateStepStructureMessage
+from soarca_fin_python_library.models.external_reference import ExternalReference
+from soarca_fin_python_library.models.step_structure import StepStructure
 
 
 class testStepStructureMessage(unittest.TestCase):

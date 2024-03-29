@@ -1,8 +1,8 @@
 import unittest
 import json
 from uuid import uuid1
-from src.message_factory import generateNackMessage
-from src.models.nack import Nack
+from soarca_fin_python_library.message_factory import generateNackMessage
+from soarca_fin_python_library.models.nack import Nack
 
 
 class TestAckMessage(unittest.TestCase):

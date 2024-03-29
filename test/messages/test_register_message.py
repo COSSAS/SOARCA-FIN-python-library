@@ -1,9 +1,9 @@
 import json
 import unittest
 from uuid import uuid1
-from src.enums.workflow_step_enum import WorkFlowStepEnum
+from soarca_fin_python_library.enums.workflow_step_enum import WorkFlowStepEnum
 
-from src.message_factory import generateAgentStructureMessage, generateCapabilityStructureMessage, generateExternalReferenceMessage, generateMetaMessage, generateRegisterMessage, generateSecurityMessage, generateStepStructureMessage
+from soarca_fin_python_library.message_factory import generateAgentStructureMessage, generateCapabilityStructureMessage, generateExternalReferenceMessage, generateMetaMessage, generateRegisterMessage, generateSecurityMessage, generateStepStructureMessage
 
 
 class testRegisterMessage(unittest.TestCase):

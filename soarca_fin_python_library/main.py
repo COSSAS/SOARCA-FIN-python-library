@@ -72,9 +72,9 @@ if __name__ == "__main__":
         USERNAME = os.getenv("MQTT_USERNAME")
         PASSWD = os.getenv("MQTT_PASSWD")
     except Exception as e:
-        log.CRITICAL(
+        log.critical(
             "Could not read environment variables. Make sure the .env file exists in the src directory")
-        log.CRITICAL(e)
+        log.critical(e)
         exit(-1)
 
     main(USERNAME, PASSWD)

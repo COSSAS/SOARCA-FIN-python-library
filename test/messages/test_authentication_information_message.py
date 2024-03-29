@@ -1,9 +1,9 @@
 import json
 import unittest
 
-from src.enums.auth_type_enum import AuthTypeEnum
-from src.message_factory import generateAuthenticationInformationMessage
-from src.models.authentication_information import AuthenticationInformation
+from soarca_fin_python_library.enums.auth_type_enum import AuthTypeEnum
+from soarca_fin_python_library.message_factory import generateAuthenticationInformationMessage
+from soarca_fin_python_library.models.authentication_information import AuthenticationInformation
 
 
 class TestAuthenticationInformationMessage(unittest.TestCase):

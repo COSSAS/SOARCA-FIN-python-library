@@ -3,8 +3,8 @@ import json
 import unittest
 from uuid import uuid1
 
-from src.message_factory import generateMetaMessage
-from src.models.meta import Meta
+from soarca_fin_python_library.message_factory import generateMetaMessage
+from soarca_fin_python_library.models.meta import Meta
 
 
 class testMetaMessage(unittest.TestCase):

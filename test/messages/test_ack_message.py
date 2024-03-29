@@ -1,8 +1,8 @@
 import unittest
 import json
 from uuid import uuid1
-from src.message_factory import generateAckMessage
-from src.models.ack import Ack
+from soarca_fin_python_library.message_factory import generateAckMessage
+from soarca_fin_python_library.models.ack import Ack
 
 
 class TestAckMessage(unittest.TestCase):

@@ -2,8 +2,8 @@ import json
 import unittest
 from uuid import uuid1
 
-from src.message_factory import generateUnregisterMessage
-from src.models.unregister import Unregister
+from soarca_fin_python_library.message_factory import generateUnregisterMessage
+from soarca_fin_python_library.models.unregister import Unregister
 
 
 class TestUnregisterMessage(unittest.TestCase):

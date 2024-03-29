@@ -2,9 +2,9 @@ import json
 import unittest
 from uuid import uuid1
 
-from src.message_factory import generateCommandSubStructureMessage, generateContextMessage
-from src.models.context import Context
-from src.models.command_sub_structure import CommandSubStructure
+from soarca_fin_python_library.message_factory import generateCommandSubStructureMessage, generateContextMessage
+from soarca_fin_python_library.models.context import Context
+from soarca_fin_python_library.models.command_sub_structure import CommandSubStructure
 
 
 class TestCommandSubStructureMessage(unittest.TestCase):

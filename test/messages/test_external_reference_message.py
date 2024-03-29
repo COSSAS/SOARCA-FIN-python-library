@@ -2,8 +2,8 @@ import unittest
 import json
 from uuid import uuid1
 
-from src.message_factory import generateExternalReferenceMessage
-from src.models.external_reference import ExternalReference
+from soarca_fin_python_library.message_factory import generateExternalReferenceMessage
+from soarca_fin_python_library.models.external_reference import ExternalReference
 
 
 class TestExternalReferenceMessage(unittest.TestCase):

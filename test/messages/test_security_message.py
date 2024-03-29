@@ -1,8 +1,8 @@
 import json
 import unittest
 
-from src.message_factory import generateSecurityMessage
-from src.models.security import Security
+from soarca_fin_python_library.message_factory import generateSecurityMessage
+from soarca_fin_python_library.models.security import Security
 
 
 class testSecurityMessage(unittest.TestCase):
