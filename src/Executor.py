@@ -104,19 +104,15 @@ class Executor(IExecutor):
                 self.callback(message)
                 return
             except (Empty, TimeoutError) as e:
-                retries -= 1
-                if retries == 0:
-                    log.error(
-                        f"Did not receive an ack for message {message.message_id}. Aborting...")
-                    exit(-1)
                 self._send_message_as_json(message, topic="soarca")
             except RuntimeError as e:
+                self._send_message_as_json(message, topic="soarca")
+            finally:
                 retries -= 1
                 if retries == 0:
                     log.error(
                         f"Did not receive an ack for message {message.message_id}. Aborting...")
                     exit(-1)
-                self._send_message_as_json(message, topic="soarca")
 
     # Handles self generated register message.
     # First sends a register message, then waits for acks.
@@ -134,23 +130,19 @@ class Executor(IExecutor):
                 return
             # Did not get a response in time
             except (Empty, TimeoutError) as e:
-                retries -= 1
-                if retries == 0:
-                    log.error(
-                        f"Did not receive an ack for message {message.message_id}. Aborting...")
-                    exit(-1)
                 # Resend message
                 self._send_message_as_json(message, topic="soarca")
 
             # Receive a response but the message failed (Nack)
             except RuntimeError as e:
+                # Resend message
+                self._send_message_as_json(message, topic="soarca")
+            finally:
                 retries -= 1
                 if retries == 0:
                     log.error(
                         f"Did not receive an ack for message {message.message_id}. Aborting...")
                     exit(-1)
-                # Resend message
-                self._send_message_as_json(message, topic="soarca")
 
     # Handles a command message from SOARCA.
     # First sends an acknowledgement back, then calls capability callback function with the command as argument.
@@ -179,15 +171,13 @@ class Executor(IExecutor):
                 self._wait_for_ack(result.message_id)
                 break
             except (Empty, TimeoutError) as e:
-                retries -= 1
-                if retries == 0:
-                    break
                 self._send_message_as_json(result)
             except RuntimeError as e:
+                self._send_message_as_json(result)
+            finally:
                 retries -= 1
                 if retries == 0:
                     break
-                self._send_message_as_json(result)
 
     # Publishes a message as JSON on a topic. Default topic is self.id.
     def _send_message_as_json(self, message: Message, topic: str = None):
