@@ -2,7 +2,7 @@ import json
 import unittest
 
 from src.message_factory import generateSecurityMessage
-from models.security import Security
+from src.models.security import Security
 
 
 class testSecurityMessage(unittest.TestCase):

@@ -33,8 +33,12 @@ class SoarcaFin(ISoarcaFin):
         self.capability_structure: dict[str, CapabilityStructure] = {}
         self.fin: IMQTTClient = None
 
-    # Create a soarca capability by listing on a topic and registering callback function
-    def create_fin_capability(self, capability: CapabilityStructure, callback) -> None:
+    # Create a soarca capability by listing on a topic and registering
+    # callback function
+    def create_fin_capability(
+            self,
+            capability: CapabilityStructure,
+            callback) -> None:
         mqttc = self._create_mqtt_client(capability.capability_id)
         parser = Parser(capability.capability_id)
         executor = Executor(capability.capability_id, callback, Queue(), mqttc)
@@ -44,7 +48,12 @@ class SoarcaFin(ISoarcaFin):
         self.capability_structure[capability.capability_id] = capability
 
     # Set settings for MQTT Server
-    def set_config_MQTT_server(self, host: str, port: int, username: str, password: str) -> None:
+    def set_config_MQTT_server(
+            self,
+            host: str,
+            port: int,
+            username: str,
+            password: str) -> None:
         self.host = host
         self.port = port
         self.username = username
@@ -53,7 +62,8 @@ class SoarcaFin(ISoarcaFin):
     # Starts the fin and the capabilities by sending a register message to the MQTT broker
     # on the 'soarca' topic.
     def start_fin(self) -> None:
-        # Start the capabilities so they can listen for incomming messages immediately
+        # Start the capabilities so they can listen for incomming messages
+        # immediately
         for capability in self.capabilities.values():
             capability.start()
 
@@ -97,19 +107,28 @@ class SoarcaFin(ISoarcaFin):
             case _:
                 log.error("Unknown message")
 
-    # Helper function to generate a register message from  registered capabilities
+    # Helper function to generate a register message from  registered
+    # capabilities
     def _create_register_message(self) -> Register:
         msg_uuid = str(uuid1())
         security = Security(version="0.0.1", channel_security="plaintext")
         timestamp = datetime.now(timezone.utc).isoformat()
         meta = Meta(timestamp=timestamp, sender_id=self.fin_id)
-        return Register(message_id=msg_uuid, fin_id=self.fin_id, protocol_version="0.0.1",
-                        security=security, capabilities=list(self.capability_structure.values()), meta=meta)
+        return Register(
+            message_id=msg_uuid,
+            fin_id=self.fin_id,
+            protocol_version="0.0.1",
+            security=security,
+            capabilities=list(
+                self.capability_structure.values()),
+            meta=meta)
 
     # Helper function to generate MQTT clients
     def _create_mqtt_client(self, client_id: str) -> mqtt.Client:
         mqttc = mqtt.Client(
-            client_id=client_id, callback_api_version=mqtt.CallbackAPIVersion.VERSION2, protocol=PahoEnums.MQTTProtocolVersion.MQTTv5)
+            client_id=client_id,
+            callback_api_version=mqtt.CallbackAPIVersion.VERSION2,
+            protocol=PahoEnums.MQTTProtocolVersion.MQTTv5)
 
         mqttc.username_pw_set(self.username, self.password)
 

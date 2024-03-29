@@ -4,7 +4,7 @@ import unittest
 from uuid import uuid1
 
 from src.message_factory import generateMetaMessage
-from models.meta import Meta
+from src.models.meta import Meta
 
 
 class testMetaMessage(unittest.TestCase):

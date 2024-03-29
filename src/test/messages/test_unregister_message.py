@@ -3,7 +3,7 @@ import unittest
 from uuid import uuid1
 
 from src.message_factory import generateUnregisterMessage
-from models.unregister import Unregister
+from src.models.unregister import Unregister
 
 
 class TestUnregisterMessage(unittest.TestCase):

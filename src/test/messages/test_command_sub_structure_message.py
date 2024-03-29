@@ -3,7 +3,7 @@ import unittest
 from uuid import uuid1
 
 from src.message_factory import generateCommandSubStructureMessage, generateContextMessage
-from models.context import Context
+from src.models.context import Context
 from src.models.command_sub_structure import CommandSubStructure
 
 

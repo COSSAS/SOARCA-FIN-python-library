@@ -4,8 +4,8 @@ from uuid import uuid1
 
 from src.message_factory import generateContextMessage, generateMetaMessage, generateResultMessage, generateResultStructureMessage
 from src.models.result_structure import ResultStructure
-from models.meta import Meta
-from models.result import Result
+from src.models.meta import Meta
+from src.models.result import Result
 
 
 class TestResultMessage(unittest.TestCase):

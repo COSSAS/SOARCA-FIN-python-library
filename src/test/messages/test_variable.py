@@ -3,7 +3,7 @@ import unittest
 
 from src.enums.variable_type_enum import VariableTypeEnum
 from src.message_factory import generateVariableMessage
-from models.variable import Variable
+from src.models.variable import Variable
 
 
 class TestVariable(unittest.TestCase):

@@ -4,7 +4,7 @@ import unittest
 from uuid import uuid1
 
 from src.message_factory import generateContextMessage
-from models.context import Context
+from src.models.context import Context
 
 
 class TestContextMessage(unittest.TestCase):

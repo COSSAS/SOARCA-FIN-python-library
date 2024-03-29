@@ -4,8 +4,8 @@ from uuid import uuid1
 
 from src.message_factory import generateCommandMessage, generateCommandSubStructureMessage, generateContextMessage, generateMetaMessage
 from src.models.command_sub_structure import CommandSubStructure
-from models.meta import Meta
-from models.command import Command
+from src.models.meta import Meta
+from src.models.command import Command
 
 
 class TestCommandMessage(unittest.TestCase):

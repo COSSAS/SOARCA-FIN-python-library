@@ -6,15 +6,21 @@ from paho.mqtt.reasoncodes import ReasonCode
 import paho.mqtt.client as mqtt
 from paho.mqtt.subscribeoptions import SubscribeOptions
 
-from src.abstract_classes.IExecutor import IExecutor
+from src.abstract_classes.i_executor import IExecutor
 from src.abstract_classes.i_parser import IParser
 from src.abstract_classes.i_mqtt_client import IMQTTClient
-from src.Executor import Executor
+from src.executor import Executor
 
 
 class MQTTClient(IMQTTClient):
 
-    def __init__(self, id: str, mqttc: mqtt.Client, callback, executor: IExecutor, parser: IParser):
+    def __init__(
+            self,
+            id: str,
+            mqttc: mqtt.Client,
+            callback,
+            executor: IExecutor,
+            parser: IParser):
         self.id: str = id
         self.mqttc: mqtt.Client = mqttc
         self.callback = callback
@@ -23,7 +29,13 @@ class MQTTClient(IMQTTClient):
         self._executor_thread = None
 
     # On connect callback function for Paho MQTT client
-    def on_connect(self, client: Client, userdata, connect_flags: ConnectFlags, reason_code: ReasonCode, properties: Properties):
+    def on_connect(
+            self,
+            client: Client,
+            userdata,
+            connect_flags: ConnectFlags,
+            reason_code: ReasonCode,
+            properties: Properties):
         return
 
     # On message callback function for Paho MQTT client
@@ -37,7 +49,8 @@ class MQTTClient(IMQTTClient):
         except Exception as e:
             log.error(f"Something went wrong when parsing messag:\n{e}")
 
-    # Start the MQTT client by registering mqtt callbacks, subscribing to topic and launching executor
+    # Start the MQTT client by registering mqtt callbacks, subscribing to
+    # topic and launching executor
     def start(self):
         # Set mqttc callback functions
         self.mqttc.on_connect = self.on_connect
@@ -53,12 +66,14 @@ class MQTTClient(IMQTTClient):
 
         # Start executor thread
         self._executor_thread = threading.Thread(
-            target=self.executor.start_executor, name=f"executor-thread-{self.id}")
+            target=self.executor.start_executor,
+            name=f"executor-thread-{self.id}")
         self._executor_thread.daemon = True
 
         self._executor_thread.start()
 
-    # Stop MQTT client by unsubscribing, stopping mqtt callbacks and exiting executor
+    # Stop MQTT client by unsubscribing, stopping mqtt callbacks and exiting
+    # executor
     def stop(self):
         self.mqttc.unsubscribe(self.id)
         self.mqttc.loop_stop()

@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 import time
 from uuid import uuid1
-from src.abstract_classes.IExecutor import IExecutor
+from src.abstract_classes.i_executor import IExecutor
 from src.models.message import Message
 from queue import Queue
 from paho.mqtt.client import Client
@@ -83,7 +83,8 @@ class Executor(IExecutor):
         self.queue.put(message, timeout=timeout)
 
     # Handles Unregister messages from SOARCA.
-    # First sends an acknowledgement, then calls controll callback function to stop fin(s).
+    # First sends an acknowledgement, then calls controll callback function to
+    # stop fin(s).
     def _handle_unregister_message(self, message: Unregister):
         ack = Ack(message_id=message.message_id)
         self._send_message_as_json(ack, topic="soarca")
@@ -91,7 +92,8 @@ class Executor(IExecutor):
         self.callback(message)
 
     # Handles unregister messages if self generated.
-    # Waits for an acknowledgement before calling controll callback function to stop fin(s).
+    # Waits for an acknowledgement before calling controll callback function
+    # to stop fin(s).
     def _handle_unregister_self_message(self, message: UnregisterSelf):
         # Send command message to soarca
         self._send_message_as_json(message, topic="soarca")

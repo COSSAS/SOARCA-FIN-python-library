@@ -2,7 +2,7 @@ import unittest
 import json
 from uuid import uuid1
 from src.message_factory import generateNackMessage
-from models.nack import Nack
+from src.models.nack import Nack
 
 
 class TestAckMessage(unittest.TestCase):

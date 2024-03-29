@@ -43,12 +43,13 @@ class testCapabilityStructureMessage(unittest.TestCase):
         self.assertEqual(capabilityStructure.version, version)
 
         self.assertIsInstance(capabilityStructure.agent, AgentStructure)
-        self.assertEqual(capabilityStructure.agent.name,
+        self.assertEqual(capabilityStructure.agent["agent"].name,
                          f"soarca-fin--{agent_name}-{uuid_agent}")
 
         self.assertIsInstance(capabilityStructure.step, StepStructure)
         self.assertIsInstance(
-            capabilityStructure.step.external_references[0], ExternalReference)
+            capabilityStructure.step["step"].external_references[0],
+            ExternalReference)
 
     def test_json_to_capability_structure_message(self):
         agent_name = "test"
@@ -89,12 +90,12 @@ class testCapabilityStructureMessage(unittest.TestCase):
         self.assertEqual(capabilityStructure.version, version)
 
         self.assertIsInstance(capabilityStructure.agent, AgentStructure)
-        self.assertEqual(capabilityStructure.agent.name,
+        self.assertEqual(capabilityStructure.agent["agent"].name,
                          f"soarca-fin--{agent_name}-{uuid_agent}")
 
         self.assertIsInstance(capabilityStructure.step, StepStructure)
         self.assertIsInstance(
-            capabilityStructure.step.external_references[0], ExternalReference)
+            capabilityStructure.step["step"].external_references[0], ExternalReference)
 
     def test_capability_structure_to_json(self):
         agent_name = "test"

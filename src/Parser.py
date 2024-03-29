@@ -31,12 +31,12 @@ class Parser(IParser):
             log.error(f"Could not parse the payload as json format: {e}")
             raise e
         # Check for attribute 'type'. Is required to parse the message further.
-        if not "type" in content:
+        if "type" not in content:
             log.error("Error, no message type found in payload")
             raise LookupError("No type attribute in payload")
 
         # Check for attribute 'message_id'. Is required for a valid message.
-        if not "message_id" in content:
+        if "message_id" not in content:
             log.error("No message_id found in the payload")
 
         # Match on type and convert to Message types

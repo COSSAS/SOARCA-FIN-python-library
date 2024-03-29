@@ -18,8 +18,13 @@ from src.enums.variable_type_enum import VariableTypeEnum
 
 def capability_pong_callback(command: Command) -> ResultStructure:
     log.info("Received ping, returning pong!")
-    out = Variable(type=VariableTypeEnum.string, name="pong_output",
-                   description="If ping, return pong", value="pong", constant=True, external=False)
+    out = Variable(
+        type=VariableTypeEnum.string,
+        name="pong_output",
+        description="If ping, return pong",
+        value="pong",
+        constant=True,
+        external=False)
     context = command.command.context
     return ResultStructure(
         state="success", context=context, variables={"result": out})
@@ -32,11 +37,22 @@ def main(username: str, password: str) -> None:
 
     external_refernce = ExternalReference(name="external-reference-name")
 
-    step_structure = StepStructure(name="step_name", description="step description",
-                                   external_references=external_refernce, command="test-command", target="123456")
+    step_structure = StepStructure(
+        name="step_name",
+        description="step description",
+        external_references=external_refernce,
+        command="test-command",
+        target="123456")
 
     capability_structure = CapabilityStructure(
-        capability_id="mod-virustotal--e896aa3b-bb37-429e-8ece-2d4286cf326d", type=WorkFlowStepEnum.action, name="capability_name", version="0.0.1", step={"test": step_structure}, agent={"testagent": agent})
+        capability_id="mod-virustotal--e896aa3b-bb37-429e-8ece-2d4286cf326d",
+        type=WorkFlowStepEnum.action,
+        name="capability_name",
+        version="0.0.1",
+        step={
+            "test": step_structure},
+        agent={
+            "testagent": agent})
 
     # Create Soarca fin
     fin = SoarcaFin("123456789")
