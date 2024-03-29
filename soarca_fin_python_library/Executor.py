@@ -1,23 +1,23 @@
 from datetime import datetime, timezone
 import time
 from uuid import uuid1
-from src.abstract_classes.i_executor import IExecutor
-from src.models.message import Message
+from soarca_fin_python_library.abstract_classes.i_executor import IExecutor
+from soarca_fin_python_library.models.message import Message
 from queue import Queue
 from paho.mqtt.client import Client
 
-from src.models.command import Command
-from src.models.ack import Ack
+from soarca_fin_python_library.models.command import Command
+from soarca_fin_python_library.models.ack import Ack
 import logging as log
 from queue import Empty
 
-from src.models.result import Result
-from src.models.nack import Nack
-from src.models.register import Register
-from src.models.unregister import Unregister
-from src.models.unregister_self import UnregisterSelf
-from src.models.result_structure import ResultStructure
-from src.models.meta import Meta
+from soarca_fin_python_library.models.result import Result
+from soarca_fin_python_library.models.nack import Nack
+from soarca_fin_python_library.models.register import Register
+from soarca_fin_python_library.models.unregister import Unregister
+from soarca_fin_python_library.models.unregister_self import UnregisterSelf
+from soarca_fin_python_library.models.result_structure import ResultStructure
+from soarca_fin_python_library.models.meta import Meta
 
 
 class Executor(IExecutor):

@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from src.enums.variable_type_enum import VariableTypeEnum
+from soarca_fin_python_library.enums.variable_type_enum import VariableTypeEnum
 
 
 class Variable(BaseModel):

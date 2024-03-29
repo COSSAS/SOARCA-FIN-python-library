@@ -2,18 +2,18 @@ import os
 import logging as log
 from dotenv import load_dotenv
 
-from src.soarca_fin import SoarcaFin
-from src.models.security import Security
-from src.models.agent_structure import AgentStructure
-from src.models.external_reference import ExternalReference
-from src.models.step_structure import StepStructure
-from src.models.capability_structure import CapabilityStructure
-from src.enums.workflow_step_enum import WorkFlowStepEnum
-from src.models.command import Command
-from src.models.result_structure import ResultStructure
+from soarca_fin_python_library.soarca_fin import SoarcaFin
+from soarca_fin_python_library.models.security import Security
+from soarca_fin_python_library.models.agent_structure import AgentStructure
+from soarca_fin_python_library.models.external_reference import ExternalReference
+from soarca_fin_python_library.models.step_structure import StepStructure
+from soarca_fin_python_library.models.capability_structure import CapabilityStructure
+from soarca_fin_python_library.enums.workflow_step_enum import WorkFlowStepEnum
+from soarca_fin_python_library.models.command import Command
+from soarca_fin_python_library.models.result_structure import ResultStructure
 
-from src.models.variable import Variable
-from src.enums.variable_type_enum import VariableTypeEnum
+from soarca_fin_python_library.models.variable import Variable
+from soarca_fin_python_library.enums.variable_type_enum import VariableTypeEnum
 
 
 def capability_pong_callback(command: Command) -> ResultStructure:

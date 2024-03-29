@@ -7,18 +7,18 @@ from datetime import datetime, timezone
 import paho.mqtt.client as mqtt
 import paho.mqtt.enums as PahoEnums
 from paho.mqtt.subscribeoptions import SubscribeOptions
-from src.abstract_classes.i_soarca_fin import ISoarcaFin
-from src.abstract_classes.i_mqtt_client import IMQTTClient
-from src.models.capability_structure import CapabilityStructure
-from src.mqtt_client import MQTTClient
-from src.Parser import Parser
-from src.Executor import Executor
-from src.models.register import Register
-from src.models.security import Security
-from src.models.meta import Meta
-from src.models.message import Message
-from src.models.unregister import Unregister
-from src.models.unregister_self import UnregisterSelf
+from soarca_fin_python_library.abstract_classes.i_soarca_fin import ISoarcaFin
+from soarca_fin_python_library.abstract_classes.i_mqtt_client import IMQTTClient
+from soarca_fin_python_library.models.capability_structure import CapabilityStructure
+from soarca_fin_python_library.mqtt_client import MQTTClient
+from soarca_fin_python_library.Parser import Parser
+from soarca_fin_python_library.Executor import Executor
+from soarca_fin_python_library.models.register import Register
+from soarca_fin_python_library.models.security import Security
+from soarca_fin_python_library.models.meta import Meta
+from soarca_fin_python_library.models.message import Message
+from soarca_fin_python_library.models.unregister import Unregister
+from soarca_fin_python_library.models.unregister_self import UnregisterSelf
 
 
 class SoarcaFin(ISoarcaFin):
