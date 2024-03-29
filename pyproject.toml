@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "soarca-fin-python-library"
+version = "0.0.1"
+description = "SOARCA FIN lib allows for extending custom SOARCA capabilities through a python library"
+authors = ["Maarten de Kruijf","RabbITCybErSeC"]
+license = "Apache License 2.0"
+readme = "README.md"
+packages = [{include = "soarca_fin_python_library"}]
+
+
+[tool.poetry.dependencies]
+python = "^3.10"
+paho-mqtt = "2.0.0"
+pydantic = "2.6.4"
+python-dotenv = "1.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
