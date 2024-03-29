@@ -1,5 +1,5 @@
 from src.models.security import Security
-from src.models.capabilityStructure import CapabilityStructure
+from src.models.capability_structure import CapabilityStructure
 from src.models.meta import Meta
 from src.models.message import Message
 

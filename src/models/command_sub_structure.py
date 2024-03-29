@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel
 
-from src.models.authenticationInformation import AuthenticationInformation
+from src.models.authentication_information import AuthenticationInformation
 from src.models.context import Context
 from src.models.variable import Variable
 

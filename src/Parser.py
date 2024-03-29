@@ -1,6 +1,6 @@
 import json
 
-from src.abstract_classes.IParser import IParser
+from src.abstract_classes.i_parser import IParser
 from src.models.ack import Ack
 from src.models.message import Message
 import paho.mqtt.client as mqtt

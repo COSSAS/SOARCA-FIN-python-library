@@ -2,9 +2,9 @@ import json
 import unittest
 from uuid import uuid1
 
-from messageFactory import generateContextMessage, generateResultStructureMessage
+from src.message_factory import generateContextMessage, generateResultStructureMessage
 from models.context import Context
-from models.resultStructure import ResultStructure
+from src.models.result_structure import ResultStructure
 
 
 class TestResultStructure(unittest.TestCase):

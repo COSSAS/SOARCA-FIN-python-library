@@ -3,7 +3,7 @@ import json
 import unittest
 from uuid import uuid1
 
-from messageFactory import generateMetaMessage
+from src.message_factory import generateMetaMessage
 from models.meta import Meta
 
 

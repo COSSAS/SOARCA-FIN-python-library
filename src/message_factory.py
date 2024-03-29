@@ -2,23 +2,23 @@ import datetime
 from uuid import uuid1
 from models.ack import Ack
 from models.nack import Nack
-from models.agentStructure import AgentStructure
-from models.externalReference import ExternalReference
-from models.stepStructure import StepStructure
-from models.capabilityStructure import CapabilityStructure
-from enums.workFlowStepEnum import WorkFlowStepEnum
+from src.models.agent_structure import AgentStructure
+from src.models.external_reference import ExternalReference
+from src.models.step_structure import StepStructure
+from src.models.capability_structure import CapabilityStructure
+from src.enums.workflow_step_enum import WorkFlowStepEnum
 from models.security import Security
 from models.meta import Meta
 from models.register import Register
 from models.unregister import Unregister
 from models.variable import Variable
-from enums.variableTypeEnum import VariableTypeEnum
+from src.enums.variable_type_enum import VariableTypeEnum
 from models.context import Context
-from enums.openVocabEnum import OpenVocabEnum
-from models.authenticationInformation import AuthenticationInformation
-from models.commandSubStructure import CommandSubStructure
+from src.enums.auth_type_enum import AuthTypeEnum
+from src.models.authentication_information import AuthenticationInformation
+from src.models.command_sub_structure import CommandSubStructure
 from models.command import Command
-from models.resultStructure import ResultStructure
+from src.models.result_structure import ResultStructure
 from models.result import Result
 
 
@@ -106,7 +106,7 @@ def generateContextMessage(step_id: str, playbook_id: str, execution_id: str, co
     return Context(step_id=step_id, playbook_id=playbook_id, execution_id=execution_id, completed_on=completed_on, generated_on=generated_on, timeout=timeout)
 
 
-def generateAuthenticationInformationMessage(type: OpenVocabEnum, name: str = None, description: str = None, authentication_info_extenstion: dict[str, str] = None) -> AuthenticationInformation:
+def generateAuthenticationInformationMessage(type: AuthTypeEnum, name: str = None, description: str = None, authentication_info_extenstion: dict[str, str] = None) -> AuthenticationInformation:
     return AuthenticationInformation(type=type, name=name, description=description, authentication_info_extensions=authentication_info_extenstion)
 
 

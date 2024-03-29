@@ -2,9 +2,9 @@ import unittest
 import json
 from uuid import uuid1
 
-from messageFactory import generateExternalReferenceMessage, generateStepStructureMessage
-from models.externalReference import ExternalReference
-from models.stepStructure import StepStructure
+from src.message_factory import generateExternalReferenceMessage, generateStepStructureMessage
+from src.models.external_reference import ExternalReference
+from src.models.step_structure import StepStructure
 
 
 class testStepStructureMessage(unittest.TestCase):

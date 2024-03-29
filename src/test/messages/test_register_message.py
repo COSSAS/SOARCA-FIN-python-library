@@ -1,9 +1,9 @@
 import json
 import unittest
 from uuid import uuid1
-from enums.workFlowStepEnum import WorkFlowStepEnum
+from src.enums.workflow_step_enum import WorkFlowStepEnum
 
-from messageFactory import generateAgentStructureMessage, generateCapabilityStructureMessage, generateExternalReferenceMessage, generateMetaMessage, generateRegisterMessage, generateSecurityMessage, generateStepStructureMessage
+from src.message_factory import generateAgentStructureMessage, generateCapabilityStructureMessage, generateExternalReferenceMessage, generateMetaMessage, generateRegisterMessage, generateSecurityMessage, generateStepStructureMessage
 
 
 class testRegisterMessage(unittest.TestCase):

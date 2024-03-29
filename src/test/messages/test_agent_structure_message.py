@@ -1,8 +1,8 @@
 import unittest
 import json
 from uuid import uuid1
-from messageFactory import generateAgentStructureMessage
-from models.agentStructure import AgentStructure
+from src.message_factory import generateAgentStructureMessage
+from src.models.agent_structure import AgentStructure
 
 
 class TestAgentStructureMessage(unittest.TestCase):

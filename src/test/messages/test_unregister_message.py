@@ -2,7 +2,7 @@ import json
 import unittest
 from uuid import uuid1
 
-from messageFactory import generateUnregisterMessage
+from src.message_factory import generateUnregisterMessage
 from models.unregister import Unregister
 
 

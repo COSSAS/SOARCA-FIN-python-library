@@ -7,8 +7,8 @@ import paho.mqtt.client as mqtt
 from paho.mqtt.subscribeoptions import SubscribeOptions
 
 from src.abstract_classes.IExecutor import IExecutor
-from src.abstract_classes.IParser import IParser
-from src.abstract_classes.IMQTTClient import IMQTTClient
+from src.abstract_classes.i_parser import IParser
+from src.abstract_classes.i_mqtt_client import IMQTTClient
 from src.Executor import Executor
 
 

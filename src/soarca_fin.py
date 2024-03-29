@@ -7,10 +7,10 @@ from datetime import datetime, timezone
 import paho.mqtt.client as mqtt
 import paho.mqtt.enums as PahoEnums
 from paho.mqtt.subscribeoptions import SubscribeOptions
-from src.abstract_classes.ISoarcaFin import ISoarcaFin
-from src.abstract_classes.IMQTTClient import IMQTTClient
-from src.models.capabilityStructure import CapabilityStructure
-from src.MQTTClient import MQTTClient
+from src.abstract_classes.i_soarca_fin import ISoarcaFin
+from src.abstract_classes.i_mqtt_client import IMQTTClient
+from src.models.capability_structure import CapabilityStructure
+from src.mqtt_client import MQTTClient
 from src.Parser import Parser
 from src.Executor import Executor
 from src.models.register import Register
@@ -18,7 +18,7 @@ from src.models.security import Security
 from src.models.meta import Meta
 from src.models.message import Message
 from src.models.unregister import Unregister
-from src.models.unregisterSelf import UnregisterSelf
+from src.models.unregister_self import UnregisterSelf
 
 
 class SoarcaFin(ISoarcaFin):

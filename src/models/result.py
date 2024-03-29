@@ -1,5 +1,5 @@
 from src.models.message import Message
-from src.models.resultStructure import ResultStructure
+from src.models.result_structure import ResultStructure
 from src.models.meta import Meta
 
 

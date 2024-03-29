@@ -1,16 +1,16 @@
 import json
 import unittest
 
-from enums.openVocabEnum import OpenVocabEnum
-from messageFactory import generateAuthenticationInformationMessage
-from models.authenticationInformation import AuthenticationInformation
+from src.enums.auth_type_enum import AuthTypeEnum
+from src.message_factory import generateAuthenticationInformationMessage
+from src.models.authentication_information import AuthenticationInformation
 
 
 class TestAuthenticationInformationMessage(unittest.TestCase):
 
     def test_authentication_information_message_generator_implicit(self):
 
-        type = OpenVocabEnum.http_basic
+        type = AuthTypeEnum.http_basic
 
         aiMessage = generateAuthenticationInformationMessage(type=type)
 
@@ -21,7 +21,7 @@ class TestAuthenticationInformationMessage(unittest.TestCase):
 
     def test_authentication_information_message_generator_explicit(self):
 
-        type = OpenVocabEnum.http_basic
+        type = AuthTypeEnum.http_basic
         ai_name = "test name"
         ai_description = "test description"
         ai_extensions = {"key": "value"}
@@ -36,7 +36,7 @@ class TestAuthenticationInformationMessage(unittest.TestCase):
             aiMessage.authentication_info_extensions, ai_extensions)
 
     def test_authentication_information_from_json(self):
-        type = OpenVocabEnum.http_basic
+        type = AuthTypeEnum.http_basic
         ai_name = "test name"
         ai_description = "test description"
         ai_extensions = {"key": "value"}
@@ -57,7 +57,7 @@ class TestAuthenticationInformationMessage(unittest.TestCase):
             aiMessage.authentication_info_extensions, ai_extensions)
 
     def test_authentication_to_json(self):
-        type = OpenVocabEnum.http_basic
+        type = AuthTypeEnum.http_basic
         ai_name = "test name"
         ai_description = "test description"
         ai_extensions = {"key": "value"}

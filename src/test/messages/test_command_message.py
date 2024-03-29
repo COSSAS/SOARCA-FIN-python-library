@@ -2,8 +2,8 @@ import json
 import unittest
 from uuid import uuid1
 
-from messageFactory import generateCommandMessage, generateCommandSubStructureMessage, generateContextMessage, generateMetaMessage
-from models.commandSubStructure import CommandSubStructure
+from src.message_factory import generateCommandMessage, generateCommandSubStructureMessage, generateContextMessage, generateMetaMessage
+from src.models.command_sub_structure import CommandSubStructure
 from models.meta import Meta
 from models.command import Command
 

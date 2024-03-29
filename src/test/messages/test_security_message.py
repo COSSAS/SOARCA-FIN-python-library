@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from messageFactory import generateSecurityMessage
+from src.message_factory import generateSecurityMessage
 from models.security import Security
 
 

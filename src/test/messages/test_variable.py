@@ -1,8 +1,8 @@
 import json
 import unittest
 
-from enums.variableTypeEnum import VariableTypeEnum
-from messageFactory import generateVariableMessage
+from src.enums.variable_type_enum import VariableTypeEnum
+from src.message_factory import generateVariableMessage
 from models.variable import Variable
 
 

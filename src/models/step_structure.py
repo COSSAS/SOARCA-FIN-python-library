@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from src.models.externalReference import ExternalReference
+from src.models.external_reference import ExternalReference
 
 
 class StepStructure(BaseModel):

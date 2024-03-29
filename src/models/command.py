@@ -1,5 +1,5 @@
 from src.models.message import Message
-from src.models.commandSubStructure import CommandSubStructure
+from src.models.command_sub_structure import CommandSubStructure
 from src.models.meta import Meta
 
 

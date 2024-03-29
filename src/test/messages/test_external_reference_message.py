@@ -2,8 +2,8 @@ import unittest
 import json
 from uuid import uuid1
 
-from messageFactory import generateExternalReferenceMessage
-from models.externalReference import ExternalReference
+from src.message_factory import generateExternalReferenceMessage
+from src.models.external_reference import ExternalReference
 
 
 class TestExternalReferenceMessage(unittest.TestCase):

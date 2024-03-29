@@ -1,13 +1,13 @@
 import json
 import unittest
 from uuid import uuid1
-from enums.workFlowStepEnum import WorkFlowStepEnum
+from src.enums.workflow_step_enum import WorkFlowStepEnum
 
-from messageFactory import generateAgentStructureMessage, generateCapabilityStructureMessage, generateExternalReferenceMessage, generateStepStructureMessage
-from models.agentStructure import AgentStructure
-from models.stepStructure import StepStructure
-from models.externalReference import ExternalReference
-from models.capabilityStructure import CapabilityStructure
+from src.message_factory import generateAgentStructureMessage, generateCapabilityStructureMessage, generateExternalReferenceMessage, generateStepStructureMessage
+from src.models.agent_structure import AgentStructure
+from src.models.step_structure import StepStructure
+from src.models.external_reference import ExternalReference
+from src.models.capability_structure import CapabilityStructure
 
 
 class testCapabilityStructureMessage(unittest.TestCase):

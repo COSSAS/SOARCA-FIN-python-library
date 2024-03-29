@@ -1,7 +1,7 @@
 import unittest
 import json
 from uuid import uuid1
-from messageFactory import generateAckMessage
+from src.message_factory import generateAckMessage
 from models.ack import Ack
 
 

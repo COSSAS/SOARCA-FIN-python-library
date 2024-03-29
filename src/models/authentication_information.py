@@ -1,12 +1,12 @@
 from typing import Optional
 from pydantic import BaseModel
 
-from src.enums.openVocabEnum import OpenVocabEnum
+from src.enums.auth_type_enum import AuthTypeEnum
 
 
 class AuthenticationInformation(BaseModel):
     id: str
-    type: OpenVocabEnum
+    type: AuthTypeEnum
     name: Optional[str] = None
     description: Optional[str] = None
     authentication_info_extensions: Optional[dict[str, str]] = None

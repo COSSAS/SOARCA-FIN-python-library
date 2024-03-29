@@ -15,8 +15,8 @@ from src.models.result import Result
 from src.models.nack import Nack
 from src.models.register import Register
 from src.models.unregister import Unregister
-from src.models.unregisterSelf import UnregisterSelf
-from src.models.resultStructure import ResultStructure
+from src.models.unregister_self import UnregisterSelf
+from src.models.result_structure import ResultStructure
 from src.models.meta import Meta
 
 

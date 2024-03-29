@@ -1,7 +1,7 @@
 import unittest
 import json
 from uuid import uuid1
-from messageFactory import generateNackMessage
+from src.message_factory import generateNackMessage
 from models.nack import Nack
 
 

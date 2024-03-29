@@ -2,8 +2,8 @@ import json
 import unittest
 from uuid import uuid1
 
-from messageFactory import generateContextMessage, generateMetaMessage, generateResultMessage, generateResultStructureMessage
-from models.resultStructure import ResultStructure
+from src.message_factory import generateContextMessage, generateMetaMessage, generateResultMessage, generateResultStructureMessage
+from src.models.result_structure import ResultStructure
 from models.meta import Meta
 from models.result import Result
 

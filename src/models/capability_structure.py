@@ -1,7 +1,7 @@
 from pydantic import BaseModel
-from src.enums.workFlowStepEnum import WorkFlowStepEnum
-from src.models.agentStructure import AgentStructure
-from src.models.stepStructure import StepStructure
+from src.enums.workflow_step_enum import WorkFlowStepEnum
+from src.models.agent_structure import AgentStructure
+from src.models.step_structure import StepStructure
 
 
 class CapabilityStructure(BaseModel):

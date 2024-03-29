@@ -2,9 +2,9 @@ import json
 import unittest
 from uuid import uuid1
 
-from messageFactory import generateCommandSubStructureMessage, generateContextMessage
+from src.message_factory import generateCommandSubStructureMessage, generateContextMessage
 from models.context import Context
-from models.commandSubStructure import CommandSubStructure
+from src.models.command_sub_structure import CommandSubStructure
 
 
 class TestCommandSubStructureMessage(unittest.TestCase):
