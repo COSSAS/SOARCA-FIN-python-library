@@ -11,8 +11,8 @@ from soarca_fin_python_library.abstract_classes.i_soarca_fin import ISoarcaFin
 from soarca_fin_python_library.abstract_classes.i_mqtt_client import IMQTTClient
 from soarca_fin_python_library.models.capability_structure import CapabilityStructure
 from soarca_fin_python_library.mqtt_client import MQTTClient
-from soarca_fin_python_library import Parser
-from soarca_fin_python_library import Executor
+from soarca_fin_python_library.parser import Parser
+from soarca_fin_python_library.executor import Executor
 from soarca_fin_python_library.models.register import Register
 from soarca_fin_python_library.models.security import Security
 from soarca_fin_python_library.models.meta import Meta
