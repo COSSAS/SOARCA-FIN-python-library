@@ -4,20 +4,35 @@ A Python implementation for the SOARCA FIN, compatible with: SOARCA the TNO orch
 ## building / starting / stopping  
 ### Requirements
  - Python3
+ - Poetry
 
 ### Setup
-Install requirements
+To handle dependencies in this project, the package Poetry is used.
+To install Poetry execute the following command:
 ```bash
-pip3 install -r requirements.txt
+pip3 install poetry
 ```
-Create .env file with the following entries:
+
+To install the dependencies from the `pyproject.toml` either enter a poetry shell or create a virtual environment.
+To enter a poetry shell execute the following command in the root of the project:
+```bash
+poetry shell
 ```
+
+Next install the dependencies in the shell:
+```bash
+poetry install
+```
+
+In order to run the project, create an `.env` file in the root of the project with the following entries:
+```bash
 MQTT_USERNAME = "{INSERT_USERNAME_HERE}"
 MQTT_PASSWD = "{INSERT_PASSWORD_HERE}"
 ```
 
 
 ### Quick Run
+Move to the `soarca_fin_python_library` folder and execute the following command:
 ```bash
 python3 main.py
 ```
