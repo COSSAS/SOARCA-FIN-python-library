@@ -1,5 +1,6 @@
 # SOARCA Fin Library
 A Python implementation for the SOARCA FIN, compatible with: SOARCA the TNO orchestrator for Open-C2, CACAO and STIX
+For more information about the SOARCA, we refer the reader to the [website](https://cossas.github.io/SOARCA/) of the SOARCA project
 
 ## building / starting / stopping  
 ### Requirements
