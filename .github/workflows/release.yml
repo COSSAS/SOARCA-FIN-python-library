@@ -25,6 +25,7 @@ jobs:
       - name: Install Poetry
         run: |
           pip3 install poetry
+          poetry self add "poetry-dynamic-versioning[plugin]"
 
       - name: Build package
         run: |

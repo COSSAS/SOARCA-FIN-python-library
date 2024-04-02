@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "soarca-fin-library"
-version = "0.0.1"
+version = "0.0.0"
 description = "SOARCA FIN lib allows for extending custom SOARCA capabilities through a python library"
 authors = ["Maarten de Kruijf","RabbITCybErSeC","xncz8h (Ivo)"]
 license = "Apache License 2.0"
@@ -13,6 +13,7 @@ vcs = "git"
 style = "semver"
 metadata = true
 dirty = true
+pattern = "default-unprefixed"
  
 [tool.poetry.dependencies]
 python = "^3.10"
