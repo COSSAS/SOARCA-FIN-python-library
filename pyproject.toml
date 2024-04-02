@@ -1,20 +1,27 @@
 [tool.poetry]
-name = "soarca-fin-python-library"
-version = "0.0.1"
+name = "soarca-fin-library"
+version = "0.0.0"
 description = "SOARCA FIN lib allows for extending custom SOARCA capabilities through a python library"
-authors = ["Maarten de Kruijf","RabbITCybErSeC"]
+authors = ["Maarten de Kruijf","RabbITCybErSeC","xncz8h (Ivo)"]
 license = "Apache License 2.0"
 readme = "README.md"
 packages = [{include = "soarca_fin_python_library"}]
-
-
+ 
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
+metadata = false
+dirty = true
+pattern = "default-unprefixed"
+ 
 [tool.poetry.dependencies]
 python = "^3.10"
 paho-mqtt = "2.0.0"
 pydantic = "2.6.4"
 python-dotenv = "1.0.1"
-
-
+ 
+ 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
