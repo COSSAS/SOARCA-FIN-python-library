@@ -1,4 +1,4 @@
-name: Python package
+name: Upload Python Package to PyPi
 on:
   push:
     tags:
@@ -13,7 +13,7 @@ jobs:
       id-token: write
     strategy:
       matrix:
-        python-version: ["3.10", "3.11"]
+        python-version: ["3.10"]
 
     steps:
       - uses: actions/checkout@v4
