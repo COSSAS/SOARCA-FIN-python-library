@@ -2,7 +2,7 @@ import json
 import unittest
 from uuid import uuid1
 
-from soarca_fin_python_library.message_factory import generateCommandSubStructureMessage, generateContextMessage
+
 from soarca_fin_python_library.models.context import Context
 from soarca_fin_python_library.models.command_sub_structure import CommandSubStructure
 
@@ -15,14 +15,14 @@ class TestCommandSubStructureMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
+        contextMessage = Context(
             step_id, playbook_id, execution_id)
 
         command = "command"
         context = contextMessage
         variables = {}
 
-        commandSubStructure = generateCommandSubStructureMessage(
+        commandSubStructure = CommandSubStructure(
             command, context, variables)
 
         self.assertEqual(commandSubStructure.command, command)
@@ -35,7 +35,7 @@ class TestCommandSubStructureMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
+        contextMessage = Context(
             step_id, playbook_id, execution_id)
 
         command = "command"
@@ -61,7 +61,7 @@ class TestCommandSubStructureMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
+        contextMessage = Context(
             step_id, playbook_id, execution_id)
 
         command = "command"
@@ -75,7 +75,7 @@ class TestCommandSubStructureMessage(unittest.TestCase):
             "authentication": None,
         }
 
-        commandSubStructure = generateCommandSubStructureMessage(
+        commandSubStructure = CommandSubStructure(
             command, context, variables)
 
         json_str = commandSubStructure.model_dump_json()

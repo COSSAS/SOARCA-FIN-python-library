@@ -2,7 +2,7 @@ import unittest
 import json
 from uuid import uuid1
 
-from soarca_fin_python_library.message_factory import generateExternalReferenceMessage
+
 from soarca_fin_python_library.models.external_reference import ExternalReference
 
 
@@ -16,7 +16,7 @@ class TestExternalReferenceMessage(unittest.TestCase):
         external_id = str(uuid1())
         reference_id = str(uuid1())
 
-        externalReference = generateExternalReferenceMessage(
+        externalReference = ExternalReference(
             name, description, source, url, external_id, reference_id)
 
         self.assertEqual(externalReference.name, name,
@@ -34,7 +34,7 @@ class TestExternalReferenceMessage(unittest.TestCase):
     def test_external_reference_message_generator_implicit(self):
         name = "test"
 
-        externalReference = generateExternalReferenceMessage(name)
+        externalReference = ExternalReference(name)
 
         self.assertEqual(externalReference.name, name,
                          "Names should match")
@@ -112,7 +112,7 @@ class TestExternalReferenceMessage(unittest.TestCase):
         external_id = str(uuid1())
         reference_id = str(uuid1())
 
-        externalReference = generateExternalReferenceMessage(
+        externalReference = ExternalReference(
             name, description, source, url, external_id, reference_id)
 
         json_str = externalReference.model_dump_json()
@@ -132,7 +132,7 @@ class TestExternalReferenceMessage(unittest.TestCase):
     def test_agent_structure_to_json_implicit(self):
         name = "test"
 
-        externalReference = generateExternalReferenceMessage(name)
+        externalReference = ExternalReference(name)
 
         json_str = externalReference.model_dump_json()
 

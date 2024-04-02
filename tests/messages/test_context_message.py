@@ -3,7 +3,7 @@ import json
 import unittest
 from uuid import uuid1
 
-from soarca_fin_python_library.message_factory import generateContextMessage
+
 from soarca_fin_python_library.models.context import Context
 
 
@@ -13,7 +13,7 @@ class TestContextMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
+        contextMessage = Context(
             step_id, playbook_id, execution_id)
 
         self.assertEqual(step_id, contextMessage.step_id)
@@ -29,7 +29,7 @@ class TestContextMessage(unittest.TestCase):
         generated_on = datetime.datetime.now().isoformat()
         timeout = datetime.datetime.now().isoformat()
 
-        contextMessage = generateContextMessage(
+        contextMessage = Context(
             step_id, playbook_id, execution_id, completed_on, generated_on, timeout)
 
         self.assertEqual(step_id, contextMessage.step_id)
@@ -86,7 +86,7 @@ class TestContextMessage(unittest.TestCase):
             "timeout": timeout,
         }
 
-        contextMessage = generateContextMessage(
+        contextMessage = Context(
             step_id, playbook_id, execution_id, completed_on, generated_on, timeout)
 
         json_str = contextMessage.model_dump_json()

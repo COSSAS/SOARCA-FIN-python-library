@@ -1,21 +1,18 @@
 import unittest
 import json
 from uuid import uuid1
-from soarca_fin_python_library.message_factory import generateAgentStructureMessage
 from soarca_fin_python_library.models.agent_structure import AgentStructure
 
 
 class TestAgentStructureMessage(unittest.TestCase):
 
     def test_agent_structure_message_generator(self):
-        name = "test"
-        id = str(uuid1())
-        agentStructure = generateAgentStructureMessage(name, id)
+        name = "somestringhere"
+        agentStructure = AgentStructure(name=name)
 
         self.assertEqual(agentStructure.type, "soarca-fin",
                          "Type should be an soarca-fin")
-        self.assertEqual(agentStructure.name, f"soarca-fin--{name}-{id}",
-                         "Names should match")
+        self.assertEqual(agentStructure.name, name)
 
     def test_json_to_agent_structure(self):
 
@@ -34,15 +31,14 @@ class TestAgentStructureMessage(unittest.TestCase):
                          "Names should match")
 
     def test_agent_structure_to_json(self):
-        name = "test"
-        id = str(uuid1())
-        agent = generateAgentStructureMessage(name, id)
+        name = "soarca-fin--test-6f00849a-f0d6-11ee-9487-d6ff9f4e6dd2"
+        agentStructure = AgentStructure(name=name)
 
-        json_str = agent.model_dump_json()
+        json_str = agentStructure.model_dump_json()
 
         json_obj = {
             "type": "soarca-fin",
-            "name": f"soarca-fin--{name}-{id}",
+            "name": "soarca-fin--test-6f00849a-f0d6-11ee-9487-d6ff9f4e6dd2",
         }
 
         self.assertEqual(json.loads(json_str), json_obj,

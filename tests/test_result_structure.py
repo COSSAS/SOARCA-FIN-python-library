@@ -2,7 +2,7 @@ import json
 import unittest
 from uuid import uuid1
 
-from soarca_fin_python_library.message_factory import generateContextMessage, generateResultStructureMessage
+
 from soarca_fin_python_library.models.context import Context
 from soarca_fin_python_library.models.result_structure import ResultStructure
 
@@ -17,10 +17,10 @@ class TestResultStructure(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
+        contextMessage = Context(
             step_id, playbook_id, execution_id)
 
-        resultStructureMessage = generateResultStructureMessage(
+        resultStructureMessage = ResultStructure(
             state, contextMessage, variables)
 
         self.assertEqual(resultStructureMessage.state, state)
@@ -35,7 +35,7 @@ class TestResultStructure(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
+        contextMessage = Context(
             step_id, playbook_id, execution_id)
 
         json_object = {
@@ -58,7 +58,7 @@ class TestResultStructure(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
+        contextMessage = Context(
             step_id, playbook_id, execution_id)
 
         json_object = {
@@ -67,7 +67,7 @@ class TestResultStructure(unittest.TestCase):
             "context": contextMessage.model_dump(),
         }
 
-        resultStructureMessage = generateResultStructureMessage(
+        resultStructureMessage = ResultStructure(
             state, contextMessage, variables)
         json_str = resultStructureMessage.model_dump_json()
 

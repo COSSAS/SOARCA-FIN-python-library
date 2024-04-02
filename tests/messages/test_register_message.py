@@ -3,7 +3,13 @@ import unittest
 from uuid import uuid1
 from soarca_fin_python_library.enums.workflow_step_enum import WorkFlowStepEnum
 
-from soarca_fin_python_library.message_factory import generateAgentStructureMessage, generateCapabilityStructureMessage, generateExternalReferenceMessage, generateMetaMessage, generateRegisterMessage, generateSecurityMessage, generateStepStructureMessage
+from soarca_fin_python_library.models.security import Security
+from soarca_fin_python_library.models.agent_structure import AgentStructure
+from soarca_fin_python_library.models.external_reference import ExternalReference
+from soarca_fin_python_library.models.capability_structure import CapabilityStructure
+from soarca_fin_python_library.models.register import Register
+from soarca_fin_python_library.models.step_structure import StepStructure
+from soarca_fin_python_library.models.meta import Meta
 
 
 class testRegisterMessage(unittest.TestCase):
@@ -12,15 +18,15 @@ class testRegisterMessage(unittest.TestCase):
 
         security_version = "0.0.1"
         channel_security = "plaintext"
-        securityMessage = generateSecurityMessage(
+        securityMessage = Security(
             security_version, channel_security)
 
         agent_name = "test"
         uuid_agent = str(uuid1())
-        agentStructure = generateAgentStructureMessage(agent_name, uuid_agent)
+        agentStructure = AgentStructure(agent_name, uuid_agent)
 
         ext_name = "test"
-        externalReference = generateExternalReferenceMessage(ext_name)
+        externalReference = ExternalReference(ext_name)
 
         type = "action"
         step_name = "test step"
@@ -28,7 +34,7 @@ class testRegisterMessage(unittest.TestCase):
         command = "test command"
         target = str(uuid1())
 
-        stepStructure = generateStepStructureMessage(
+        stepStructure = StepStructure(
             type, step_name, description, [externalReference], command, target)
 
         capability_id = str(uuid1())
@@ -36,13 +42,13 @@ class testRegisterMessage(unittest.TestCase):
         capability_name = "test name"
         version = "0.0.1"
 
-        capabilityStructure = generateCapabilityStructureMessage(
+        capabilityStructure = CapabilityStructure(
             capability_id, type, capability_name, version, stepStructure, agentStructure)
 
         fin_id = str(uuid1())
         protocol_version = "test version"
 
-        registerMessage = generateRegisterMessage(
+        registerMessage = Register(
             fin_id, protocol_version, securityMessage, [capabilityStructure])
 
         self.assertEqual(registerMessage.type, "register")
@@ -55,15 +61,15 @@ class testRegisterMessage(unittest.TestCase):
     def test_json_to_register_message(self):
         security_version = "0.0.1"
         channel_security = "plaintext"
-        securityMessage = generateSecurityMessage(
+        securityMessage = Security(
             security_version, channel_security)
 
         agent_name = "test"
         uuid_agent = str(uuid1())
-        agentStructure = generateAgentStructureMessage(agent_name, uuid_agent)
+        agentStructure = AgentStructure(agent_name, uuid_agent)
 
         ext_name = "test"
-        externalReference = generateExternalReferenceMessage(ext_name)
+        externalReference = ExternalReference(ext_name)
 
         type = "action"
         step_name = "test step"
@@ -71,7 +77,7 @@ class testRegisterMessage(unittest.TestCase):
         command = "test command"
         target = str(uuid1())
 
-        stepStructure = generateStepStructureMessage(
+        stepStructure = StepStructure(
             type, step_name, description, [externalReference], command, target)
 
         capability_id = str(uuid1())
@@ -79,16 +85,16 @@ class testRegisterMessage(unittest.TestCase):
         capability_name = "test name"
         version = "0.0.1"
 
-        capabilityStructure = generateCapabilityStructureMessage(
+        capabilityStructure = CapabilityStructure(
             capability_id, type, capability_name, version, stepStructure, agentStructure)
 
         fin_id = str(uuid1())
         message_id = str(uuid1())
         protocol_version = "test version"
 
-        meta = generateMetaMessage(fin_id)
+        meta = Meta(fin_id)
 
-        registerMessage = generateRegisterMessage(fin_id, protocol_version, securityMessage, [
+        registerMessage = Register(fin_id, protocol_version, securityMessage, [
             capabilityStructure], meta, message_id)
 
         json_object = {

@@ -2,7 +2,7 @@ import unittest
 import json
 from uuid import uuid1
 
-from soarca_fin_python_library.message_factory import generateExternalReferenceMessage, generateStepStructureMessage
+
 from soarca_fin_python_library.models.external_reference import ExternalReference
 from soarca_fin_python_library.models.step_structure import StepStructure
 
@@ -10,7 +10,7 @@ from soarca_fin_python_library.models.step_structure import StepStructure
 class testStepStructureMessage(unittest.TestCase):
     def test_step_structure_generator(self):
         ext_name = "test"
-        externalReference = generateExternalReferenceMessage(ext_name)
+        externalReference = ExternalReference(ext_name)
 
         type = "action"
         step_name = "test step"
@@ -18,7 +18,7 @@ class testStepStructureMessage(unittest.TestCase):
         command = "test command"
         target = str(uuid1())
 
-        stepStructureMessage = generateStepStructureMessage(
+        stepStructureMessage = StepStructure(
             type, step_name, description, [externalReference], command, target)
 
         self.assertEqual(stepStructureMessage.type, type,
@@ -38,7 +38,7 @@ class testStepStructureMessage(unittest.TestCase):
 
     def test_json_to_step_structure_message(self):
         ext_name = "test"
-        externalReference = generateExternalReferenceMessage(ext_name)
+        externalReference = ExternalReference(ext_name)
 
         type = "action"
         step_name = "test step"
@@ -75,7 +75,7 @@ class testStepStructureMessage(unittest.TestCase):
 
     def test_step_structure_to_json(self):
         ext_name = "test"
-        externalReference = generateExternalReferenceMessage(ext_name)
+        externalReference = ExternalReference(ext_name)
 
         type = "action"
         step_name = "test step"
@@ -83,7 +83,7 @@ class testStepStructureMessage(unittest.TestCase):
         command = "test command"
         target = str(uuid1())
 
-        stepStructureMessage = generateStepStructureMessage(
+        stepStructureMessage = StepStructure(
             type, step_name, description, [externalReference], command, target)
 
         json_str = stepStructureMessage.model_dump_json()

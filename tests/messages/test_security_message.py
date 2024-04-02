@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from soarca_fin_python_library.message_factory import generateSecurityMessage
+
 from soarca_fin_python_library.models.security import Security
 
 
@@ -11,7 +11,7 @@ class testSecurityMessage(unittest.TestCase):
         version = "0.0.1"
         channel_security = "plaintext"
 
-        securityMessage = generateSecurityMessage(version, channel_security)
+        securityMessage = Security(version, channel_security)
 
         self.assertEqual(securityMessage.version, version)
         self.assertEqual(securityMessage.channel_security, channel_security)
@@ -34,7 +34,7 @@ class testSecurityMessage(unittest.TestCase):
         version = "0.0.1"
         channel_security = "plaintext"
 
-        securityMessage = generateSecurityMessage(version, channel_security)
+        securityMessage = Security(version, channel_security)
 
         json_str = securityMessage.model_dump_json()
 

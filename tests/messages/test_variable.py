@@ -2,7 +2,7 @@ import json
 import unittest
 
 from soarca_fin_python_library.enums.variable_type_enum import VariableTypeEnum
-from soarca_fin_python_library.message_factory import generateVariableMessage
+
 from soarca_fin_python_library.models.variable import Variable
 
 
@@ -10,13 +10,14 @@ class TestVariable(unittest.TestCase):
 
     def test_variable_message_generator(self):
         type = VariableTypeEnum.string
+        name = "__var_name__"
         description = "test description"
         value = "test value"
         constant = True
         external = False
 
-        variableMessage = generateVariableMessage(
-            type, description, value, constant, external)
+        variableMessage = Variable(
+            type, name, description, value, constant, external)
 
         self.assertEqual(type, variableMessage.type)
         self.assertEqual(description, variableMessage.description)
@@ -26,6 +27,7 @@ class TestVariable(unittest.TestCase):
 
     def test_variable_message_from_json(self):
         type = VariableTypeEnum.string
+        name = "__var_name__"
         description = "test description"
         value = "test value"
         constant = True
@@ -33,6 +35,7 @@ class TestVariable(unittest.TestCase):
 
         json_obj = {
             "type": type,
+            "name": name,
             "description": description,
             "value": value,
             "constant": constant,
@@ -49,18 +52,20 @@ class TestVariable(unittest.TestCase):
 
     def test_variable_to_json(self):
         type = VariableTypeEnum.string
+        name = "__var_name__"
         description = "test description"
         value = "test value"
         constant = True
         external = False
 
-        variableMessage = generateVariableMessage(
-            type, description, value, constant, external)
+        variableMessage = Variable(
+            type, name, description, value, constant, external)
 
         json_str = variableMessage.model_dump_json()
 
         json_obj = {
             "type": type,
+            "name": name,
             "description": description,
             "value": value,
             "constant": constant,

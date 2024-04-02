@@ -2,7 +2,6 @@ import json
 import unittest
 
 from soarca_fin_python_library.enums.auth_type_enum import AuthTypeEnum
-from soarca_fin_python_library.message_factory import generateAuthenticationInformationMessage
 from soarca_fin_python_library.models.authentication_information import AuthenticationInformation
 
 
@@ -12,7 +11,7 @@ class TestAuthenticationInformationMessage(unittest.TestCase):
 
         type = AuthTypeEnum.http_basic
 
-        aiMessage = generateAuthenticationInformationMessage(type=type)
+        aiMessage = AuthenticationInformation(id="some", type=type)
 
         self.assertEqual(aiMessage.type, type)
         self.assertIsNone(aiMessage.name)
@@ -26,8 +25,11 @@ class TestAuthenticationInformationMessage(unittest.TestCase):
         ai_description = "test description"
         ai_extensions = {"key": "value"}
 
-        aiMessage = generateAuthenticationInformationMessage(
-            type, ai_name, ai_description, ai_extensions)
+        aiMessage = AuthenticationInformation(id="someid",
+                                              type=type,
+                                              name=ai_name,
+                                              description=ai_description,
+                                              authentication_info_extensions=ai_extensions)
 
         self.assertEqual(aiMessage.type, type)
         self.assertEqual(aiMessage.name, ai_name)
@@ -43,6 +45,7 @@ class TestAuthenticationInformationMessage(unittest.TestCase):
 
         json_obj = {
             "type": type,
+            "id": "someid",
             "name": ai_name,
             "description": ai_description,
             "authentication_info_extensions": ai_extensions,
@@ -58,19 +61,25 @@ class TestAuthenticationInformationMessage(unittest.TestCase):
 
     def test_authentication_to_json(self):
         type = AuthTypeEnum.http_basic
+        id = "someID"
         ai_name = "test name"
         ai_description = "test description"
         ai_extensions = {"key": "value"}
 
         json_obj = {
+            "id": "someID",
             "type": type,
             "name": ai_name,
             "description": ai_description,
             "authentication_info_extensions": ai_extensions,
         }
 
-        aiMessage = generateAuthenticationInformationMessage(
-            type, ai_name, ai_description, ai_extensions)
+        aiMessage = AuthenticationInformation(
+            id=id,
+            type=type,
+            name=ai_name,
+            description=ai_description,
+            authentication_info_extensions=ai_extensions)
 
         json_str = aiMessage.model_dump_json()
 
