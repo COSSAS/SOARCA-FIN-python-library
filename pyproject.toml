@@ -11,7 +11,7 @@ packages = [{include = "soarca_fin_python_library"}]
 enable = true
 vcs = "git"
 style = "semver"
-metadata = true
+metadata = false
 dirty = true
 pattern = "default-unprefixed"
  
