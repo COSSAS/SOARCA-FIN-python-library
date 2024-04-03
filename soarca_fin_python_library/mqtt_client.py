@@ -1,3 +1,4 @@
+from json import JSONDecodeError
 import threading
 import logging as log
 from paho.mqtt.client import Client, ConnectFlags, MQTTMessage
@@ -16,12 +17,12 @@ class MQTTClient(IMQTTClient):
 
     def __init__(
             self,
-            id: str,
+            client_id: str,
             mqttc: mqtt.Client,
             callback,
             executor: IExecutor,
             parser: IParser):
-        self.id: str = id
+        self.id: str = client_id
         self.mqttc: mqtt.Client = mqttc
         self.callback = callback
         self.executor: Executor = executor
@@ -46,8 +47,8 @@ class MQTTClient(IMQTTClient):
             # If we should process the message, send it to the executor
             if msg:
                 self.executor.queue_message(msg)
-        except Exception as e:
-            log.error(f"Something went wrong when parsing messag:\n{e}")
+        except (LookupError, JSONDecodeError, TypeError) as e:
+            log.error("Something went wrong when parsing messag:\n%s", e)
 
     # Start the MQTT client by registering mqtt callbacks, subscribing to
     # topic and launching executor
@@ -65,12 +66,12 @@ class MQTTClient(IMQTTClient):
         self.mqttc.loop_start()
 
         # Start executor thread
-        self._executor_thread = threading.Thread(
+        self.executor_thread = threading.Thread(
             target=self.executor.start_executor,
             name=f"executor-thread-{self.id}")
-        self._executor_thread.daemon = True
+        self.executor_thread.daemon = True
 
-        self._executor_thread.start()
+        self.executor_thread.start()
 
     # Stop MQTT client by unsubscribing, stopping mqtt callbacks and exiting
     # executor
