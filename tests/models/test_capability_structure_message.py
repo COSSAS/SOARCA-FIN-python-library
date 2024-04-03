@@ -20,7 +20,6 @@ class testCapabilityStructureMessage(unittest.TestCase):
         ext_name = "test"
         externalReference = ExternalReference(name=ext_name)
 
-        type = "action"
         step_name = "test step"
         description = "test description"
         command = "test command"
@@ -30,15 +29,15 @@ class testCapabilityStructureMessage(unittest.TestCase):
                                       externalReference], command=command, target=target)
 
         capability_id = str(uuid1())
-        type = WorkFlowStepEnum.action
+        capability_type = WorkFlowStepEnum.action
         capability_name = "test name"
         version = "0.0.1"
 
         capabilityStructure = CapabilityStructure(
-            capability_id=capability_id, type=type, name=capability_name, version=version, step={"step": stepStructure}, agent={"agent": agentStructure})
+            capability_id=capability_id, type=capability_type, name=capability_name, version=version, step={"step": stepStructure}, agent={"agent": agentStructure})
 
         self.assertEqual(capabilityStructure.capability_id, capability_id)
-        self.assertEqual(capabilityStructure.type, type)
+        self.assertEqual(capabilityStructure.type, capability_type)
         self.assertEqual(capabilityStructure.name, capability_name)
         self.assertEqual(capabilityStructure.version, version)
 
@@ -61,7 +60,6 @@ class testCapabilityStructureMessage(unittest.TestCase):
         ext_name = "test"
         externalReference = ExternalReference(name=ext_name)
 
-        type = "action"
         step_name = "test step"
         description = "test description"
         command = "test command"
@@ -71,13 +69,13 @@ class testCapabilityStructureMessage(unittest.TestCase):
                                       externalReference], command=command, target=target)
 
         capability_id = str(uuid1())
-        type = WorkFlowStepEnum.action
+        capability_type = WorkFlowStepEnum.action
         capability_name = "test name"
         version = "0.0.1"
 
         json_object = {
             "capability_id": capability_id,
-            "type": type,
+            "type": capability_type,
             "name": capability_name,
             "version": version,
             "agent": {"agent": agentStructure.model_dump()},
@@ -87,7 +85,7 @@ class testCapabilityStructureMessage(unittest.TestCase):
         capabilityStructure = CapabilityStructure(**json_object)
 
         self.assertEqual(capabilityStructure.capability_id, capability_id)
-        self.assertEqual(capabilityStructure.type, type)
+        self.assertEqual(capabilityStructure.type, capability_type)
         self.assertEqual(capabilityStructure.name, capability_name)
         self.assertEqual(capabilityStructure.version, version)
 
@@ -109,7 +107,6 @@ class testCapabilityStructureMessage(unittest.TestCase):
         ext_name = "test"
         externalReference = ExternalReference(name=ext_name)
 
-        type = "action"
         step_name = "test step"
         description = "test description"
         command = "test command"
@@ -119,18 +116,18 @@ class testCapabilityStructureMessage(unittest.TestCase):
                                       externalReference], command=command, target=target)
 
         capability_id = str(uuid1())
-        type = WorkFlowStepEnum.action
+        capability_type = WorkFlowStepEnum.action
         capability_name = "test name"
         version = "0.0.1"
 
         capabilityStructure = CapabilityStructure(
-            capability_id=capability_id, type=type, name=capability_name, version=version, step={"step": stepStructure}, agent={"agent": agentStructure})
+            capability_id=capability_id, type=capability_type, name=capability_name, version=version, step={"step": stepStructure}, agent={"agent": agentStructure})
 
         json_str = capabilityStructure.model_dump_json()
 
         json_object = {
             "capability_id": capability_id,
-            "type": type,
+            "type": capability_type,
             "name": capability_name,
             "version": version,
             "agent": {"agent": agentStructure.model_dump()},
