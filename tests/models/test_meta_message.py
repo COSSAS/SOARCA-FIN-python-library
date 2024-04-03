@@ -1,30 +1,18 @@
-import datetime
+from datetime import datetime, timezone
 import json
 import unittest
 from uuid import uuid1
 
-from soarca_fin_python_library.message_factory import generateMetaMessage
+
 from soarca_fin_python_library.models.meta import Meta
 
 
 class testMetaMessage(unittest.TestCase):
 
-    def test_meta_message_generator_implicit(self):
+    def test_meta_message_generator(self):
         id = str(uuid1())
-        metaMessage = generateMetaMessage(id)
-
-        datetime_now = datetime.datetime.now()
-        datetime_object = datetime.datetime.fromisoformat(
-            metaMessage.timestamp)
-
-        self.assertEqual(metaMessage.sender_id, id)
-        self.assertIsNotNone(metaMessage.timestamp)
-        self.assertTrue(datetime_object < datetime_now)
-
-    def test_meta_message_generator_explicit(self):
-        id = str(uuid1())
-        timestamp = datetime.datetime.now().isoformat()
-        metaMessage = generateMetaMessage(id, timestamp)
+        timestamp = datetime.now(timezone.utc).isoformat()
+        metaMessage = Meta(sender_id=id, timestamp=timestamp)
 
         self.assertEqual(metaMessage.sender_id, id)
         self.assertIsNotNone(metaMessage.timestamp)
@@ -32,7 +20,7 @@ class testMetaMessage(unittest.TestCase):
 
     def test_json_to_meta_message(self):
         id = str(uuid1())
-        timestamp = datetime.datetime.now().isoformat()
+        timestamp = datetime.now(timezone.utc).isoformat()
 
         json_object = {
             "sender_id": id,
@@ -46,8 +34,8 @@ class testMetaMessage(unittest.TestCase):
 
     def test_meta_message_to_json(self):
         id = str(uuid1())
-        timestamp = datetime.datetime.now().isoformat()
-        metaMessage = generateMetaMessage(id, timestamp)
+        timestamp = datetime.now(timezone.utc).isoformat()
+        metaMessage = Meta(sender_id=id, timestamp=timestamp)
 
         json_str = metaMessage.model_dump_json()
 

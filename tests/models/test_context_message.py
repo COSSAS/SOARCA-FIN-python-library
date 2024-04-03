@@ -3,7 +3,7 @@ import json
 import unittest
 from uuid import uuid1
 
-from soarca_fin_python_library.message_factory import generateContextMessage
+
 from soarca_fin_python_library.models.context import Context
 
 
@@ -13,8 +13,8 @@ class TestContextMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = Context(
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
 
         self.assertEqual(step_id, contextMessage.step_id)
         self.assertEqual(playbook_id, contextMessage.playbook_id)
@@ -27,10 +27,10 @@ class TestContextMessage(unittest.TestCase):
 
         completed_on = datetime.datetime.now().isoformat()
         generated_on = datetime.datetime.now().isoformat()
-        timeout = datetime.datetime.now().isoformat()
+        timeout = 30
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id, completed_on, generated_on, timeout)
+        contextMessage = Context(
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id, completed_on=completed_on, generated_on=generated_on, timeout=timeout)
 
         self.assertEqual(step_id, contextMessage.step_id)
         self.assertEqual(playbook_id, contextMessage.playbook_id)
@@ -47,7 +47,7 @@ class TestContextMessage(unittest.TestCase):
 
         completed_on = datetime.datetime.now().isoformat()
         generated_on = datetime.datetime.now().isoformat()
-        timeout = datetime.datetime.now().isoformat()
+        timeout = 30
 
         json_obj = {
             "step_id": step_id,
@@ -75,7 +75,7 @@ class TestContextMessage(unittest.TestCase):
 
         completed_on = datetime.datetime.now().isoformat()
         generated_on = datetime.datetime.now().isoformat()
-        timeout = datetime.datetime.now().isoformat()
+        timeout = 30
 
         json_obj = {
             "step_id": step_id,
@@ -86,8 +86,8 @@ class TestContextMessage(unittest.TestCase):
             "timeout": timeout,
         }
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id, completed_on, generated_on, timeout)
+        contextMessage = Context(
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id, completed_on=completed_on, generated_on=generated_on, timeout=timeout)
 
         json_str = contextMessage.model_dump_json()
 

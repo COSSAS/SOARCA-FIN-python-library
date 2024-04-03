@@ -6,6 +6,6 @@ class StepStructure(BaseModel):
     type: str = "action"
     name: str
     description: str
-    external_references: ExternalReference
+    external_references: list[ExternalReference]
     command: str
     target: str

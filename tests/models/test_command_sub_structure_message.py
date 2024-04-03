@@ -2,7 +2,7 @@ import json
 import unittest
 from uuid import uuid1
 
-from soarca_fin_python_library.message_factory import generateCommandSubStructureMessage, generateContextMessage
+
 from soarca_fin_python_library.models.context import Context
 from soarca_fin_python_library.models.command_sub_structure import CommandSubStructure
 
@@ -15,15 +15,15 @@ class TestCommandSubStructureMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = Context(
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
 
         command = "command"
         context = contextMessage
         variables = {}
 
-        commandSubStructure = generateCommandSubStructureMessage(
-            command, context, variables)
+        commandSubStructure = CommandSubStructure(
+            command=command, context=context, variables=variables)
 
         self.assertEqual(commandSubStructure.command, command)
         self.assertIsNone(commandSubStructure.authentication)
@@ -35,8 +35,8 @@ class TestCommandSubStructureMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = Context(
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
 
         command = "command"
         context = contextMessage
@@ -61,8 +61,8 @@ class TestCommandSubStructureMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = Context(
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
 
         command = "command"
         context = contextMessage
@@ -75,8 +75,8 @@ class TestCommandSubStructureMessage(unittest.TestCase):
             "authentication": None,
         }
 
-        commandSubStructure = generateCommandSubStructureMessage(
-            command, context, variables)
+        commandSubStructure = CommandSubStructure(
+            command=command, context=context, variables=variables)
 
         json_str = commandSubStructure.model_dump_json()
 
