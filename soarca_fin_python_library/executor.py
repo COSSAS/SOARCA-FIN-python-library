@@ -69,7 +69,7 @@ class Executor(IExecutor):
                         # Send Nack?
                         log.warn(
                             f"Unimplemented command: {message.model_dump_json()}")
-            except Empty as e:
+            except Empty:
                 pass
 
         log.info(f"Thread ended for {self.id}")
@@ -105,9 +105,9 @@ class Executor(IExecutor):
                 self._wait_for_ack(message.message_id)
                 self.callback(message)
                 return
-            except (Empty, TimeoutError) as e:
+            except (Empty, TimeoutError):
                 self._send_message_as_json(message, topic="soarca")
-            except RuntimeError as e:
+            except RuntimeError:
                 self._send_message_as_json(message, topic="soarca")
             finally:
                 retries -= 1
@@ -131,12 +131,12 @@ class Executor(IExecutor):
                 self._wait_for_ack(message.message_id)
                 return
             # Did not get a response in time
-            except (Empty, TimeoutError) as e:
+            except (Empty, TimeoutError):
                 # Resend message
                 self._send_message_as_json(message, topic="soarca")
 
             # Receive a response but the message failed (Nack)
-            except RuntimeError as e:
+            except RuntimeError:
                 # Resend message
                 self._send_message_as_json(message, topic="soarca")
             finally:
@@ -172,9 +172,9 @@ class Executor(IExecutor):
             try:
                 self._wait_for_ack(result.message_id)
                 break
-            except (Empty, TimeoutError) as e:
+            except (Empty, TimeoutError):
                 self._send_message_as_json(result)
-            except RuntimeError as e:
+            except RuntimeError:
                 self._send_message_as_json(result)
             finally:
                 retries -= 1

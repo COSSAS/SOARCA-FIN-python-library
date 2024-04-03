@@ -3,7 +3,6 @@ import logging as log
 from dotenv import load_dotenv
 
 from soarca_fin_python_library.soarca_fin import SoarcaFin
-from soarca_fin_python_library.models.security import Security
 from soarca_fin_python_library.models.agent_structure import AgentStructure
 from soarca_fin_python_library.models.external_reference import ExternalReference
 from soarca_fin_python_library.models.step_structure import StepStructure
@@ -31,7 +30,6 @@ def capability_pong_callback(command: Command) -> ResultStructure:
 
 
 def main(username: str, password: str) -> None:
-    security = Security(version="0.0.1", channel_security="plaintext")
 
     agent = AgentStructure(name="soarca-fin--123")
 

@@ -21,7 +21,7 @@ class Parser(IParser):
     def parse_on_message(self, message: mqtt.MQTTMessage) -> Message:
         # Check if we did not receive an empty MQTT message.
         if not message.payload:
-            log.error(f"Received a message with an empty payload")
+            log.error("Received a message with an empty payload")
             raise LookupError("Could not receive payload from message")
         content = ""
         # Try to convert MQTT payload to utf8 and load is as a JSON object.
