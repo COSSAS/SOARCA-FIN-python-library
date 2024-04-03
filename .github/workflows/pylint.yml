@@ -17,9 +17,9 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pylint
         pip install poetry
+        poetry self add pylint
         poetry install
     - name: Analysing the code with pylint
       run: |
-        pylint --disable=R,C $(git ls-files '*.py')
+        poetry run pylint --disable=R,C $(git ls-files '*.py')
