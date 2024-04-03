@@ -22,11 +22,11 @@ from soarca_fin_python_library.models.meta import Meta
 
 class Executor(IExecutor):
 
-    def __init__(self, id: str, callback, queue: Queue, mqttc: Client):
+    def __init__(self, executor_id: str, callback, queue: Queue, mqttc: Client):
         self.queue: Queue[Message] = queue
         self.mqttc: Client = mqttc
         self.acks: list[str] = []
-        self.id = id
+        self.id = executor_id
         self.callback = callback
         self.TIMEOUT = 30
         self.running = True
@@ -42,7 +42,7 @@ class Executor(IExecutor):
     # Main executor loop. Polls for messages in the queue and parsers them.
     def start_executor(self):
 
-        log.info(f"Thread started for {self.id}")
+        log.info("Thread started for %s", self.id)
         self.running = True
 
         while self.running:
@@ -56,7 +56,7 @@ class Executor(IExecutor):
                             self._put_message_in_queue(message)
                         else:
                             log.debug(
-                                f"Received unknown (n)ack with message_id: {message.message_id}")
+                                "Received unknown (n)ack with message_id: %s", message.message_id)
                     case Register():
                         self._handle_register_message(message)
                     case Unregister():
@@ -67,12 +67,12 @@ class Executor(IExecutor):
                         self._handle_command_message(message)
                     case _:
                         # Send Nack?
-                        log.warn(
-                            f"Unimplemented command: {message.model_dump_json()}")
+                        log.warning(
+                            "Unimplemented command: %s", message.model_dump_json())
             except Empty:
                 pass
 
-        log.info(f"Thread ended for {self.id}")
+        log.info("Thread ended for %s", self.id)
 
     # Gets message form queue. Is blocking.
     def _get_message_from_queue(self, timeout: float = None) -> Message:
@@ -113,7 +113,7 @@ class Executor(IExecutor):
                 retries -= 1
                 if retries == 0:
                     log.error(
-                        f"Did not receive an ack for message {message.message_id}. Aborting...")
+                        "Did not receive an ack for message %s. Aborting...", message.message_id)
                     exit(-1)
 
     # Handles self generated register message.
@@ -143,7 +143,7 @@ class Executor(IExecutor):
                 retries -= 1
                 if retries == 0:
                     log.error(
-                        f"Did not receive an ack for message {message.message_id}. Aborting...")
+                        "Did not receive an ack for message %s. Aborting...", message.message_id)
                     exit(-1)
 
     # Handles a command message from SOARCA.
@@ -178,8 +178,8 @@ class Executor(IExecutor):
                 self._send_message_as_json(result)
             finally:
                 retries -= 1
-                if retries == 0:
-                    break
+            if retries == 0:
+                break
 
     # Publishes a message as JSON on a topic. Default topic is self.id.
     def _send_message_as_json(self, message: Message, topic: str = None):
@@ -209,17 +209,18 @@ class Executor(IExecutor):
                 self.acks.remove(message_id)
                 match message:
                     case Ack():
-                        log.info(f"Receive ack for message {message_id}")
+                        log.info("Received ack for message: %s", message_id)
                         return
                     case Nack():
-                        log.warn(f"Receive nack for message {message_id}")
+                        log.warning(
+                            "Received nack for message: %s", message_id)
                         raise RuntimeError("Receive a nack")
                     case _:
                         raise TypeError(
                             f"Unexpected message type {message.model_dump_json()}")
 
             except Empty as e:
-                log.warn("Did not receive an ack")
+                log.warning("Did not receive an ack")
                 raise e
 
         raise TimeoutError(f"Timeout for message with id {message_id}")
