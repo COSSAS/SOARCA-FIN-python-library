@@ -16,14 +16,14 @@ class TestCommandSubStructureMessage(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id, playbook_id, execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
 
         command = "command"
         context = contextMessage
         variables = {}
 
         commandSubStructure = CommandSubStructure(
-            command, context, variables)
+            command=command, context=context, variables=variables)
 
         self.assertEqual(commandSubStructure.command, command)
         self.assertIsNone(commandSubStructure.authentication)
@@ -36,7 +36,7 @@ class TestCommandSubStructureMessage(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id, playbook_id, execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
 
         command = "command"
         context = contextMessage
@@ -62,7 +62,7 @@ class TestCommandSubStructureMessage(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id, playbook_id, execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
 
         command = "command"
         context = contextMessage
@@ -76,7 +76,7 @@ class TestCommandSubStructureMessage(unittest.TestCase):
         }
 
         commandSubStructure = CommandSubStructure(
-            command, context, variables)
+            command=command, context=context, variables=variables)
 
         json_str = commandSubStructure.model_dump_json()
 

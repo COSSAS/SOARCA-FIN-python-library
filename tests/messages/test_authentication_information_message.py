@@ -68,7 +68,7 @@ class TestAuthenticationInformationMessage(unittest.TestCase):
 
         json_obj = {
             "id": "someID",
-            "type": type,
+            "type": type.value,
             "name": ai_name,
             "description": ai_description,
             "authentication_info_extensions": ai_extensions,
@@ -81,6 +81,6 @@ class TestAuthenticationInformationMessage(unittest.TestCase):
             description=ai_description,
             authentication_info_extensions=ai_extensions)
 
-        json_str = aiMessage.model_dump_json()
+        json_str = aiMessage.model_dump_json(exclude_none=True)
 
         self.assertEqual(json.loads(json_str), json_obj)

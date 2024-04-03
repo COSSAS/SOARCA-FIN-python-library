@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 import json
 import unittest
 from uuid import uuid1
@@ -13,47 +14,49 @@ class TestCommandMessage(unittest.TestCase):
     def test_command_message_generator(self):
 
         meta_id = str(uuid1())
-        metaMessage = Meta(meta_id)
+        timestamp = datetime.now(timezone.utc).isoformat()
+        metaMessage = Meta(timestamp=timestamp, sender_id=meta_id)
 
         step_id = str(uuid1())
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id, playbook_id, execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
 
         command = "command"
         context = contextMessage
         variables = {}
 
         commandSubStructure = CommandSubStructure(
-            command, context, variables)
+            command=command, context=context, variables=variables)
 
+        command_id = str(uuid1())
         commandMessage = Command(
-            commandSubStructure, metaMessage)
+            command=commandSubStructure, meta=metaMessage, message_id=command_id)
 
         self.assertIsInstance(commandMessage.command, CommandSubStructure)
         self.assertIsInstance(commandMessage.meta, Meta)
         self.assertIsNotNone(commandMessage.message_id)
 
     def test_command_from_json(self):
-
         meta_id = str(uuid1())
-        metaMessage = Meta(meta_id)
+        timestamp = datetime.now(timezone.utc).isoformat()
+        metaMessage = Meta(timestamp=timestamp, sender_id=meta_id)
 
         step_id = str(uuid1())
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id, playbook_id, execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
 
         command = "command"
         context = contextMessage
         variables = {}
 
-        commandSubStructure = Command(
-            command, context, variables)
+        commandSubStructure = CommandSubStructure(
+            command=command, context=context, variables=variables)
 
         command_id = str(uuid1())
 
@@ -72,21 +75,22 @@ class TestCommandMessage(unittest.TestCase):
 
     def test_command_to_json(self):
         meta_id = str(uuid1())
-        metaMessage = Meta(meta_id)
+        timestamp = datetime.now(timezone.utc).isoformat()
+        metaMessage = Meta(timestamp=timestamp, sender_id=meta_id)
 
         step_id = str(uuid1())
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id, playbook_id, execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
 
         command = "command"
         context = contextMessage
         variables = {}
 
         commandSubStructure = CommandSubStructure(
-            command, context, variables)
+            command=command, context=context, variables=variables)
 
         command_id = str(uuid1())
 
@@ -98,7 +102,7 @@ class TestCommandMessage(unittest.TestCase):
         }
 
         commandMessage = Command(
-            commandSubStructure, metaMessage, command_id)
+            command=commandSubStructure, meta=metaMessage, message_id=command_id)
 
         json_str = commandMessage.model_dump_json()
 

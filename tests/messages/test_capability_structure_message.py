@@ -14,10 +14,11 @@ class testCapabilityStructureMessage(unittest.TestCase):
     def test_capability_structure_generator(self):
         agent_name = "test"
         uuid_agent = str(uuid1())
-        agentStructure = AgentStructure(agent_name, uuid_agent)
+        name = f"soarca-fin--{agent_name}-{uuid_agent}"
+        agentStructure = AgentStructure(name=name)
 
         ext_name = "test"
-        externalReference = ExternalReference(ext_name)
+        externalReference = ExternalReference(name=ext_name)
 
         type = "action"
         step_name = "test step"
@@ -25,8 +26,8 @@ class testCapabilityStructureMessage(unittest.TestCase):
         command = "test command"
         target = str(uuid1())
 
-        stepStructure = StepStructure(
-            type, step_name, description, [externalReference], command, target)
+        stepStructure = StepStructure(name=step_name, description=description, external_references=[
+                                      externalReference], command=command, target=target)
 
         capability_id = str(uuid1())
         type = WorkFlowStepEnum.action
@@ -34,18 +35,19 @@ class testCapabilityStructureMessage(unittest.TestCase):
         version = "0.0.1"
 
         capabilityStructure = CapabilityStructure(
-            capability_id, type, capability_name, version, stepStructure, agentStructure)
+            capability_id=capability_id, type=type, name=capability_name, version=version, step={"step": stepStructure}, agent={"agent": agentStructure})
 
         self.assertEqual(capabilityStructure.capability_id, capability_id)
         self.assertEqual(capabilityStructure.type, type)
         self.assertEqual(capabilityStructure.name, capability_name)
         self.assertEqual(capabilityStructure.version, version)
 
-        self.assertIsInstance(capabilityStructure.agent, AgentStructure)
+        self.assertIsInstance(
+            capabilityStructure.agent["agent"], AgentStructure)
         self.assertEqual(capabilityStructure.agent["agent"].name,
                          f"soarca-fin--{agent_name}-{uuid_agent}")
 
-        self.assertIsInstance(capabilityStructure.step, StepStructure)
+        self.assertIsInstance(capabilityStructure.step["step"], StepStructure)
         self.assertIsInstance(
             capabilityStructure.step["step"].external_references[0],
             ExternalReference)
@@ -53,10 +55,11 @@ class testCapabilityStructureMessage(unittest.TestCase):
     def test_json_to_capability_structure_message(self):
         agent_name = "test"
         uuid_agent = str(uuid1())
-        agentStructure = AgentStructure(agent_name, uuid_agent)
+        name = f"soarca-fin--{agent_name}-{uuid_agent}"
+        agentStructure = AgentStructure(name=name)
 
         ext_name = "test"
-        externalReference = ExternalReference(ext_name)
+        externalReference = ExternalReference(name=ext_name)
 
         type = "action"
         step_name = "test step"
@@ -64,8 +67,8 @@ class testCapabilityStructureMessage(unittest.TestCase):
         command = "test command"
         target = str(uuid1())
 
-        stepStructure = StepStructure(
-            type, step_name, description, [externalReference], command, target)
+        stepStructure = StepStructure(name=step_name, description=description, external_references=[
+                                      externalReference], command=command, target=target)
 
         capability_id = str(uuid1())
         type = WorkFlowStepEnum.action
@@ -77,8 +80,8 @@ class testCapabilityStructureMessage(unittest.TestCase):
             "type": type,
             "name": capability_name,
             "version": version,
-            "agent": agentStructure.model_dump(),
-            "step": stepStructure.model_dump(),
+            "agent": {"agent": agentStructure.model_dump()},
+            "step": {"step": stepStructure.model_dump()},
         }
 
         capabilityStructure = CapabilityStructure(**json_object)
@@ -88,21 +91,23 @@ class testCapabilityStructureMessage(unittest.TestCase):
         self.assertEqual(capabilityStructure.name, capability_name)
         self.assertEqual(capabilityStructure.version, version)
 
-        self.assertIsInstance(capabilityStructure.agent, AgentStructure)
+        self.assertIsInstance(
+            capabilityStructure.agent["agent"], AgentStructure)
         self.assertEqual(capabilityStructure.agent["agent"].name,
                          f"soarca-fin--{agent_name}-{uuid_agent}")
 
-        self.assertIsInstance(capabilityStructure.step, StepStructure)
+        self.assertIsInstance(capabilityStructure.step["step"], StepStructure)
         self.assertIsInstance(
             capabilityStructure.step["step"].external_references[0], ExternalReference)
 
     def test_capability_structure_to_json(self):
         agent_name = "test"
         uuid_agent = str(uuid1())
-        agentStructure = AgentStructure(agent_name, uuid_agent)
+        name = f"soarca-fin--{agent_name}-{uuid_agent}"
+        agentStructure = AgentStructure(name=name)
 
         ext_name = "test"
-        externalReference = ExternalReference(ext_name)
+        externalReference = ExternalReference(name=ext_name)
 
         type = "action"
         step_name = "test step"
@@ -110,8 +115,8 @@ class testCapabilityStructureMessage(unittest.TestCase):
         command = "test command"
         target = str(uuid1())
 
-        stepStructure = StepStructure(
-            type, step_name, description, [externalReference], command, target)
+        stepStructure = StepStructure(name=step_name, description=description, external_references=[
+                                      externalReference], command=command, target=target)
 
         capability_id = str(uuid1())
         type = WorkFlowStepEnum.action
@@ -119,7 +124,7 @@ class testCapabilityStructureMessage(unittest.TestCase):
         version = "0.0.1"
 
         capabilityStructure = CapabilityStructure(
-            capability_id, type, capability_name, version, stepStructure, agentStructure)
+            capability_id=capability_id, type=type, name=capability_name, version=version, step={"step": stepStructure}, agent={"agent": agentStructure})
 
         json_str = capabilityStructure.model_dump_json()
 
@@ -128,8 +133,8 @@ class testCapabilityStructureMessage(unittest.TestCase):
             "type": type,
             "name": capability_name,
             "version": version,
-            "agent": agentStructure.model_dump(),
-            "step": stepStructure.model_dump(),
+            "agent": {"agent": agentStructure.model_dump()},
+            "step": {"step": stepStructure.model_dump()},
         }
 
         self.assertEqual(json.loads(json_str), json_object)
