@@ -15,8 +15,8 @@ from soarca_fin_python_library.models.command import Command
 
 class Parser(IParser):
 
-    def __init__(self, id: str):
-        self.id = id
+    def __init__(self, parser_id: str):
+        self.id = parser_id
 
     def parse_on_message(self, message: mqtt.MQTTMessage) -> Message:
         # Check if we did not receive an empty MQTT message.
@@ -28,7 +28,7 @@ class Parser(IParser):
         try:
             content = json.loads(message.payload.decode('utf8'))
         except Exception as e:
-            log.error(f"Could not parse the payload as json format: {e}")
+            log.error("Could not parse the payload as json format: %s", e)
             raise e
         # Check for attribute 'type'. Is required to parse the message further.
         if "type" not in content:
