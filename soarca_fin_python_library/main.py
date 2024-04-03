@@ -65,14 +65,14 @@ def main(username: str, password: str) -> None:
 if __name__ == "__main__":
     log.basicConfig()
     log.getLogger().setLevel(log.DEBUG)
-    try:
-        load_dotenv()
-        USERNAME = os.getenv("MQTT_USERNAME")
-        PASSWD = os.getenv("MQTT_PASSWD")
-    except Exception as e:
+    load_dotenv()
+    USERNAME = os.getenv("MQTT_USERNAME")
+    PASSWD = os.getenv("MQTT_PASSWD")
+
+    if USERNAME and PASSWD:
+        main(USERNAME, PASSWD)
+
+    else:
         log.critical(
             "Could not read environment variables. Make sure the .env file exists in the src directory")
-        log.critical(e)
         exit(-1)
-
-    main(USERNAME, PASSWD)
