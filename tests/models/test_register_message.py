@@ -30,22 +30,22 @@ class testRegisterMessage(unittest.TestCase):
         ext_name = "test"
         externalReference = ExternalReference(name=ext_name)
 
-        type = "action"
+        step_type = "action"
         step_name = "test step"
         description = "test description"
         command = "test command"
         target = str(uuid1())
 
         stepStructure = StepStructure(
-            type=type, name=step_name, description=description, external_references=[externalReference], command=command, target=target)
+            type=step_type, name=step_name, description=description, external_references=[externalReference], command=command, target=target)
 
         capability_id = str(uuid1())
-        type = WorkFlowStepEnum.action
+        capability_type = WorkFlowStepEnum.action
         capability_name = "test name"
         version = "0.0.1"
 
         capabilityStructure = CapabilityStructure(
-            capability_id=capability_id, type=type, name=capability_name, version=version, step={"step": stepStructure}, agent={"agent": agentStructure})
+            capability_id=capability_id, type=capability_type, name=capability_name, version=version, step={"step": stepStructure}, agent={"agent": agentStructure})
 
         message_id = str(uuid1())
         fin_id = str(uuid1())
@@ -79,22 +79,22 @@ class testRegisterMessage(unittest.TestCase):
         ext_name = "test"
         externalReference = ExternalReference(name=ext_name)
 
-        type = "action"
+        step_type = "action"
         step_name = "test step"
         description = "test description"
         command = "test command"
         target = str(uuid1())
 
         stepStructure = StepStructure(
-            type=type, name=step_name, description=description, external_references=[externalReference], command=command, target=target)
+            type=step_type, name=step_name, description=description, external_references=[externalReference], command=command, target=target)
 
         capability_id = str(uuid1())
-        type = WorkFlowStepEnum.action
+        capability_type = WorkFlowStepEnum.action
         capability_name = "test name"
         version = "0.0.1"
 
         capabilityStructure = CapabilityStructure(
-            capability_id=capability_id, type=type, name=capability_name, version=version, step={"step": stepStructure}, agent={"agent": agentStructure})
+            capability_id=capability_id, type=capability_type, name=capability_name, version=version, step={"step": stepStructure}, agent={"agent": agentStructure})
 
         fin_id = str(uuid1())
         message_id = str(uuid1())
