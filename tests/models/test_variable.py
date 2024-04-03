@@ -9,7 +9,7 @@ from soarca_fin_python_library.models.variable import Variable
 class TestVariable(unittest.TestCase):
 
     def test_variable_message_generator(self):
-        type = VariableTypeEnum.string
+        variable_type = VariableTypeEnum.string
         name = "__var_name__"
         description = "test description"
         value = "test value"
@@ -17,16 +17,16 @@ class TestVariable(unittest.TestCase):
         external = False
 
         variableMessage = Variable(
-            type=type, name=name, description=description, value=value, constant=constant, external=external)
+            type=variable_type, name=name, description=description, value=value, constant=constant, external=external)
 
-        self.assertEqual(type, variableMessage.type)
+        self.assertEqual(variable_type, variableMessage.type)
         self.assertEqual(description, variableMessage.description)
         self.assertEqual(value, variableMessage.value)
         self.assertEqual(constant, variableMessage.constant)
         self.assertEqual(external, variableMessage.external)
 
     def test_variable_message_from_json(self):
-        type = VariableTypeEnum.string
+        variable_type = VariableTypeEnum.string
         name = "__var_name__"
         description = "test description"
         value = "test value"
@@ -34,7 +34,7 @@ class TestVariable(unittest.TestCase):
         external = False
 
         json_obj = {
-            "type": type,
+            "type": variable_type,
             "name": name,
             "description": description,
             "value": value,
@@ -44,14 +44,14 @@ class TestVariable(unittest.TestCase):
 
         variableMessage = Variable(**json_obj)
 
-        self.assertEqual(type, variableMessage.type)
+        self.assertEqual(variable_type, variableMessage.type)
         self.assertEqual(description, variableMessage.description)
         self.assertEqual(value, variableMessage.value)
         self.assertEqual(constant, variableMessage.constant)
         self.assertEqual(external, variableMessage.external)
 
     def test_variable_to_json(self):
-        type = VariableTypeEnum.string
+        variable_type = VariableTypeEnum.string
         name = "__var_name__"
         description = "test description"
         value = "test value"
@@ -59,12 +59,12 @@ class TestVariable(unittest.TestCase):
         external = False
 
         variableMessage = Variable(
-            type=type, name=name, description=description, value=value, constant=constant, external=external)
+            type=variable_type, name=name, description=description, value=value, constant=constant, external=external)
 
         json_str = variableMessage.model_dump_json()
 
         json_obj = {
-            "type": type,
+            "type": variable_type,
             "name": name,
             "description": description,
             "value": value,
