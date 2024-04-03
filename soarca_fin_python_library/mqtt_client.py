@@ -26,7 +26,7 @@ class MQTTClient(IMQTTClient):
         self.callback = callback
         self.executor: Executor = executor
         self.parser = parser
-        self._executor_thread = None
+        self.executor_thread = None
 
     # On connect callback function for Paho MQTT client
     def on_connect(
