@@ -17,17 +17,17 @@ class TestAgentStructureMessage(unittest.TestCase):
     def test_json_to_agent_structure(self):
 
         name = "test"
-        id = str(uuid1())
+        agent_id = str(uuid1())
         json_obj = {
             "type": "soarca-fin",
-            "name": f"soarca-fin--{name}-{id}"
+            "name": f"soarca-fin--{name}-{agent_id}"
         }
 
         agent = AgentStructure(**json_obj)
 
         self.assertEqual(agent.type, "soarca-fin",
                          "Type should be an soarca-fin")
-        self.assertEqual(agent.name, f"soarca-fin--{name}-{id}",
+        self.assertEqual(agent.name, f"soarca-fin--{name}-{agent_id}",
                          "Names should match")
 
     def test_agent_structure_to_json(self):
