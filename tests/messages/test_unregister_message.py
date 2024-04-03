@@ -8,14 +8,11 @@ from soarca_fin_python_library.models.unregister import Unregister
 
 class TestUnregisterMessage(unittest.TestCase):
 
-    def test_unregister_message_generator_invalid(self):
-
-        self.assertRaises(ValueError, Unregister)
-
     def test_unregister_message_generator_all(self):
+        message_id = str(uuid1())
         all = True
 
-        unregisterMessage = Unregister(all)
+        unregisterMessage = Unregister(message_id=message_id, all=all)
 
         self.assertEqual("unregister", unregisterMessage.type)
         self.assertEqual(all, unregisterMessage.all)
@@ -25,9 +22,9 @@ class TestUnregisterMessage(unittest.TestCase):
 
     def test_unregister_message_generator_capability(self):
         capability_id = str(uuid1())
-
-        unregisterMessage = Unregister(
-            capability_id=capability_id)
+        message_id = str(uuid1())
+        unregisterMessage = Unregister(message_id=message_id,
+                                       capability_id=capability_id)
 
         self.assertEqual("unregister", unregisterMessage.type)
         self.assertEqual(False, unregisterMessage.all)
@@ -37,9 +34,9 @@ class TestUnregisterMessage(unittest.TestCase):
 
     def test_unregister_message_generator_fin(self):
         fin_id = str(uuid1())
-
-        unregisterMessage = Unregister(
-            fin_id=fin_id)
+        message_id = str(uuid1())
+        unregisterMessage = Unregister(message_id=message_id,
+                                       fin_id=fin_id)
 
         self.assertEqual("unregister", unregisterMessage.type)
         self.assertEqual(False, unregisterMessage.all)

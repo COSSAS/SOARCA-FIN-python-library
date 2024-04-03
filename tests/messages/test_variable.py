@@ -17,7 +17,7 @@ class TestVariable(unittest.TestCase):
         external = False
 
         variableMessage = Variable(
-            type, name, description, value, constant, external)
+            type=type, name=name, description=description, value=value, constant=constant, external=external)
 
         self.assertEqual(type, variableMessage.type)
         self.assertEqual(description, variableMessage.description)
@@ -59,7 +59,7 @@ class TestVariable(unittest.TestCase):
         external = False
 
         variableMessage = Variable(
-            type, name, description, value, constant, external)
+            type=type, name=name, description=description, value=value, constant=constant, external=external)
 
         json_str = variableMessage.model_dump_json()
 

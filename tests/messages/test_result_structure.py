@@ -18,10 +18,10 @@ class TestResultStructure(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id, playbook_id, execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
 
         resultStructureMessage = ResultStructure(
-            state, contextMessage, variables)
+            state=state, context=contextMessage, variables=variables)
 
         self.assertEqual(resultStructureMessage.state, state)
         self.assertEqual(resultStructureMessage.variables, variables)
@@ -36,7 +36,7 @@ class TestResultStructure(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id, playbook_id, execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
 
         json_object = {
             "state": state,
@@ -59,7 +59,7 @@ class TestResultStructure(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id, playbook_id, execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
 
         json_object = {
             "state": state,
@@ -68,7 +68,7 @@ class TestResultStructure(unittest.TestCase):
         }
 
         resultStructureMessage = ResultStructure(
-            state, contextMessage, variables)
+            state=state, context=contextMessage, variables=variables)
         json_str = resultStructureMessage.model_dump_json()
 
         self.assertEqual(json.loads(json_str), json_object)

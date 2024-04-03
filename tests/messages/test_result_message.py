@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 import json
 import unittest
 from uuid import uuid1
@@ -28,16 +29,18 @@ class TestResultMessage(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id, playbook_id, execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
 
-        resultStructureMessage = Result(
-            state, contextMessage, variables)
+        resultStructureMessage = ResultStructure(
+            state=state, context=contextMessage, variables=variables)
 
         fin_id = str(uuid1())
-        metaMessage = Meta(fin_id)
+        timestamp = datetime.now(timezone.utc).isoformat()
+        metaMessage = Meta(sender_id=fin_id, timestamp=timestamp)
 
-        resultMessage = Result(
-            resultStructureMessage, metaMessage)
+        message_id = str(uuid1())
+        resultMessage = Result(message_id=message_id,
+                               result=resultStructureMessage, meta=metaMessage)
 
         self.assertIsInstance(resultMessage.result, ResultStructure)
         self.assertIsInstance(resultMessage.meta, Meta)
@@ -52,13 +55,14 @@ class TestResultMessage(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id, playbook_id, execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
 
-        resultStructureMessage = Result(
-            state, contextMessage, variables)
+        resultStructureMessage = ResultStructure(
+            state=state, context=contextMessage, variables=variables)
 
         fin_id = str(uuid1())
-        metaMessage = Meta(fin_id)
+        timestamp = datetime.now(timezone.utc).isoformat()
+        metaMessage = Meta(sender_id=fin_id, timestamp=timestamp)
 
         message_id = str(uuid1())
 
@@ -85,13 +89,14 @@ class TestResultMessage(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id, playbook_id, execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
 
-        resultStructureMessage = Result(
-            state, contextMessage, variables)
+        resultStructureMessage = ResultStructure(
+            state=state, context=contextMessage, variables=variables)
 
         fin_id = str(uuid1())
-        metaMessage = Meta(fin_id)
+        timestamp = datetime.now(timezone.utc).isoformat()
+        metaMessage = Meta(sender_id=fin_id, timestamp=timestamp)
 
         message_id = str(uuid1())
 
@@ -103,7 +108,7 @@ class TestResultMessage(unittest.TestCase):
         }
 
         resultMessage = Result(
-            resultStructureMessage, metaMessage, message_id)
+            result=resultStructureMessage, meta=metaMessage, message_id=message_id)
 
         json_str = resultMessage.model_dump_json()
 

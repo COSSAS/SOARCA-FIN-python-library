@@ -11,7 +11,8 @@ class testSecurityMessage(unittest.TestCase):
         version = "0.0.1"
         channel_security = "plaintext"
 
-        securityMessage = Security(version, channel_security)
+        securityMessage = Security(
+            version=version, channel_security=channel_security)
 
         self.assertEqual(securityMessage.version, version)
         self.assertEqual(securityMessage.channel_security, channel_security)
@@ -34,7 +35,8 @@ class testSecurityMessage(unittest.TestCase):
         version = "0.0.1"
         channel_security = "plaintext"
 
-        securityMessage = Security(version, channel_security)
+        securityMessage = Security(
+            version=version, channel_security=channel_security)
 
         json_str = securityMessage.model_dump_json()
 

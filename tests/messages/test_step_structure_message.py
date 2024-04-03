@@ -10,7 +10,7 @@ from soarca_fin_python_library.models.step_structure import StepStructure
 class testStepStructureMessage(unittest.TestCase):
     def test_step_structure_generator(self):
         ext_name = "test"
-        externalReference = ExternalReference(ext_name)
+        externalReference = ExternalReference(name=ext_name)
 
         type = "action"
         step_name = "test step"
@@ -19,7 +19,7 @@ class testStepStructureMessage(unittest.TestCase):
         target = str(uuid1())
 
         stepStructureMessage = StepStructure(
-            type, step_name, description, [externalReference], command, target)
+            type=type, name=step_name, description=description, external_references=[externalReference], command=command, target=target)
 
         self.assertEqual(stepStructureMessage.type, type,
                          "Types should be the same")
@@ -38,7 +38,7 @@ class testStepStructureMessage(unittest.TestCase):
 
     def test_json_to_step_structure_message(self):
         ext_name = "test"
-        externalReference = ExternalReference(ext_name)
+        externalReference = ExternalReference(name=ext_name)
 
         type = "action"
         step_name = "test step"
@@ -75,7 +75,7 @@ class testStepStructureMessage(unittest.TestCase):
 
     def test_step_structure_to_json(self):
         ext_name = "test"
-        externalReference = ExternalReference(ext_name)
+        externalReference = ExternalReference(name=ext_name)
 
         type = "action"
         step_name = "test step"
@@ -84,7 +84,7 @@ class testStepStructureMessage(unittest.TestCase):
         target = str(uuid1())
 
         stepStructureMessage = StepStructure(
-            type, step_name, description, [externalReference], command, target)
+            type=type, name=step_name, description=description, external_references=[externalReference], command=command, target=target)
 
         json_str = stepStructureMessage.model_dump_json()
 
