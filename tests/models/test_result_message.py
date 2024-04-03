@@ -10,14 +10,6 @@ from soarca_fin_python_library.models.result import Result
 from soarca_fin_python_library.models.context import Context
 
 
-from soarca_fin_python_library.models.security import Security
-from soarca_fin_python_library.models.agent_structure import AgentStructure
-from soarca_fin_python_library.models.external_reference import ExternalReference
-from soarca_fin_python_library.models.capability_structure import CapabilityStructure
-from soarca_fin_python_library.models.register import Register
-from soarca_fin_python_library.models.step_structure import StepStructure
-
-
 class TestResultMessage(unittest.TestCase):
 
     def test_result_generator(self):
