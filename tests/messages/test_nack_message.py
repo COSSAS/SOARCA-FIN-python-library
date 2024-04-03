@@ -8,7 +8,7 @@ class TestAckMessage(unittest.TestCase):
 
     def test_ack_message_generator(self):
         id = str(uuid1())
-        nack = Nack(id)
+        nack = Nack(message_id=id)
 
         self.assertEqual(nack.type, "nack", "Type should be an nack")
         self.assertEqual(nack.message_id, id, "Message_id's should match")
@@ -29,7 +29,7 @@ class TestAckMessage(unittest.TestCase):
 
     def test_ack_to_json(self):
         id = str(uuid1())
-        nack = Nack(id)
+        nack = Nack(message_id=id)
 
         json_str = nack.model_dump_json()
 

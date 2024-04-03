@@ -17,7 +17,7 @@ class TestExternalReferenceMessage(unittest.TestCase):
         reference_id = str(uuid1())
 
         externalReference = ExternalReference(
-            name, description, source, url, external_id, reference_id)
+            name=name, description=description, source=source, url=url, external_id=external_id, reference_id=reference_id)
 
         self.assertEqual(externalReference.name, name,
                          "Names should match")
@@ -34,7 +34,7 @@ class TestExternalReferenceMessage(unittest.TestCase):
     def test_external_reference_message_generator_implicit(self):
         name = "test"
 
-        externalReference = ExternalReference(name)
+        externalReference = ExternalReference(name=name)
 
         self.assertEqual(externalReference.name, name,
                          "Names should match")
@@ -113,7 +113,7 @@ class TestExternalReferenceMessage(unittest.TestCase):
         reference_id = str(uuid1())
 
         externalReference = ExternalReference(
-            name, description, source, url, external_id, reference_id)
+            name=name, description=description, source=source, url=url, external_id=external_id, reference_id=reference_id)
 
         json_str = externalReference.model_dump_json()
 
@@ -132,7 +132,7 @@ class TestExternalReferenceMessage(unittest.TestCase):
     def test_agent_structure_to_json_implicit(self):
         name = "test"
 
-        externalReference = ExternalReference(name)
+        externalReference = ExternalReference(name=name)
 
         json_str = externalReference.model_dump_json()
 
