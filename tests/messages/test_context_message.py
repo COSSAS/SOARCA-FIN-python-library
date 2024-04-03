@@ -13,8 +13,7 @@ class TestContextMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = generateContextMessage(step_id, playbook_id, execution_id)
 
         self.assertEqual(step_id, contextMessage.step_id)
         self.assertEqual(playbook_id, contextMessage.playbook_id)
@@ -30,7 +29,8 @@ class TestContextMessage(unittest.TestCase):
         timeout = datetime.datetime.now().isoformat()
 
         contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id, completed_on, generated_on, timeout)
+            step_id, playbook_id, execution_id, completed_on, generated_on, timeout
+        )
 
         self.assertEqual(step_id, contextMessage.step_id)
         self.assertEqual(playbook_id, contextMessage.playbook_id)
@@ -87,7 +87,8 @@ class TestContextMessage(unittest.TestCase):
         }
 
         contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id, completed_on, generated_on, timeout)
+            step_id, playbook_id, execution_id, completed_on, generated_on, timeout
+        )
 
         json_str = contextMessage.model_dump_json()
 

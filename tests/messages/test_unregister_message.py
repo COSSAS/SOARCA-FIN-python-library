@@ -7,9 +7,7 @@ from soarca_fin_python_library.models.unregister import Unregister
 
 
 class TestUnregisterMessage(unittest.TestCase):
-
     def test_unregister_message_generator_invalid(self):
-
         self.assertRaises(ValueError, generateUnregisterMessage)
 
     def test_unregister_message_generator_all(self):
@@ -26,8 +24,7 @@ class TestUnregisterMessage(unittest.TestCase):
     def test_unregister_message_generator_capability(self):
         capability_id = str(uuid1())
 
-        unregisterMessage = generateUnregisterMessage(
-            capability_id=capability_id)
+        unregisterMessage = generateUnregisterMessage(capability_id=capability_id)
 
         self.assertEqual("unregister", unregisterMessage.type)
         self.assertEqual(False, unregisterMessage.all)
@@ -38,8 +35,7 @@ class TestUnregisterMessage(unittest.TestCase):
     def test_unregister_message_generator_fin(self):
         fin_id = str(uuid1())
 
-        unregisterMessage = generateUnregisterMessage(
-            fin_id=fin_id)
+        unregisterMessage = generateUnregisterMessage(fin_id=fin_id)
 
         self.assertEqual("unregister", unregisterMessage.type)
         self.assertEqual(False, unregisterMessage.all)
@@ -48,7 +44,6 @@ class TestUnregisterMessage(unittest.TestCase):
         self.assertIsNotNone(unregisterMessage.message_id)
 
     def test_json_to_unregister_message(self):
-
         message_id = str(uuid1())
         capability_id = None
         fin_id = str(uuid1())
@@ -77,7 +72,8 @@ class TestUnregisterMessage(unittest.TestCase):
         all = False
 
         unregisterMessage = generateUnregisterMessage(
-            fin_id=fin_id, message_id=message_id)
+            fin_id=fin_id, message_id=message_id
+        )
 
         json_str = unregisterMessage.model_dump_json()
 

@@ -24,10 +24,10 @@ def capability_pong_callback(command: Command) -> ResultStructure:
         description="If ping, return pong",
         value="pong",
         constant=True,
-        external=False)
+        external=False,
+    )
     context = command.command.context
-    return ResultStructure(
-        state="success", context=context, variables={"result": out})
+    return ResultStructure(state="success", context=context, variables={"result": out})
 
 
 def main(username: str, password: str) -> None:
@@ -42,17 +42,17 @@ def main(username: str, password: str) -> None:
         description="step description",
         external_references=external_refernce,
         command="test-command",
-        target="123456")
+        target="123456",
+    )
 
     capability_structure = CapabilityStructure(
         capability_id="mod-virustotal--e896aa3b-bb37-429e-8ece-2d4286cf326d",
         type=WorkFlowStepEnum.action,
         name="capability_name",
         version="0.0.1",
-        step={
-            "test": step_structure},
-        agent={
-            "testagent": agent})
+        step={"test": step_structure},
+        agent={"testagent": agent},
+    )
 
     # Create Soarca fin
     fin = SoarcaFin("123456789")
@@ -73,7 +73,8 @@ if __name__ == "__main__":
         PASSWD = os.getenv("MQTT_PASSWD")
     except Exception as e:
         log.critical(
-            "Could not read environment variables. Make sure the .env file exists in the src directory")
+            "Could not read environment variables. Make sure the .env file exists in the src directory"
+        )
         log.critical(e)
         exit(-1)
 

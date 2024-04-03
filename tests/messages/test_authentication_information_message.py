@@ -2,14 +2,16 @@ import json
 import unittest
 
 from soarca_fin_python_library.enums.auth_type_enum import AuthTypeEnum
-from soarca_fin_python_library.message_factory import generateAuthenticationInformationMessage
-from soarca_fin_python_library.models.authentication_information import AuthenticationInformation
+from soarca_fin_python_library.message_factory import (
+    generateAuthenticationInformationMessage,
+)
+from soarca_fin_python_library.models.authentication_information import (
+    AuthenticationInformation,
+)
 
 
 class TestAuthenticationInformationMessage(unittest.TestCase):
-
     def test_authentication_information_message_generator_implicit(self):
-
         type = AuthTypeEnum.http_basic
 
         aiMessage = generateAuthenticationInformationMessage(type=type)
@@ -20,20 +22,19 @@ class TestAuthenticationInformationMessage(unittest.TestCase):
         self.assertIsNone(aiMessage.authentication_info_extensions)
 
     def test_authentication_information_message_generator_explicit(self):
-
         type = AuthTypeEnum.http_basic
         ai_name = "test name"
         ai_description = "test description"
         ai_extensions = {"key": "value"}
 
         aiMessage = generateAuthenticationInformationMessage(
-            type, ai_name, ai_description, ai_extensions)
+            type, ai_name, ai_description, ai_extensions
+        )
 
         self.assertEqual(aiMessage.type, type)
         self.assertEqual(aiMessage.name, ai_name)
         self.assertEqual(aiMessage.description, ai_description)
-        self.assertEqual(
-            aiMessage.authentication_info_extensions, ai_extensions)
+        self.assertEqual(aiMessage.authentication_info_extensions, ai_extensions)
 
     def test_authentication_information_from_json(self):
         type = AuthTypeEnum.http_basic
@@ -53,8 +54,7 @@ class TestAuthenticationInformationMessage(unittest.TestCase):
         self.assertEqual(aiMessage.type, type)
         self.assertEqual(aiMessage.name, ai_name)
         self.assertEqual(aiMessage.description, ai_description)
-        self.assertEqual(
-            aiMessage.authentication_info_extensions, ai_extensions)
+        self.assertEqual(aiMessage.authentication_info_extensions, ai_extensions)
 
     def test_authentication_to_json(self):
         type = AuthTypeEnum.http_basic
@@ -70,7 +70,8 @@ class TestAuthenticationInformationMessage(unittest.TestCase):
         }
 
         aiMessage = generateAuthenticationInformationMessage(
-            type, ai_name, ai_description, ai_extensions)
+            type, ai_name, ai_description, ai_extensions
+        )
 
         json_str = aiMessage.model_dump_json()
 

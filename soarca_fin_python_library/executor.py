@@ -21,7 +21,6 @@ from soarca_fin_python_library.models.meta import Meta
 
 
 class Executor(IExecutor):
-
     def __init__(self, id: str, callback, queue: Queue, mqttc: Client):
         self.queue: Queue[Message] = queue
         self.mqttc: Client = mqttc
@@ -41,7 +40,6 @@ class Executor(IExecutor):
 
     # Main executor loop. Polls for messages in the queue and parsers them.
     def start_executor(self):
-
         log.info(f"Thread started for {self.id}")
         self.running = True
 
@@ -56,7 +54,8 @@ class Executor(IExecutor):
                             self._put_message_in_queue(message)
                         else:
                             log.debug(
-                                f"Received unknown (n)ack with message_id: {message.message_id}")
+                                f"Received unknown (n)ack with message_id: {message.message_id}"
+                            )
                     case Register():
                         self._handle_register_message(message)
                     case Unregister():
@@ -67,8 +66,7 @@ class Executor(IExecutor):
                         self._handle_command_message(message)
                     case _:
                         # Send Nack?
-                        log.warn(
-                            f"Unimplemented command: {message.model_dump_json()}")
+                        log.warn(f"Unimplemented command: {message.model_dump_json()}")
             except Empty as e:
                 pass
 
@@ -113,7 +111,8 @@ class Executor(IExecutor):
                 retries -= 1
                 if retries == 0:
                     log.error(
-                        f"Did not receive an ack for message {message.message_id}. Aborting...")
+                        f"Did not receive an ack for message {message.message_id}. Aborting..."
+                    )
                     exit(-1)
 
     # Handles self generated register message.
@@ -143,7 +142,8 @@ class Executor(IExecutor):
                 retries -= 1
                 if retries == 0:
                     log.error(
-                        f"Did not receive an ack for message {message.message_id}. Aborting...")
+                        f"Did not receive an ack for message {message.message_id}. Aborting..."
+                    )
                     exit(-1)
 
     # Handles a command message from SOARCA.
@@ -160,8 +160,7 @@ class Executor(IExecutor):
         message_id = str(uuid1())
         timestamp = datetime.now(timezone.utc).isoformat()
         meta = Meta(timestamp=timestamp, sender_id=self.id)
-        result = Result(message_id=message_id, meta=meta,
-                        result=resultStruct)
+        result = Result(message_id=message_id, meta=meta, result=resultStruct)
 
         # Send result back
         self._send_message_as_json(result)
@@ -216,7 +215,8 @@ class Executor(IExecutor):
                         raise RuntimeError("Receive a nack")
                     case _:
                         raise TypeError(
-                            f"Unexpected message type {message.model_dump_json()}")
+                            f"Unexpected message type {message.model_dump_json()}"
+                        )
 
             except Empty as e:
                 log.warn("Did not receive an ack")

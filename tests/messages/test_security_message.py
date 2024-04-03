@@ -6,7 +6,6 @@ from soarca_fin_python_library.models.security import Security
 
 
 class testSecurityMessage(unittest.TestCase):
-
     def test_security_message_generator(self):
         version = "0.0.1"
         channel_security = "plaintext"

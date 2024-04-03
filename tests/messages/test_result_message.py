@@ -2,14 +2,18 @@ import json
 import unittest
 from uuid import uuid1
 
-from soarca_fin_python_library.message_factory import generateContextMessage, generateMetaMessage, generateResultMessage, generateResultStructureMessage
+from soarca_fin_python_library.message_factory import (
+    generateContextMessage,
+    generateMetaMessage,
+    generateResultMessage,
+    generateResultStructureMessage,
+)
 from soarca_fin_python_library.models.result_structure import ResultStructure
 from soarca_fin_python_library.models.meta import Meta
 from soarca_fin_python_library.models.result import Result
 
 
 class TestResultMessage(unittest.TestCase):
-
     def test_result_generator(self):
         state = "failure"
         variables = {}
@@ -18,17 +22,16 @@ class TestResultMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = generateContextMessage(step_id, playbook_id, execution_id)
 
         resultStructureMessage = generateResultStructureMessage(
-            state, contextMessage, variables)
+            state, contextMessage, variables
+        )
 
         fin_id = str(uuid1())
         metaMessage = generateMetaMessage(fin_id)
 
-        resultMessage = generateResultMessage(
-            resultStructureMessage, metaMessage)
+        resultMessage = generateResultMessage(resultStructureMessage, metaMessage)
 
         self.assertIsInstance(resultMessage.result, ResultStructure)
         self.assertIsInstance(resultMessage.meta, Meta)
@@ -42,11 +45,11 @@ class TestResultMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = generateContextMessage(step_id, playbook_id, execution_id)
 
         resultStructureMessage = generateResultStructureMessage(
-            state, contextMessage, variables)
+            state, contextMessage, variables
+        )
 
         fin_id = str(uuid1())
         metaMessage = generateMetaMessage(fin_id)
@@ -75,11 +78,11 @@ class TestResultMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = generateContextMessage(step_id, playbook_id, execution_id)
 
         resultStructureMessage = generateResultStructureMessage(
-            state, contextMessage, variables)
+            state, contextMessage, variables
+        )
 
         fin_id = str(uuid1())
         metaMessage = generateMetaMessage(fin_id)
@@ -94,7 +97,8 @@ class TestResultMessage(unittest.TestCase):
         }
 
         resultMessage = generateResultMessage(
-            resultStructureMessage, metaMessage, message_id)
+            resultStructureMessage, metaMessage, message_id
+        )
 
         json_str = resultMessage.model_dump_json()
 

@@ -2,13 +2,15 @@ import json
 import unittest
 from uuid import uuid1
 
-from soarca_fin_python_library.message_factory import generateContextMessage, generateResultStructureMessage
+from soarca_fin_python_library.message_factory import (
+    generateContextMessage,
+    generateResultStructureMessage,
+)
 from soarca_fin_python_library.models.context import Context
 from soarca_fin_python_library.models.result_structure import ResultStructure
 
 
 class TestResultStructure(unittest.TestCase):
-
     def test_result_structure_message_generator(self):
         state = "failure"
         variables = {}
@@ -17,11 +19,11 @@ class TestResultStructure(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = generateContextMessage(step_id, playbook_id, execution_id)
 
         resultStructureMessage = generateResultStructureMessage(
-            state, contextMessage, variables)
+            state, contextMessage, variables
+        )
 
         self.assertEqual(resultStructureMessage.state, state)
         self.assertEqual(resultStructureMessage.variables, variables)
@@ -35,8 +37,7 @@ class TestResultStructure(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = generateContextMessage(step_id, playbook_id, execution_id)
 
         json_object = {
             "state": state,
@@ -58,8 +59,7 @@ class TestResultStructure(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = generateContextMessage(step_id, playbook_id, execution_id)
 
         json_object = {
             "state": state,
@@ -68,7 +68,8 @@ class TestResultStructure(unittest.TestCase):
         }
 
         resultStructureMessage = generateResultStructureMessage(
-            state, contextMessage, variables)
+            state, contextMessage, variables
+        )
         json_str = resultStructureMessage.model_dump_json()
 
         self.assertEqual(json.loads(json_str), json_object)

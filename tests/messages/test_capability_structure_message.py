@@ -3,7 +3,12 @@ import unittest
 from uuid import uuid1
 from soarca_fin_python_library.enums.workflow_step_enum import WorkFlowStepEnum
 
-from soarca_fin_python_library.message_factory import generateAgentStructureMessage, generateCapabilityStructureMessage, generateExternalReferenceMessage, generateStepStructureMessage
+from soarca_fin_python_library.message_factory import (
+    generateAgentStructureMessage,
+    generateCapabilityStructureMessage,
+    generateExternalReferenceMessage,
+    generateStepStructureMessage,
+)
 from soarca_fin_python_library.models.agent_structure import AgentStructure
 from soarca_fin_python_library.models.step_structure import StepStructure
 from soarca_fin_python_library.models.external_reference import ExternalReference
@@ -11,7 +16,6 @@ from soarca_fin_python_library.models.capability_structure import CapabilityStru
 
 
 class testCapabilityStructureMessage(unittest.TestCase):
-
     def test_capability_structure_generator(self):
         agent_name = "test"
         uuid_agent = str(uuid1())
@@ -27,7 +31,8 @@ class testCapabilityStructureMessage(unittest.TestCase):
         target = str(uuid1())
 
         stepStructure = generateStepStructureMessage(
-            type, step_name, description, [externalReference], command, target)
+            type, step_name, description, [externalReference], command, target
+        )
 
         capability_id = str(uuid1())
         type = WorkFlowStepEnum.action
@@ -35,7 +40,8 @@ class testCapabilityStructureMessage(unittest.TestCase):
         version = "0.0.1"
 
         capabilityStructure = generateCapabilityStructureMessage(
-            capability_id, type, capability_name, version, stepStructure, agentStructure)
+            capability_id, type, capability_name, version, stepStructure, agentStructure
+        )
 
         self.assertEqual(capabilityStructure.capability_id, capability_id)
         self.assertEqual(capabilityStructure.type, type)
@@ -43,13 +49,15 @@ class testCapabilityStructureMessage(unittest.TestCase):
         self.assertEqual(capabilityStructure.version, version)
 
         self.assertIsInstance(capabilityStructure.agent, AgentStructure)
-        self.assertEqual(capabilityStructure.agent["agent"].name,
-                         f"soarca-fin--{agent_name}-{uuid_agent}")
+        self.assertEqual(
+            capabilityStructure.agent["agent"].name,
+            f"soarca-fin--{agent_name}-{uuid_agent}",
+        )
 
         self.assertIsInstance(capabilityStructure.step, StepStructure)
         self.assertIsInstance(
-            capabilityStructure.step["step"].external_references[0],
-            ExternalReference)
+            capabilityStructure.step["step"].external_references[0], ExternalReference
+        )
 
     def test_json_to_capability_structure_message(self):
         agent_name = "test"
@@ -66,7 +74,8 @@ class testCapabilityStructureMessage(unittest.TestCase):
         target = str(uuid1())
 
         stepStructure = generateStepStructureMessage(
-            type, step_name, description, [externalReference], command, target)
+            type, step_name, description, [externalReference], command, target
+        )
 
         capability_id = str(uuid1())
         type = WorkFlowStepEnum.action
@@ -90,12 +99,15 @@ class testCapabilityStructureMessage(unittest.TestCase):
         self.assertEqual(capabilityStructure.version, version)
 
         self.assertIsInstance(capabilityStructure.agent, AgentStructure)
-        self.assertEqual(capabilityStructure.agent["agent"].name,
-                         f"soarca-fin--{agent_name}-{uuid_agent}")
+        self.assertEqual(
+            capabilityStructure.agent["agent"].name,
+            f"soarca-fin--{agent_name}-{uuid_agent}",
+        )
 
         self.assertIsInstance(capabilityStructure.step, StepStructure)
         self.assertIsInstance(
-            capabilityStructure.step["step"].external_references[0], ExternalReference)
+            capabilityStructure.step["step"].external_references[0], ExternalReference
+        )
 
     def test_capability_structure_to_json(self):
         agent_name = "test"
@@ -112,7 +124,8 @@ class testCapabilityStructureMessage(unittest.TestCase):
         target = str(uuid1())
 
         stepStructure = generateStepStructureMessage(
-            type, step_name, description, [externalReference], command, target)
+            type, step_name, description, [externalReference], command, target
+        )
 
         capability_id = str(uuid1())
         type = WorkFlowStepEnum.action
@@ -120,7 +133,8 @@ class testCapabilityStructureMessage(unittest.TestCase):
         version = "0.0.1"
 
         capabilityStructure = generateCapabilityStructureMessage(
-            capability_id, type, capability_name, version, stepStructure, agentStructure)
+            capability_id, type, capability_name, version, stepStructure, agentStructure
+        )
 
         json_str = capabilityStructure.model_dump_json()
 

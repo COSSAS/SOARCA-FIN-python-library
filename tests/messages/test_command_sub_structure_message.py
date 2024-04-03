@@ -2,28 +2,29 @@ import json
 import unittest
 from uuid import uuid1
 
-from soarca_fin_python_library.message_factory import generateCommandSubStructureMessage, generateContextMessage
+from soarca_fin_python_library.message_factory import (
+    generateCommandSubStructureMessage,
+    generateContextMessage,
+)
 from soarca_fin_python_library.models.context import Context
 from soarca_fin_python_library.models.command_sub_structure import CommandSubStructure
 
 
 class TestCommandSubStructureMessage(unittest.TestCase):
-
     def test_command_sub_structure_message(self):
-
         step_id = str(uuid1())
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = generateContextMessage(step_id, playbook_id, execution_id)
 
         command = "command"
         context = contextMessage
         variables = {}
 
         commandSubStructure = generateCommandSubStructureMessage(
-            command, context, variables)
+            command, context, variables
+        )
 
         self.assertEqual(commandSubStructure.command, command)
         self.assertIsNone(commandSubStructure.authentication)
@@ -35,8 +36,7 @@ class TestCommandSubStructureMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = generateContextMessage(step_id, playbook_id, execution_id)
 
         command = "command"
         context = contextMessage
@@ -61,8 +61,7 @@ class TestCommandSubStructureMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = generateContextMessage(step_id, playbook_id, execution_id)
 
         command = "command"
         context = contextMessage
@@ -76,7 +75,8 @@ class TestCommandSubStructureMessage(unittest.TestCase):
         }
 
         commandSubStructure = generateCommandSubStructureMessage(
-            command, context, variables)
+            command, context, variables
+        )
 
         json_str = commandSubStructure.model_dump_json()
 

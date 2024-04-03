@@ -7,7 +7,6 @@ from soarca_fin_python_library.models.variable import Variable
 
 
 class TestVariable(unittest.TestCase):
-
     def test_variable_message_generator(self):
         type = VariableTypeEnum.string
         description = "test description"
@@ -16,7 +15,8 @@ class TestVariable(unittest.TestCase):
         external = False
 
         variableMessage = generateVariableMessage(
-            type, description, value, constant, external)
+            type, description, value, constant, external
+        )
 
         self.assertEqual(type, variableMessage.type)
         self.assertEqual(description, variableMessage.description)
@@ -55,7 +55,8 @@ class TestVariable(unittest.TestCase):
         external = False
 
         variableMessage = generateVariableMessage(
-            type, description, value, constant, external)
+            type, description, value, constant, external
+        )
 
         json_str = variableMessage.model_dump_json()
 

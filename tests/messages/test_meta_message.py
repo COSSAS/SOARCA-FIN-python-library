@@ -8,14 +8,12 @@ from soarca_fin_python_library.models.meta import Meta
 
 
 class testMetaMessage(unittest.TestCase):
-
     def test_meta_message_generator_implicit(self):
         id = str(uuid1())
         metaMessage = generateMetaMessage(id)
 
         datetime_now = datetime.datetime.now()
-        datetime_object = datetime.datetime.fromisoformat(
-            metaMessage.timestamp)
+        datetime_object = datetime.datetime.fromisoformat(metaMessage.timestamp)
 
         self.assertEqual(metaMessage.sender_id, id)
         self.assertIsNotNone(metaMessage.timestamp)

@@ -5,13 +5,15 @@ from paho.mqtt.properties import Properties
 
 
 class IMQTTClient(ABC):
-
     @abstractmethod
-    def on_connect(self, client: Client,
-                   userdata,
-                   connect_flags: ConnectFlags,
-                   reason_code: ReasonCode,
-                   properties: Properties):
+    def on_connect(
+        self,
+        client: Client,
+        userdata,
+        connect_flags: ConnectFlags,
+        reason_code: ReasonCode,
+        properties: Properties,
+    ):
         pass
 
     @abstractmethod

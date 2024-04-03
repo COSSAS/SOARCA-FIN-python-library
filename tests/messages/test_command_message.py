@@ -2,16 +2,19 @@ import json
 import unittest
 from uuid import uuid1
 
-from soarca_fin_python_library.message_factory import generateCommandMessage, generateCommandSubStructureMessage, generateContextMessage, generateMetaMessage
+from soarca_fin_python_library.message_factory import (
+    generateCommandMessage,
+    generateCommandSubStructureMessage,
+    generateContextMessage,
+    generateMetaMessage,
+)
 from soarca_fin_python_library.models.command_sub_structure import CommandSubStructure
 from soarca_fin_python_library.models.meta import Meta
 from soarca_fin_python_library.models.command import Command
 
 
 class TestCommandMessage(unittest.TestCase):
-
     def test_command_message_generator(self):
-
         meta_id = str(uuid1())
         metaMessage = generateMetaMessage(meta_id)
 
@@ -19,25 +22,23 @@ class TestCommandMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = generateContextMessage(step_id, playbook_id, execution_id)
 
         command = "command"
         context = contextMessage
         variables = {}
 
         commandSubStructure = generateCommandSubStructureMessage(
-            command, context, variables)
+            command, context, variables
+        )
 
-        commandMessage = generateCommandMessage(
-            commandSubStructure, metaMessage)
+        commandMessage = generateCommandMessage(commandSubStructure, metaMessage)
 
         self.assertIsInstance(commandMessage.command, CommandSubStructure)
         self.assertIsInstance(commandMessage.meta, Meta)
         self.assertIsNotNone(commandMessage.message_id)
 
     def test_command_from_json(self):
-
         meta_id = str(uuid1())
         metaMessage = generateMetaMessage(meta_id)
 
@@ -45,15 +46,15 @@ class TestCommandMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = generateContextMessage(step_id, playbook_id, execution_id)
 
         command = "command"
         context = contextMessage
         variables = {}
 
         commandSubStructure = generateCommandSubStructureMessage(
-            command, context, variables)
+            command, context, variables
+        )
 
         command_id = str(uuid1())
 
@@ -78,15 +79,15 @@ class TestCommandMessage(unittest.TestCase):
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
-        contextMessage = generateContextMessage(
-            step_id, playbook_id, execution_id)
+        contextMessage = generateContextMessage(step_id, playbook_id, execution_id)
 
         command = "command"
         context = contextMessage
         variables = {}
 
         commandSubStructure = generateCommandSubStructureMessage(
-            command, context, variables)
+            command, context, variables
+        )
 
         command_id = str(uuid1())
 
@@ -98,7 +99,8 @@ class TestCommandMessage(unittest.TestCase):
         }
 
         commandMessage = generateCommandMessage(
-            commandSubStructure, metaMessage, command_id)
+            commandSubStructure, metaMessage, command_id
+        )
 
         json_str = commandMessage.model_dump_json()
 
