@@ -25,8 +25,8 @@ class testCapabilityStructureMessage(unittest.TestCase):
         command = "test command"
         target = str(uuid1())
 
-        stepStructure = StepStructure(name=step_name, description=description, external_references=[
-                                      externalReference], command=command, target=target)
+        stepStructure = StepStructure(name=step_name, description=description,
+                                      external_references=externalReference, command=command, target=target)
 
         capability_id = str(uuid1())
         capability_type = WorkFlowStepEnum.action
@@ -48,7 +48,7 @@ class testCapabilityStructureMessage(unittest.TestCase):
 
         self.assertIsInstance(capabilityStructure.step["step"], StepStructure)
         self.assertIsInstance(
-            capabilityStructure.step["step"].external_references[0],
+            capabilityStructure.step["step"].external_references,
             ExternalReference)
 
     def test_json_to_capability_structure_message(self):
@@ -65,8 +65,8 @@ class testCapabilityStructureMessage(unittest.TestCase):
         command = "test command"
         target = str(uuid1())
 
-        stepStructure = StepStructure(name=step_name, description=description, external_references=[
-                                      externalReference], command=command, target=target)
+        stepStructure = StepStructure(name=step_name, description=description,
+                                      external_references=externalReference, command=command, target=target)
 
         capability_id = str(uuid1())
         capability_type = WorkFlowStepEnum.action
@@ -96,7 +96,7 @@ class testCapabilityStructureMessage(unittest.TestCase):
 
         self.assertIsInstance(capabilityStructure.step["step"], StepStructure)
         self.assertIsInstance(
-            capabilityStructure.step["step"].external_references[0], ExternalReference)
+            capabilityStructure.step["step"].external_references, ExternalReference)
 
     def test_capability_structure_to_json(self):
         agent_name = "test"
@@ -112,8 +112,8 @@ class testCapabilityStructureMessage(unittest.TestCase):
         command = "test command"
         target = str(uuid1())
 
-        stepStructure = StepStructure(name=step_name, description=description, external_references=[
-                                      externalReference], command=command, target=target)
+        stepStructure = StepStructure(name=step_name, description=description,
+                                      external_references=externalReference, command=command, target=target)
 
         capability_id = str(uuid1())
         capability_type = WorkFlowStepEnum.action

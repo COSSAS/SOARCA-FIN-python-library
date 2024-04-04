@@ -38,7 +38,7 @@ def main(username: str, password: str) -> None:
     step_structure = StepStructure(
         name="step_name",
         description="step description",
-        external_references=[external_reference],
+        external_references=external_reference,
         command="test-command",
         target="123456")
 
