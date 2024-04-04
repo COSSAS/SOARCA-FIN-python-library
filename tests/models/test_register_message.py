@@ -37,7 +37,7 @@ class testRegisterMessage(unittest.TestCase):
         target = str(uuid1())
 
         stepStructure = StepStructure(
-            type=step_type, name=step_name, description=description, external_references=externalReference, command=command, target=target)
+            type=step_type, name=step_name, description=description, external_references=[externalReference], command=command, target=target)
 
         capability_id = str(uuid1())
         capability_type = WorkFlowStepEnum.action
@@ -86,7 +86,7 @@ class testRegisterMessage(unittest.TestCase):
         target = str(uuid1())
 
         stepStructure = StepStructure(
-            type=step_type, name=step_name, description=description, external_references=externalReference, command=command, target=target)
+            type=step_type, name=step_name, description=description, external_references=[externalReference], command=command, target=target)
 
         capability_id = str(uuid1())
         capability_type = WorkFlowStepEnum.action
