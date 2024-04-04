@@ -8,7 +8,7 @@ class TestAckMessage(unittest.TestCase):
 
     def test_ack_message_generator(self):
         message_id = str(uuid1())
-        ack = Ack(message_id=id)
+        ack = Ack(message_id=message_id)
         self.assertEqual(ack.type, "ack", "Type should be an ack")
         self.assertEqual(ack.message_id, message_id,
                          "Message_id's should match")
@@ -30,7 +30,7 @@ class TestAckMessage(unittest.TestCase):
 
     def test_ack_to_json(self):
         message_id = str(uuid1())
-        ack = Ack(message_id=id)
+        ack = Ack(message_id=message_id)
 
         json_str = ack.model_dump_json()
 
