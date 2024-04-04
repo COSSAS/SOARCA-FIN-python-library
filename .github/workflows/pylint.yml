@@ -18,8 +18,8 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install poetry
-        poetry self add pylint
         poetry install
+        poetry add pylint
     - name: Analysing the code with pylint
       run: |
         poetry run pylint --disable=R,C $(git ls-files '*.py')
