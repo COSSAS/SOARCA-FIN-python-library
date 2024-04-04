@@ -33,12 +33,12 @@ def main(username: str, password: str) -> None:
 
     agent = AgentStructure(name="soarca-fin--123")
 
-    external_refernce = ExternalReference(name="external-reference-name")
+    external_reference = ExternalReference(name="external-reference-name")
 
     step_structure = StepStructure(
         name="step_name",
         description="step description",
-        external_references=external_refernce,
+        external_references=[external_reference],
         command="test-command",
         target="123456")
 
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     USERNAME = os.getenv("MQTT_USERNAME")
     PASSWD = os.getenv("MQTT_PASSWD")
 
-    if USERNAME and PASSWD:
+    if USERNAME is not None and PASSWD is not None:
         main(USERNAME, PASSWD)
 
     else:
