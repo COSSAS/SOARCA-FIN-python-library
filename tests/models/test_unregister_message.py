@@ -15,7 +15,7 @@ class TestUnregisterMessage(unittest.TestCase):
         unregisterMessage = Unregister(message_id=message_id, all=register_all)
 
         self.assertEqual("unregister", unregisterMessage.type)
-        self.assertEqual(all, unregisterMessage.all)
+        self.assertEqual(register_all, unregisterMessage.all)
         self.assertIsNone(unregisterMessage.capability_id)
         self.assertIsNone(unregisterMessage.fin_id)
         self.assertIsNotNone(unregisterMessage.message_id)

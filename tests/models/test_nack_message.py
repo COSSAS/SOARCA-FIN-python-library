@@ -8,7 +8,7 @@ class TestAckMessage(unittest.TestCase):
 
     def test_ack_message_generator(self):
         message_id = str(uuid1())
-        nack = Nack(message_id=id)
+        nack = Nack(message_id=message_id)
 
         self.assertEqual(nack.type, "nack", "Type should be an nack")
         self.assertEqual(nack.message_id, message_id,
