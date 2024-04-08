@@ -1,20 +1,32 @@
 # SOARCA Fin Library
 A Python implementation for the SOARCA FIN, compatible with: SOARCA the TNO orchestrator for Open-C2, CACAO and STIX
-For more information about the SOARCA, we refer the reader to the [website](https://cossas.github.io/SOARCA/) of the SOARCA project
+For more information about the SOARCA, we refer the reader to the [website](https://cossas.github.io/SOARCA/) of the SOARCA project.
 
-## building / starting / stopping  
+## Quick Use
+To use the SOARCA Fin library use the following command to install the library using pip:
+```bash
+pip install soarca-fin-library
+```
+
+## Running this repository
 ### Requirements
  - Python3
  - Poetry
 
 ### Setup
+In order to run the project, create an `.env` file in the root of the project with the following entries:
+```bash
+MQTT_USERNAME = "{INSERT_USERNAME_HERE}"
+MQTT_PASSWD = "{INSERT_PASSWORD_HERE}"
+```
+
 To handle dependencies in this project, the package Poetry is used.
 To install Poetry execute the following command:
 ```bash
 pip3 install poetry
 ```
 
-To install the dependencies from the `pyproject.toml` either enter a poetry shell or create a virtual environment.
+To install the dependencies from the `pyproject.toml` either enter a poetry shell, create a virtual environment or use poetry run.
 To enter a poetry shell execute the following command in the root of the project:
 ```bash
 poetry shell
@@ -25,20 +37,21 @@ Next install the dependencies in the shell:
 poetry install
 ```
 
-In order to run the project, create an `.env` file in the root of the project with the following entries:
-```bash
-MQTT_USERNAME = "{INSERT_USERNAME_HERE}"
-MQTT_PASSWD = "{INSERT_PASSWORD_HERE}"
-```
-
 
 ### Quick Run
-Move to the `soarca_fin_python_library` folder and execute the following command:
+To quick run the project, either run it through poetry run or a poetry shell.
+#### Poetry Run
 ```bash
-python3 main.py
+poetry run python soarca_fin_python_library/main.py
 ```
 
-### Setup SOARCA Capabilities
+#### Poetry Shell
+Move to the `soarca_fin_python_library` folder and execute the following command:
+```bash
+python main.py
+```
+
+## Setup SOARCA Capabilities
 To register a fin to SOARCA, first create a SoarcaFin object pass the fin_id in the constructor.
 Call `set_config_MQTT_server()` to set the required configurations for the fin to connect to the MQTT broker.
 For each capability to be registered, call `create_fin_capability()`. The capability callback funtion should return an object of type `ResultStructure`.
