@@ -8,18 +8,35 @@ To use the SOARCA Fin library use the following command to install the library u
 pip install soarca-fin-library
 ```
 
+## Setup SOARCA Capabilities
+To register a fin to SOARCA, first create a `SoarcaFin` object and pass the `fin_id` in the constructor.
+Call `set_config_MQTT_server()` to set the required configurations for the fin to connect to the MQTT broker.
+For each capability to be registered, call `create_fin_capability()`. The capability callback funtion should return an object of type `ResultStructure`.
+When all capabilities are initialized, call `start_fin()` for the SOARCA Fin to connect to the MQTT broker and register itself to SOARCA.
+
 ## Running this repository
 ### Requirements
  - Python3
  - Poetry
 
 ### Setup
+#### Env File
 In order to run the project, create an `.env` file in the root of the project with the following entries:
 ```bash
+MQTT_BROKER = "{INSERT_MQTT_BROKER_URL_HERE}"
+MQTT_PORT = "{INSERT_MQTT_PORT_HERE}"
 MQTT_USERNAME = "{INSERT_USERNAME_HERE}"
 MQTT_PASSWD = "{INSERT_PASSWORD_HERE}"
 ```
+If no `.env` file is specified, the following default values will be used:
+```bash
+MQTT_BROKER = "localhost"
+MQTT_PORT = "1883"
+MQTT_USERNAME = "soarca"
+MQTT_PASSWD = "password"
+```
 
+#### Dependencies
 To handle dependencies in this project, the package Poetry is used.
 To install Poetry execute the following command:
 ```bash
@@ -32,7 +49,7 @@ To enter a poetry shell execute the following command in the root of the project
 poetry shell
 ```
 
-Next install the dependencies in the shell:
+To install the dependencies in a poetry shell or create a virtual environment, run:
 ```bash
 poetry install
 ```
@@ -46,16 +63,9 @@ poetry run python soarca_fin_python_library/main.py
 ```
 
 #### Poetry Shell
-Move to the `soarca_fin_python_library` folder and execute the following command:
 ```bash
-python main.py
+python soarca_fin_python_library/main.py
 ```
-
-## Setup SOARCA Capabilities
-To register a fin to SOARCA, first create a SoarcaFin object pass the fin_id in the constructor.
-Call `set_config_MQTT_server()` to set the required configurations for the fin to connect to the MQTT broker.
-For each capability to be registered, call `create_fin_capability()`. The capability callback funtion should return an object of type `ResultStructure`.
-When all capabilities are initialized, call `start_fin()` for the SOARCA Fin to connect to the MQTT broker and register itself to SOARCA.
 
 
 ## Documentation
@@ -70,3 +80,25 @@ The SoarcaFin creates `MQTTClient`s for each capability registered, plus one for
 The `Parser` object parsers the raw MQTT messages and tries to convert them to one of the objects in `src/models`.
 The `Executor` runs in their own thread and handles the actual execution of the messages.
 The `Executor` polls a thread-safe queue for new messages and performs IO operations, such as sending messages to the MQTT broker and calling capability callbacks.
+
+## Contributing
+Want to contribute to this project? Please keep in mind the following rules:
+- This repository uses git **rebase** strategy
+- For each PR, there should be atleasts one issue
+- Make sure all tests pass (including lint errors)
+
+### Running tests
+To run the tests in this repository use:
+```bash
+poetry run python -m unittest
+``` 
+To run python linter, first install pylint and then run pylint with the following arguments:
+```bash
+poetry add pylint &&
+poetry run pylint --disable=R,C $(git ls-files '*.py')
+```
+To format the code base, first install ruff and then run ruff:
+```bash
+poetry add ruff &&
+poetry run ruff
+```
