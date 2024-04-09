@@ -14,6 +14,8 @@ Call `set_config_MQTT_server()` to set the required configurations for the fin t
 For each capability to be registered, call `create_fin_capability()`. The capability callback funtion should return an object of type `ResultStructure`.
 When all capabilities are initialized, call `start_fin()` for the SOARCA Fin to connect to the MQTT broker and register itself to SOARCA.
 
+An example is given in this project in the file `soarca_fin_python_library/main.py`
+
 ## Running this repository
 ### Requirements
  - Python3
