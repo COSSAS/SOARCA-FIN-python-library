@@ -100,5 +100,5 @@ poetry run pylint --disable=R,C $(git ls-files '*.py')
 To format the code base, first install ruff and then run ruff:
 ```bash
 poetry add ruff &&
-poetry run ruff
+poetry run ruff format
 ```
