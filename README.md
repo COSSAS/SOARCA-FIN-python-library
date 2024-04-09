@@ -81,6 +81,16 @@ The `Parser` object parsers the raw MQTT messages and tries to convert them to o
 The `Executor` runs in their own thread and handles the actual execution of the messages.
 The `Executor` polls a thread-safe queue for new messages and performs IO operations, such as sending messages to the MQTT broker and calling capability callbacks.
 
+### Class Overview
+![class overview](./img/soarca_fin_class_overview.png)
+
+### Sequence Diagrams
+#### Command
+![sequence diagram command](./img/sequence_diagram_command.png)
+
+#### Register
+![register diagram command](./img/sequence_diagram_register.png)
+
 ## Contributing
 Want to contribute to this project? Please keep in mind the following rules:
 - This repository uses git **rebase** strategy
