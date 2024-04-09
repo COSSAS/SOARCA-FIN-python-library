@@ -29,7 +29,7 @@ def capability_pong_callback(command: Command) -> ResultStructure:
         state="success", context=context, variables={"result": out})
 
 
-def main(mqtt_broker: str, mqtt_port: str, username: str, password: str) -> None:
+def main(mqtt_broker: str, mqtt_port: int, username: str, password: str) -> None:
 
     agent = AgentStructure(name="soarca-fin--123")
 
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     log.getLogger().setLevel(log.DEBUG)
     load_dotenv()
     MQTT_BROKER = os.getenv("MQTT_BROKER", "localhost")
-    MQTT_PORT = os.getenv("MQTT_PORT", 1883)
+    MQTT_PORT = int(os.getenv("MQTT_PORT", "1883"))
     USERNAME = os.getenv("MQTT_USERNAME", "soarca")
     PASSWD = os.getenv("MQTT_PASSWD", "password")
 
