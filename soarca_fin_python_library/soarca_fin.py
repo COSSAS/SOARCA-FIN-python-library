@@ -82,7 +82,7 @@ class SoarcaFin(ISoarcaFin):
         # Send register message to the MQTT broker
         register_msg = self._create_register_message()
         self.fin.executor.queue_message(register_msg)
-        self.fin._executor_thread.join()
+        self.fin.executor_thread.join()
 
     # Callback function for the control fin such that is can control the
     # capability fins
@@ -93,14 +93,14 @@ class SoarcaFin(ISoarcaFin):
                     for capability in self.capabilities.values():
                         capability.stop()
                     self.fin.stop()
-                    log.warn("Stopping in 10 seconds...")
+                    log.warning("Stopping in 10 seconds...")
                     time.sleep(10)
                 elif message.capability_id in self.capabilities:
                     self.capabilities[message.capability_id].stop()
                     del self.capabilities[message.capability_id]
                     del self.capability_structure[message.capability_id]
-                    log.warn(
-                        f"Stopping capability with id {message.capability_id} in 10 seconds...")
+                    log.warning(
+                        "Stopping capability with id %s in 10 seconds...", message.capability_id)
                     time.sleep(10)
                 else:
                     log.debug("Unregister not for this fin")

@@ -12,16 +12,16 @@ class testStepStructureMessage(unittest.TestCase):
         ext_name = "test"
         externalReference = ExternalReference(name=ext_name)
 
-        type = "action"
+        step_type = "action"
         step_name = "test step"
         description = "test description"
         command = "test command"
         target = str(uuid1())
 
         stepStructureMessage = StepStructure(
-            type=type, name=step_name, description=description, external_references=[externalReference], command=command, target=target)
+            type=step_type, name=step_name, description=description, external_references=[externalReference], command=command, target=target)
 
-        self.assertEqual(stepStructureMessage.type, type,
+        self.assertEqual(stepStructureMessage.type, step_type,
                          "Types should be the same")
         self.assertEqual(stepStructureMessage.name, step_name,
                          "Names should be the same")
@@ -40,14 +40,14 @@ class testStepStructureMessage(unittest.TestCase):
         ext_name = "test"
         externalReference = ExternalReference(name=ext_name)
 
-        type = "action"
+        step_type = "action"
         step_name = "test step"
         description = "test description"
         command = "test command"
         target = str(uuid1())
 
         json_object = {
-            "type": type,
+            "type": step_type,
             "name": step_name,
             "description": description,
             "command": command,
@@ -57,7 +57,7 @@ class testStepStructureMessage(unittest.TestCase):
 
         stepStructureMessage = StepStructure(**json_object)
 
-        self.assertEqual(stepStructureMessage.type, type,
+        self.assertEqual(stepStructureMessage.type, step_type,
                          "Types should be the same")
         self.assertEqual(stepStructureMessage.name, step_name,
                          "Names should be the same")
@@ -77,19 +77,19 @@ class testStepStructureMessage(unittest.TestCase):
         ext_name = "test"
         externalReference = ExternalReference(name=ext_name)
 
-        type = "action"
+        step_type = "action"
         step_name = "test step"
         description = "test description"
         command = "test command"
         target = str(uuid1())
 
         stepStructureMessage = StepStructure(
-            type=type, name=step_name, description=description, external_references=[externalReference], command=command, target=target)
+            type=step_type, name=step_name, description=description, external_references=[externalReference], command=command, target=target)
 
         json_str = stepStructureMessage.model_dump_json()
 
         json_object = {
-            "type": type,
+            "type": step_type,
             "name": step_name,
             "description": description,
             "command": command,
