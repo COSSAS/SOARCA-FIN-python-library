@@ -84,14 +84,101 @@ The `Executor` runs in their own thread and handles the actual execution of the 
 The `Executor` polls a thread-safe queue for new messages and performs IO operations, such as sending messages to the MQTT broker and calling capability callbacks.
 
 ### Class Overview
-![class overview](./img/soarca_fin_class_overview.png)
+```plantuml
+interface IParser {
+ Message parse_on_message()
+}
+
+interface IMQTTClient {
+ void on_connect()
+ void on_message()
+}
+
+interface ISoarcaFin {
+ void set_config_MQTTServer()
+ void set_fin_capabilities()
+ void start_fin()
+}
+
+interface IExecutor {
+ void queue_message()
+}
+
+
+class SoarcaFin
+class MQTTClient
+class Parser
+class Executor
+
+ISoarcaFin <|.. SoarcaFin
+IMQTTClient <|.. MQTTClient
+IParser <|.. Parser
+IExecutor <|.. Executor
+
+IMQTTClient <- SoarcaFin
+IExecutor <- MQTTClient
+IParser <-MQTTClient
+```
 
 ### Sequence Diagrams
 #### Command
-![sequence diagram command](./img/sequence_diagram_command.png)
+```plantuml
+Soarca -> "MQTTClient (Capability 1)" : Command Message [Capability ID Topic]
+
+"MQTTClient (Capability 1)" -> Parser : parse_on_message(message)
+"MQTTClient (Capability 1)" <-- Parser : Message.Command
+
+"MQTTClient (Capability 1)" -> "Executor (Capability 1)" : Command message
+Soarca <-- "Executor (Capability 1)" : Ack
+
+"Executor (Capability 1)" -> "Capability Callback" : Command
+"Executor (Capability 1)" <-- "Capability Callback" : Result
+
+
+Soarca <- "Executor (Capability 1)" : Result
+Soarca --> "MQTTClient (Capability 1)" : Ack
+
+"MQTTClient (Capability 1)" -> Parser : parse_on_message(message)
+"MQTTClient (Capability 1)" <-- Parser : Message.Ack
+
+"MQTTClient (Capability 1)" -> "Executor (Capability 1)" : Ack message
+```
 
 #### Register
-![register diagram command](./img/sequence_diagram_register.png)
+```plantuml
+Soarca -> Soarca : Create Soarca Topic
+
+Library -> SoarcaFin : Set MQTT Server config
+
+Library -> SoarcaFin : Set Capability1
+SoarcaFin -> "MQTTClient (Capability 1)" : Create capability
+
+Library -> SoarcaFin : Set Capability2
+SoarcaFin -> "MQTTClient (Capability 2)" : Create capability
+
+
+Library -> SoarcaFin : Start Fin
+
+
+SoarcaFin -> "MQTTClient (Capability 1)" : Start capability
+"MQTTClient (Capability 1)" -> "MQTTClient (Capability 1)" : Register Capability Topic
+SoarcaFin -> "MQTTClient (Capability 2)" : Start capability
+"MQTTClient (Capability 2)" -> "MQTTClient (Capability 2)" : Register Capability Topic
+
+SoarcaFin -> "MQTTClient (Fin)" : Register Fin
+"MQTTClient (Fin)" -> "MQTTClient (Fin)" : Register SoarcaFin Topic
+
+"MQTTClient (Fin)" -> "Executor (Fin)" : Send Register Message
+
+Soarca <- "Executor (Fin)" : Message.Register [Soarca Topic]
+
+Soarca --> "MQTTClient (Fin)" :  Message.Ack [Fin ID Topic]
+
+"MQTTClient (Fin)" -> "Parser (Fin)" : parse_on_message(ack)
+"MQTTClient (Fin)" <-- "Parser (Fin)" : Message.Ack
+
+"MQTTClient (Fin)" -> "Executor (Fin)" : Message.Ack
+```
 
 ## Contributing
 Want to contribute to this project? Please keep in mind the following rules:
