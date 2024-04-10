@@ -43,7 +43,7 @@ def main(mqtt_broker: str, mqtt_port: int, username: str, password: str) -> None
         target="123456")
 
     capability_structure = CapabilityStructure(
-        capability_id="mod-virustotal--e896aa3b-bb37-429e-8ece-2d4286cf326d",
+        capability_id="mod-pong--e896aa3b-bb37-429e-8ece-2d4286cf326d",
         type=WorkFlowStepEnum.action,
         name="capability_name",
         version="0.0.1",
