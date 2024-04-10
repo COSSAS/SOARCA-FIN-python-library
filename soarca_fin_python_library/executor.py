@@ -105,14 +105,16 @@ class Executor(IExecutor):
                 self._wait_for_ack(message.message_id)
                 self.callback(message)
                 return
-            except (Empty, TimeoutError):
+            except (Empty, TimeoutError) as e:
+                log.debug(e)
                 self._send_message_as_json(message, topic="soarca")
-            except RuntimeError:
+            except RuntimeError as e:
+                log.debug(e)
                 self._send_message_as_json(message, topic="soarca")
             finally:
                 retries -= 1
                 if retries == 0:
-                    log.error(
+                    log.fatal(
                         "Did not receive an ack for message %s. Aborting...", message.message_id)
                     exit(-1)
 
@@ -131,18 +133,20 @@ class Executor(IExecutor):
                 self._wait_for_ack(message.message_id)
                 return
             # Did not get a response in time
-            except (Empty, TimeoutError):
+            except (Empty, TimeoutError) as e:
+                log.debug(e)
                 # Resend message
                 self._send_message_as_json(message, topic="soarca")
 
             # Receive a response but the message failed (Nack)
             except RuntimeError:
+                log.debug(e)
                 # Resend message
                 self._send_message_as_json(message, topic="soarca")
             finally:
                 retries -= 1
                 if retries == 0:
-                    log.error(
+                    log.fatal(
                         "Did not receive an ack for message %s. Aborting...", message.message_id)
                     exit(-1)
 
@@ -172,13 +176,18 @@ class Executor(IExecutor):
             try:
                 self._wait_for_ack(result.message_id)
                 break
-            except (Empty, TimeoutError):
+            except (Empty, TimeoutError) as e:
+                log.debug(e)
                 self._send_message_as_json(result)
-            except RuntimeError:
+            except RuntimeError as e:
+                log.debug(e)
                 self._send_message_as_json(result)
             finally:
                 retries -= 1
             if retries == 0:
+                self.acks.remove(message_id)
+                log.error(
+                    "Did not receive an acknowledgement for message %s. Skipping message...", result.message_id)
                 break
 
     # Publishes a message as JSON on a topic. Default topic is self.id.
@@ -214,7 +223,7 @@ class Executor(IExecutor):
                     case Nack():
                         log.warning(
                             "Received nack for message: %s", message_id)
-                        raise RuntimeError("Receive a nack")
+                        raise RuntimeError("Received a nack")
                     case _:
                         raise TypeError(
                             f"Unexpected message type {message.model_dump_json()}")

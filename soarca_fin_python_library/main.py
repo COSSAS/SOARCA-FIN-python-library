@@ -29,7 +29,7 @@ def capability_pong_callback(command: Command) -> ResultStructure:
         state="success", context=context, variables={"result": out})
 
 
-def main(username: str, password: str) -> None:
+def main(mqtt_broker: str, mqtt_port: int, username: str, password: str) -> None:
 
     agent = AgentStructure(name="soarca-fin--123")
 
@@ -55,7 +55,7 @@ def main(username: str, password: str) -> None:
     # Create Soarca fin
     fin = SoarcaFin("123456789")
     # Set config for MQTT Server
-    fin.set_config_MQTT_server("localhost", 1883, username, password)
+    fin.set_config_MQTT_server(mqtt_broker, mqtt_port, username, password)
     # Register Capabilities
     fin.create_fin_capability(capability_structure, capability_pong_callback)
     # Start the fin
@@ -66,13 +66,9 @@ if __name__ == "__main__":
     log.basicConfig()
     log.getLogger().setLevel(log.DEBUG)
     load_dotenv()
-    USERNAME = os.getenv("MQTT_USERNAME")
-    PASSWD = os.getenv("MQTT_PASSWD")
+    MQTT_BROKER = os.getenv("MQTT_BROKER", "localhost")
+    MQTT_PORT = int(os.getenv("MQTT_PORT", "1883"))
+    USERNAME = os.getenv("MQTT_USERNAME", "soarca")
+    PASSWD = os.getenv("MQTT_PASSWD", "password")
 
-    if USERNAME is not None and PASSWD is not None:
-        main(USERNAME, PASSWD)
-
-    else:
-        log.critical(
-            "Could not read environment variables. Make sure the .env file exists in the src directory")
-        exit(-1)
+    main(MQTT_BROKER, MQTT_PORT, USERNAME, PASSWD)
