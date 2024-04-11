@@ -1,5 +1,4 @@
 import os
-import logging as log
 from dotenv import load_dotenv
 
 from soarca_fin_python_library.soarca_fin import SoarcaFin
@@ -16,36 +15,49 @@ from soarca_fin_python_library.enums.variable_type_enum import VariableTypeEnum
 
 
 def capability_pong_callback(command: Command) -> ResultStructure:
-    log.info("Received ping, returning pong!")
-    out = Variable(
+    print("Received ping, returning pong!")
+
+    result = Variable(
         type=VariableTypeEnum.string,
         name="pong_output",
         description="If ping, return pong",
         value="pong",
         constant=True,
         external=False)
+
     context = command.command.context
+
     return ResultStructure(
-        state="success", context=context, variables={"result": out})
+        state="success", context=context, variables={"result": result})
 
 
 def main(mqtt_broker: str, mqtt_port: int, username: str, password: str) -> None:
 
-    agent = AgentStructure(name="soarca-fin--123")
+    finId = "soarca-fin--pingpong-f877bb3a-bb37-429e-8ece-2d4286cf326d"
+    agentName = "soarca-fin-pong-f896bb3b-bb37-429e-8ece-2d4286cf326d"
+    externalReferenceName = "external-reference-example-name"
+    capabilityId = "mod-pong--e896aa3b-bb37-429e-8ece-2d4286cf326d"
 
-    external_reference = ExternalReference(name="external-reference-name")
+    # Create AgentStructure
+    agent = AgentStructure(
+        name=agentName)
 
+    # Create ExternalReference
+    external_reference = ExternalReference(name=externalReferenceName)
+
+    # Create StepStructure
     step_structure = StepStructure(
         name="step_name",
         description="step description",
         external_references=[external_reference],
-        command="test-command",
-        target="123456")
+        command="pong",
+        target=agentName)
 
+    # Create CapabilityStructure
     capability_structure = CapabilityStructure(
-        capability_id="mod-pong--e896aa3b-bb37-429e-8ece-2d4286cf326d",
+        capability_id=capabilityId,
         type=WorkFlowStepEnum.action,
-        name="capability_name",
+        name="Ping Pong capability",
         version="0.0.1",
         step={
             "test": step_structure},
@@ -53,7 +65,7 @@ def main(mqtt_broker: str, mqtt_port: int, username: str, password: str) -> None
             "testagent": agent})
 
     # Create Soarca fin
-    fin = SoarcaFin("123456789")
+    fin = SoarcaFin(finId)
     # Set config for MQTT Server
     fin.set_config_MQTT_server(mqtt_broker, mqtt_port, username, password)
     # Register Capabilities
@@ -63,8 +75,6 @@ def main(mqtt_broker: str, mqtt_port: int, username: str, password: str) -> None
 
 
 if __name__ == "__main__":
-    log.basicConfig()
-    log.getLogger().setLevel(log.DEBUG)
     load_dotenv()
     MQTT_BROKER = os.getenv("MQTT_BROKER", "localhost")
     MQTT_PORT = int(os.getenv("MQTT_PORT", "1883"))
