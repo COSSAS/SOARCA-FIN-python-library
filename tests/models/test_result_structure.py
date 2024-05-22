@@ -8,7 +8,6 @@ from soarca_fin_python_library.models.result_structure import ResultStructure
 
 
 class TestResultStructure(unittest.TestCase):
-
     def test_result_structure_message_generator(self):
         state = "failure"
         variables = {}
@@ -18,10 +17,12 @@ class TestResultStructure(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id
+        )
 
         resultStructureMessage = ResultStructure(
-            state=state, context=contextMessage, variables=variables)
+            state=state, context=contextMessage, variables=variables
+        )
 
         self.assertEqual(resultStructureMessage.state, state)
         self.assertEqual(resultStructureMessage.variables, variables)
@@ -36,7 +37,8 @@ class TestResultStructure(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id
+        )
 
         json_object = {
             "state": state,
@@ -59,7 +61,8 @@ class TestResultStructure(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id
+        )
 
         json_object = {
             "state": state,
@@ -68,7 +71,8 @@ class TestResultStructure(unittest.TestCase):
         }
 
         resultStructureMessage = ResultStructure(
-            state=state, context=contextMessage, variables=variables)
+            state=state, context=contextMessage, variables=variables
+        )
         json_str = resultStructureMessage.model_dump_json()
 
         self.assertEqual(json.loads(json_str), json_object)

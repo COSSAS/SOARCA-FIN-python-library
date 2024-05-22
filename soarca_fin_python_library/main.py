@@ -23,14 +23,13 @@ def capability_pong_callback(command: Command) -> ResultStructure:
         description="If ping, return pong",
         value="pong",
         constant=True,
-        external=False)
+        external=False,
+    )
     context = command.command.context
-    return ResultStructure(
-        state="success", context=context, variables={"result": out})
+    return ResultStructure(state="success", context=context, variables={"result": out})
 
 
 def main(mqtt_broker: str, mqtt_port: int, username: str, password: str) -> None:
-
     agent = AgentStructure(name="soarca-fin--123")
 
     external_reference = ExternalReference(name="external-reference-name")
@@ -40,17 +39,17 @@ def main(mqtt_broker: str, mqtt_port: int, username: str, password: str) -> None
         description="step description",
         external_references=[external_reference],
         command="test-command",
-        target="123456")
+        target="123456",
+    )
 
     capability_structure = CapabilityStructure(
         capability_id="mod-virustotal--e896aa3b-bb37-429e-8ece-2d4286cf326d",
         type=WorkFlowStepEnum.action,
         name="capability_name",
         version="0.0.1",
-        step={
-            "test": step_structure},
-        agent={
-            "testagent": agent})
+        step={"test": step_structure},
+        agent={"testagent": agent},
+    )
 
     # Create Soarca fin
     fin = SoarcaFin("123456789")

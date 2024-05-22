@@ -11,7 +11,6 @@ from soarca_fin_python_library.models.context import Context
 
 
 class TestResultMessage(unittest.TestCase):
-
     def test_result_generator(self):
         state = "failure"
         variables = {}
@@ -21,18 +20,21 @@ class TestResultMessage(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id
+        )
 
         resultStructureMessage = ResultStructure(
-            state=state, context=contextMessage, variables=variables)
+            state=state, context=contextMessage, variables=variables
+        )
 
         fin_id = str(uuid1())
         timestamp = datetime.now(timezone.utc).isoformat()
         metaMessage = Meta(sender_id=fin_id, timestamp=timestamp)
 
         message_id = str(uuid1())
-        resultMessage = Result(message_id=message_id,
-                               result=resultStructureMessage, meta=metaMessage)
+        resultMessage = Result(
+            message_id=message_id, result=resultStructureMessage, meta=metaMessage
+        )
 
         self.assertIsInstance(resultMessage.result, ResultStructure)
         self.assertIsInstance(resultMessage.meta, Meta)
@@ -47,10 +49,12 @@ class TestResultMessage(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id
+        )
 
         resultStructureMessage = ResultStructure(
-            state=state, context=contextMessage, variables=variables)
+            state=state, context=contextMessage, variables=variables
+        )
 
         fin_id = str(uuid1())
         timestamp = datetime.now(timezone.utc).isoformat()
@@ -81,10 +85,12 @@ class TestResultMessage(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id
+        )
 
         resultStructureMessage = ResultStructure(
-            state=state, context=contextMessage, variables=variables)
+            state=state, context=contextMessage, variables=variables
+        )
 
         fin_id = str(uuid1())
         timestamp = datetime.now(timezone.utc).isoformat()
@@ -100,7 +106,8 @@ class TestResultMessage(unittest.TestCase):
         }
 
         resultMessage = Result(
-            result=resultStructureMessage, meta=metaMessage, message_id=message_id)
+            result=resultStructureMessage, meta=metaMessage, message_id=message_id
+        )
 
         json_str = resultMessage.model_dump_json()
 
