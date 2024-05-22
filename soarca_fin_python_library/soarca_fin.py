@@ -1,4 +1,3 @@
-
 from queue import Queue
 import time
 from uuid import uuid1
@@ -22,7 +21,6 @@ from soarca_fin_python_library.models.unregister_self import UnregisterSelf
 
 
 class SoarcaFin(ISoarcaFin):
-
     def __init__(self, fin_id: str):
         self.fin_id: str = fin_id
         self.host: str = None
@@ -35,25 +33,20 @@ class SoarcaFin(ISoarcaFin):
 
     # Create a soarca capability by listing on a topic and registering
     # callback function
-    def create_fin_capability(
-            self,
-            capability: CapabilityStructure,
-            callback) -> None:
+    def create_fin_capability(self, capability: CapabilityStructure, callback) -> None:
         mqttc = self._create_mqtt_client(capability.capability_id)
         parser = Parser(capability.capability_id)
         executor = Executor(capability.capability_id, callback, Queue(), mqttc)
         capabilityClient = MQTTClient(
-            capability.capability_id, mqttc, callback, executor, parser)
+            capability.capability_id, mqttc, callback, executor, parser
+        )
         self.capabilities[capability.capability_id] = capabilityClient
         self.capability_structure[capability.capability_id] = capability
 
     # Set settings for MQTT Server
     def set_config_MQTT_server(
-            self,
-            host: str,
-            port: int,
-            username: str,
-            password: str) -> None:
+        self, host: str, port: int, username: str, password: str
+    ) -> None:
         self.host = host
         self.port = port
         self.username = username
@@ -69,11 +62,9 @@ class SoarcaFin(ISoarcaFin):
 
         # Create fin control MQTT client to handle all control functions
         mqttc = self._create_mqtt_client(self.fin_id)
-        mqttc.subscribe(
-            "soarca", options=SubscribeOptions(qos=1, noLocal=True))
+        mqttc.subscribe("soarca", options=SubscribeOptions(qos=1, noLocal=True))
         parser = Parser(self.fin_id)
-        executor = Executor(
-            self.fin_id, self.fin_control_callback, Queue(), mqttc)
+        executor = Executor(self.fin_id, self.fin_control_callback, Queue(), mqttc)
         self.fin = MQTTClient(self.fin_id, mqttc, None, executor, parser)
 
         # Start the control fin
@@ -100,7 +91,9 @@ class SoarcaFin(ISoarcaFin):
                     del self.capabilities[message.capability_id]
                     del self.capability_structure[message.capability_id]
                     log.warning(
-                        "Stopping capability with id %s in 10 seconds...", message.capability_id)
+                        "Stopping capability with id %s in 10 seconds...",
+                        message.capability_id,
+                    )
                     time.sleep(10)
                 else:
                     log.debug("Unregister not for this fin")
@@ -119,16 +112,17 @@ class SoarcaFin(ISoarcaFin):
             fin_id=self.fin_id,
             protocol_version="0.0.1",
             security=security,
-            capabilities=list(
-                self.capability_structure.values()),
-            meta=meta)
+            capabilities=list(self.capability_structure.values()),
+            meta=meta,
+        )
 
     # Helper function to generate MQTT clients
     def _create_mqtt_client(self, client_id: str) -> mqtt.Client:
         mqttc = mqtt.Client(
             client_id=client_id,
             callback_api_version=mqtt.CallbackAPIVersion.VERSION2,
-            protocol=PahoEnums.MQTTProtocolVersion.MQTTv5)
+            protocol=PahoEnums.MQTTProtocolVersion.MQTTv5,
+        )
 
         mqttc.username_pw_set(self.username, self.password)
 
