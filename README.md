@@ -7,11 +7,7 @@ For more in depth documentation, see the documentation page on here.
 
 Usage of this SOARCA Fin Library is described [here](https://cossas.github.io/SOARCA/docs/soarca-extensions/fin-python-library/).
 
-## Setup SOARCA Capabilities
-To register a fin to SOARCA, first create a `SoarcaFin` object and pass the `fin_id` in the constructor.
-Call `set_config_MQTT_server()` to set the required configurations for the fin to connect to the MQTT broker.
-For each capability to be registered, call `create_fin_capability()`. The capability callback funtion should return an object of type `ResultStructure`.
-When all capabilities are initialized, call `start_fin()` for the SOARCA Fin to connect to the MQTT broker and register itself to SOARCA.
+## Example 
 
 An example is given in this project in the file `examples/pong_example.py`
 
