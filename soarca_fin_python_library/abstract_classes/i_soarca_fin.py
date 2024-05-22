@@ -4,9 +4,10 @@ from soarca_fin_python_library.models.capability_structure import CapabilityStru
 
 
 class ISoarcaFin(ABC):
-
     @abstractmethod
-    def set_config_MQTT_server(self, host: str, port: str, username: str, password: str) -> None:
+    def set_config_MQTT_server(
+        self, host: str, port: str, username: str, password: str
+    ) -> None:
         pass
 
     @abstractmethod

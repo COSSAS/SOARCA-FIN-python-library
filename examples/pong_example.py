@@ -23,24 +23,24 @@ def capability_pong_callback(command: Command) -> ResultStructure:
         description="If ping, return pong",
         value="pong",
         constant=True,
-        external=False)
+        external=False,
+    )
 
     context = command.command.context
 
     return ResultStructure(
-        state="success", context=context, variables={"result": result})
+        state="success", context=context, variables={"result": result}
+    )
 
 
 def main(mqtt_broker: str, mqtt_port: int, username: str, password: str) -> None:
-
     finId = "soarca-fin--pingpong-f877bb3a-bb37-429e-8ece-2d4286cf326d"
     agentName = "soarca-fin-pong-f896bb3b-bb37-429e-8ece-2d4286cf326d"
     externalReferenceName = "external-reference-example-name"
     capabilityId = "mod-pong--e896aa3b-bb37-429e-8ece-2d4286cf326d"
 
     # Create AgentStructure
-    agent = AgentStructure(
-        name=agentName)
+    agent = AgentStructure(name=agentName)
 
     # Create ExternalReference
     external_reference = ExternalReference(name=externalReferenceName)
@@ -51,7 +51,8 @@ def main(mqtt_broker: str, mqtt_port: int, username: str, password: str) -> None
         description="step description",
         external_references=[external_reference],
         command="pong",
-        target=agentName)
+        target=agentName,
+    )
 
     # Create CapabilityStructure
     capability_structure = CapabilityStructure(
@@ -59,10 +60,9 @@ def main(mqtt_broker: str, mqtt_port: int, username: str, password: str) -> None
         type=WorkFlowStepEnum.action,
         name="Ping Pong capability",
         version="0.0.1",
-        step={
-            "test": step_structure},
-        agent={
-            "testagent": agent})
+        step={"test": step_structure},
+        agent={"testagent": agent},
+    )
 
     # Create Soarca fin
     fin = SoarcaFin(finId)
