@@ -10,9 +10,7 @@ from soarca_fin_python_library.models.context import Context
 
 
 class TestCommandMessage(unittest.TestCase):
-
     def test_command_message_generator(self):
-
         meta_id = str(uuid1())
         timestamp = datetime.now(timezone.utc).isoformat()
         metaMessage = Meta(timestamp=timestamp, sender_id=meta_id)
@@ -22,18 +20,21 @@ class TestCommandMessage(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id
+        )
 
         command = "command"
         context = contextMessage
         variables = {}
 
         commandSubStructure = CommandSubStructure(
-            command=command, context=context, variables=variables)
+            command=command, context=context, variables=variables
+        )
 
         command_id = str(uuid1())
         commandMessage = Command(
-            command=commandSubStructure, meta=metaMessage, message_id=command_id)
+            command=commandSubStructure, meta=metaMessage, message_id=command_id
+        )
 
         self.assertIsInstance(commandMessage.command, CommandSubStructure)
         self.assertIsInstance(commandMessage.meta, Meta)
@@ -49,14 +50,16 @@ class TestCommandMessage(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id
+        )
 
         command = "command"
         context = contextMessage
         variables = {}
 
         commandSubStructure = CommandSubStructure(
-            command=command, context=context, variables=variables)
+            command=command, context=context, variables=variables
+        )
 
         command_id = str(uuid1())
 
@@ -83,14 +86,16 @@ class TestCommandMessage(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id
+        )
 
         command = "command"
         context = contextMessage
         variables = {}
 
         commandSubStructure = CommandSubStructure(
-            command=command, context=context, variables=variables)
+            command=command, context=context, variables=variables
+        )
 
         command_id = str(uuid1())
 
@@ -102,7 +107,8 @@ class TestCommandMessage(unittest.TestCase):
         }
 
         commandMessage = Command(
-            command=commandSubStructure, meta=metaMessage, message_id=command_id)
+            command=commandSubStructure, meta=metaMessage, message_id=command_id
+        )
 
         json_str = commandMessage.model_dump_json()
 

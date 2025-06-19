@@ -14,14 +14,14 @@ from soarca_fin_python_library.executor import Executor
 
 
 class MQTTClient(IMQTTClient):
-
     def __init__(
-            self,
-            client_id: str,
-            mqttc: mqtt.Client,
-            callback,
-            executor: IExecutor,
-            parser: IParser):
+        self,
+        client_id: str,
+        mqttc: mqtt.Client,
+        callback,
+        executor: IExecutor,
+        parser: IParser,
+    ):
         self.id: str = client_id
         self.mqttc: mqtt.Client = mqttc
         self.callback = callback
@@ -31,12 +31,13 @@ class MQTTClient(IMQTTClient):
 
     # On connect callback function for Paho MQTT client
     def on_connect(
-            self,
-            client: Client,
-            userdata,
-            connect_flags: ConnectFlags,
-            reason_code: ReasonCode,
-            properties: Properties):
+        self,
+        client: Client,
+        userdata,
+        connect_flags: ConnectFlags,
+        reason_code: ReasonCode,
+        properties: Properties,
+    ):
         return
 
     # On message callback function for Paho MQTT client
@@ -59,16 +60,15 @@ class MQTTClient(IMQTTClient):
 
         # Subscribe to capability topic using noLocal (requires MQTTv5).
         # noLocal is used to not receive own messages such as Acks.
-        self.mqttc.subscribe(
-            self.id, options=SubscribeOptions(qos=1, noLocal=True))
+        self.mqttc.subscribe(self.id, options=SubscribeOptions(qos=1, noLocal=True))
 
         # Start callback loops for mqtt in the background
         self.mqttc.loop_start()
 
         # Start executor thread
         self.executor_thread = threading.Thread(
-            target=self.executor.start_executor,
-            name=f"executor-thread-{self.id}")
+            target=self.executor.start_executor, name=f"executor-thread-{self.id}"
+        )
         self.executor_thread.daemon = True
 
         self.executor_thread.start()

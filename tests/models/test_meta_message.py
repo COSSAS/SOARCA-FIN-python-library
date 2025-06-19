@@ -8,7 +8,6 @@ from soarca_fin_python_library.models.meta import Meta
 
 
 class testMetaMessage(unittest.TestCase):
-
     def test_meta_message_generator(self):
         message_id = str(uuid1())
         timestamp = datetime.now(timezone.utc).isoformat()

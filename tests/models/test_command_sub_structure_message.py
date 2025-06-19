@@ -8,22 +8,22 @@ from soarca_fin_python_library.models.command_sub_structure import CommandSubStr
 
 
 class TestCommandSubStructureMessage(unittest.TestCase):
-
     def test_command_sub_structure_message(self):
-
         step_id = str(uuid1())
         playbook_id = str(uuid1())
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id
+        )
 
         command = "command"
         context = contextMessage
         variables = {}
 
         commandSubStructure = CommandSubStructure(
-            command=command, context=context, variables=variables)
+            command=command, context=context, variables=variables
+        )
 
         self.assertEqual(commandSubStructure.command, command)
         self.assertIsNone(commandSubStructure.authentication)
@@ -36,7 +36,8 @@ class TestCommandSubStructureMessage(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id
+        )
 
         command = "command"
         context = contextMessage
@@ -62,7 +63,8 @@ class TestCommandSubStructureMessage(unittest.TestCase):
         execution_id = str(uuid1())
 
         contextMessage = Context(
-            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id)
+            step_id=step_id, playbook_id=playbook_id, execution_id=execution_id
+        )
 
         command = "command"
         context = contextMessage
@@ -76,7 +78,8 @@ class TestCommandSubStructureMessage(unittest.TestCase):
         }
 
         commandSubStructure = CommandSubStructure(
-            command=command, context=context, variables=variables)
+            command=command, context=context, variables=variables
+        )
 
         json_str = commandSubStructure.model_dump_json()
 

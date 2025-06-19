@@ -14,7 +14,6 @@ from soarca_fin_python_library.models.command import Command
 
 
 class Parser(IParser):
-
     def __init__(self, parser_id: str):
         self.id = parser_id
 
@@ -26,7 +25,7 @@ class Parser(IParser):
         content = ""
         # Try to convert MQTT payload to utf8 and load is as a JSON object.
         try:
-            content = json.loads(message.payload.decode('utf8'))
+            content = json.loads(message.payload.decode("utf8"))
         except Exception as e:
             log.error("Could not parse the payload as json format: %s", e)
             raise e
@@ -49,12 +48,12 @@ class Parser(IParser):
                 return Command(**content)
             case "register":
                 log.debug(
-                    "Ignoring register request, since only the fin can start this")
+                    "Ignoring register request, since only the fin can start this"
+                )
             case "unregister":
                 return Unregister(**content)
             case "result":
-                log.debug(
-                    "Ignoring result request, since only the fin can send this")
+                log.debug("Ignoring result request, since only the fin can send this")
             case "unregister":
                 # self.thread_pool.submit(on_unregister_handler, self, content)
                 return Unregister(**content)

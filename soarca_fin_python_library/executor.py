@@ -21,7 +21,6 @@ from soarca_fin_python_library.models.meta import Meta
 
 
 class Executor(IExecutor):
-
     def __init__(self, executor_id: str, callback, queue: Queue, mqttc: Client):
         self.queue: Queue[Message] = queue
         self.mqttc: Client = mqttc
@@ -41,7 +40,6 @@ class Executor(IExecutor):
 
     # Main executor loop. Polls for messages in the queue and parsers them.
     def start_executor(self):
-
         log.info("Thread started for %s", self.id)
         self.running = True
 
@@ -56,7 +54,9 @@ class Executor(IExecutor):
                             self._put_message_in_queue(message)
                         else:
                             log.debug(
-                                "Received unknown (n)ack with message_id: %s", message.message_id)
+                                "Received unknown (n)ack with message_id: %s",
+                                message.message_id,
+                            )
                     case Register():
                         self._handle_register_message(message)
                     case Unregister():
@@ -68,7 +68,8 @@ class Executor(IExecutor):
                     case _:
                         # Send Nack?
                         log.warning(
-                            "Unimplemented command: %s", message.model_dump_json())
+                            "Unimplemented command: %s", message.model_dump_json()
+                        )
             except Empty:
                 pass
 
@@ -115,7 +116,9 @@ class Executor(IExecutor):
                 retries -= 1
                 if retries == 0:
                     log.fatal(
-                        "Did not receive an ack for message %s. Aborting...", message.message_id)
+                        "Did not receive an ack for message %s. Aborting...",
+                        message.message_id,
+                    )
                     exit(-1)
 
     # Handles self generated register message.
@@ -147,7 +150,9 @@ class Executor(IExecutor):
                 retries -= 1
                 if retries == 0:
                     log.fatal(
-                        "Did not receive an ack for message %s. Aborting...", message.message_id)
+                        "Did not receive an ack for message %s. Aborting...",
+                        message.message_id,
+                    )
                     exit(-1)
 
     # Handles a command message from SOARCA.
@@ -164,8 +169,7 @@ class Executor(IExecutor):
         message_id = str(uuid1())
         timestamp = datetime.now(timezone.utc).isoformat()
         meta = Meta(timestamp=timestamp, sender_id=self.id)
-        result = Result(message_id=message_id, meta=meta,
-                        result=resultStruct)
+        result = Result(message_id=message_id, meta=meta, result=resultStruct)
 
         # Send result back
         self._send_message_as_json(result)
@@ -187,7 +191,9 @@ class Executor(IExecutor):
             if retries == 0:
                 self.acks.remove(message_id)
                 log.error(
-                    "Did not receive an acknowledgement for message %s. Skipping message...", result.message_id)
+                    "Did not receive an acknowledgement for message %s. Skipping message...",
+                    result.message_id,
+                )
                 break
 
     # Publishes a message as JSON on a topic. Default topic is self.id.
@@ -221,12 +227,12 @@ class Executor(IExecutor):
                         log.info("Received ack for message: %s", message_id)
                         return
                     case Nack():
-                        log.warning(
-                            "Received nack for message: %s", message_id)
+                        log.warning("Received nack for message: %s", message_id)
                         raise RuntimeError("Received a nack")
                     case _:
                         raise TypeError(
-                            f"Unexpected message type {message.model_dump_json()}")
+                            f"Unexpected message type {message.model_dump_json()}"
+                        )
 
             except Empty as e:
                 log.warning("Did not receive an ack")

@@ -14,13 +14,12 @@ from soarca_fin_python_library.models.meta import Meta
 
 
 class testRegisterMessage(unittest.TestCase):
-
     def test_register_message_generator(self):
-
         security_version = "0.0.1"
         channel_security = "plaintext"
         securityMessage = Security(
-            version=security_version, channel_security=channel_security)
+            version=security_version, channel_security=channel_security
+        )
 
         agent_name = "test"
         uuid_agent = str(uuid1())
@@ -37,7 +36,13 @@ class testRegisterMessage(unittest.TestCase):
         target = str(uuid1())
 
         stepStructure = StepStructure(
-            type=step_type, name=step_name, description=description, external_references=[externalReference], command=command, target=target)
+            type=step_type,
+            name=step_name,
+            description=description,
+            external_references=[externalReference],
+            command=command,
+            target=target,
+        )
 
         capability_id = str(uuid1())
         capability_type = WorkFlowStepEnum.action
@@ -45,7 +50,13 @@ class testRegisterMessage(unittest.TestCase):
         version = "0.0.1"
 
         capabilityStructure = CapabilityStructure(
-            capability_id=capability_id, type=capability_type, name=capability_name, version=version, step={"step": stepStructure}, agent={"agent": agentStructure})
+            capability_id=capability_id,
+            type=capability_type,
+            name=capability_name,
+            version=version,
+            step={"step": stepStructure},
+            agent={"agent": agentStructure},
+        )
 
         message_id = str(uuid1())
         fin_id = str(uuid1())
@@ -55,8 +66,14 @@ class testRegisterMessage(unittest.TestCase):
         timestamp = datetime.now(timezone.utc).isoformat()
         metaMessage = Meta(timestamp=timestamp, sender_id=meta_id)
 
-        registerMessage = Register(message_id=message_id,
-                                   fin_id=fin_id, protocol_version=protocol_version, security=securityMessage, capabilities=[capabilityStructure], meta=metaMessage)
+        registerMessage = Register(
+            message_id=message_id,
+            fin_id=fin_id,
+            protocol_version=protocol_version,
+            security=securityMessage,
+            capabilities=[capabilityStructure],
+            meta=metaMessage,
+        )
 
         self.assertEqual(registerMessage.type, "register")
         self.assertEqual(registerMessage.fin_id, fin_id)
@@ -69,7 +86,8 @@ class testRegisterMessage(unittest.TestCase):
         security_version = "0.0.1"
         channel_security = "plaintext"
         securityMessage = Security(
-            version=security_version, channel_security=channel_security)
+            version=security_version, channel_security=channel_security
+        )
 
         agent_name = "test"
         uuid_agent = str(uuid1())
@@ -86,7 +104,13 @@ class testRegisterMessage(unittest.TestCase):
         target = str(uuid1())
 
         stepStructure = StepStructure(
-            type=step_type, name=step_name, description=description, external_references=[externalReference], command=command, target=target)
+            type=step_type,
+            name=step_name,
+            description=description,
+            external_references=[externalReference],
+            command=command,
+            target=target,
+        )
 
         capability_id = str(uuid1())
         capability_type = WorkFlowStepEnum.action
@@ -94,7 +118,13 @@ class testRegisterMessage(unittest.TestCase):
         version = "0.0.1"
 
         capabilityStructure = CapabilityStructure(
-            capability_id=capability_id, type=capability_type, name=capability_name, version=version, step={"step": stepStructure}, agent={"agent": agentStructure})
+            capability_id=capability_id,
+            type=capability_type,
+            name=capability_name,
+            version=version,
+            step={"step": stepStructure},
+            agent={"agent": agentStructure},
+        )
 
         fin_id = str(uuid1())
         message_id = str(uuid1())
@@ -103,8 +133,14 @@ class testRegisterMessage(unittest.TestCase):
         timestamp = datetime.now(timezone.utc).isoformat()
         meta = Meta(sender_id=fin_id, timestamp=timestamp)
 
-        registerMessage = Register(fin_id=fin_id, protocol_version=protocol_version, security=securityMessage, capabilities=[
-            capabilityStructure], meta=meta, message_id=message_id)
+        registerMessage = Register(
+            fin_id=fin_id,
+            protocol_version=protocol_version,
+            security=securityMessage,
+            capabilities=[capabilityStructure],
+            meta=meta,
+            message_id=message_id,
+        )
 
         json_object = {
             "type": "register",
@@ -113,7 +149,7 @@ class testRegisterMessage(unittest.TestCase):
             "protocol_version": protocol_version,
             "security": securityMessage.model_dump(),
             "capabilities": [capabilityStructure.model_dump()],
-            "meta": meta.model_dump()
+            "meta": meta.model_dump(),
         }
 
         json_str = registerMessage.model_dump_json()
